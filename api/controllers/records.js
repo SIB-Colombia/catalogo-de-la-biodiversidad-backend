@@ -1,4 +1,3 @@
-
 import mongoose from 'mongoose';
 import async from 'async';
 import winston from 'winston';
@@ -62,212 +61,212 @@ function lastRecordTest(req, res) {
             //null or undefined
             if(!(result == null)){
               //null or undefined
-              if(result._doc.associatedPartyAccepted == null){
+              if(result._doc.associatedPartyApprovedInUse == null){
                 console.log("undefined");
               }else{
-                //console.log(result._doc.associatedPartyAccepted.associatedParty);
-                lastRec.associatedParty = result._doc.associatedPartyAccepted.associatedParty;
+                //console.log(result._doc.associatedPartyApprovedInUse.associatedParty);
+                lastRec.associatedParty = result._doc.associatedPartyApprovedInUse.associatedParty;
               }
 
-              if(result._doc.commonNamesAtomizedAccepted == null){
+              if(result._doc.commonNamesAtomizedApprovedInUse == null){
                 console.log("undefined");
               }else{
-                //console.log(result._doc.commonNamesAtomizedAccepted.commonNamesAtomized);
-                lastRec.commonNamesAtomized = result._doc.commonNamesAtomizedAccepted.commonNamesAtomized;
+                //console.log(result._doc.commonNamesAtomizedApprovedInUse.commonNamesAtomized);
+                lastRec.commonNamesAtomized = result._doc.commonNamesAtomizedApprovedInUse.commonNamesAtomized;
               }
 
-              if(result._doc.synonymsAtomizedAccepted == null){
+              if(result._doc.synonymsAtomizedApprovedInUse == null){
                 //console.log("undefined");
               }else{
-                //console.log(result._doc.synonymsAtomizedAccepted.synonymsAtomized);
-                lastRec.synonymsAtomized = result._doc.synonymsAtomizedAccepted.synonymsAtomized;
+                //console.log(result._doc.synonymsAtomizedApprovedInUse.synonymsAtomized);
+                lastRec.synonymsAtomized = result._doc.synonymsAtomizedApprovedInUse.synonymsAtomized;
               }
 
-              if(result._doc.taxonRecordNameAccepted == null){
+              if(result._doc.taxonRecordNameApprovedInUse == null){
                 console.log("undefined");
               }else{
-                //console.log(result._doc.taxonRecordNameAccepted.taxonRecordName);
-                lastRec.taxonRecordName = result._doc.taxonRecordNameAccepted.taxonRecordName;
+                //console.log(result._doc.taxonRecordNameApprovedInUse.taxonRecordName);
+                lastRec.taxonRecordName = result._doc.taxonRecordNameApprovedInUse.taxonRecordName;
               }
 
-              if(result._doc.lifeCycleAccepted == null){
+              if(result._doc.lifeCycleApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.lifeCycle = result._doc.lifeCycleAccepted.lifeCycle;
+                lastRec.lifeCycle = result._doc.lifeCycleApprovedInUse.lifeCycle;
               }
 
-              if(result._doc.lifeFormAccepted == null){
+              if(result._doc.lifeFormApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.lifeForm = result._doc.lifeFormAccepted.lifeForm;
+                lastRec.lifeForm = result._doc.lifeFormApprovedInUse.lifeForm;
               }
 
-              if(result._doc.identificationKeysAccepted == null){
+              if(result._doc.identificationKeysApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.identificationKeys = result._doc.identificationKeysAccepted.identificationKeys;
+                lastRec.identificationKeys = result._doc.identificationKeysApprovedInUse.identificationKeys;
               }
 
-              if(result._doc.fullDescriptionAccepted == null){
+              if(result._doc.fullDescriptionApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.fullDescription = result._doc.fullDescriptionAccepted.fullDescription;
+                lastRec.fullDescription = result._doc.fullDescriptionApprovedInUse.fullDescription;
               }
 
-              if(result._doc.briefDescriptionAccepted == null){
+              if(result._doc.briefDescriptionApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.briefDescription = result._doc.briefDescriptionAccepted.briefDescription;
+                lastRec.briefDescription = result._doc.briefDescriptionApprovedInUse.briefDescription;
               }
 
-              if(result._doc.abstractAccepted == null){
+              if(result._doc.abstractApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.abstract = result._doc.abstractAccepted.abstract;
+                lastRec.abstract = result._doc.abstractApprovedInUse.abstract;
               }
 
-              if(result._doc.hierarchyAccepted == null){
+              if(result._doc.hierarchyApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.hierarchy = result._doc.hierarchyAccepted.hierarchy;
+                lastRec.hierarchy = result._doc.hierarchyApprovedInUse.hierarchy;
               }
 
-              if(result._doc.reproductionAccepted == null){
+              if(result._doc.reproductionApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.reproduction = result._doc.reproductionAccepted.reproduction;
+                lastRec.reproduction = result._doc.reproductionApprovedInUse.reproduction;
               }
 
-              if(result._doc.annualCyclesAccepted == null){
+              if(result._doc.annualCyclesApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.annualCycles = result._doc.annualCyclesAccepted.annualCycles;
+                lastRec.annualCycles = result._doc.annualCyclesApprovedInUse.annualCycles;
               }
 
-              if(result._doc.feedingAccepted == null){
+              if(result._doc.feedingApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.feeding = result._doc.feedingAccepted.feeding;
+                lastRec.feeding = result._doc.feedingApprovedInUse.feeding;
               }
 
-              if(result._doc.dispersalAccepted == null){
+              if(result._doc.dispersalApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.dispersal = result._doc.dispersalAccepted.dispersal;
+                lastRec.dispersal = result._doc.dispersalApprovedInUse.dispersal;
               }
 
-              if(result._doc.behaviorAccepted == null){
+              if(result._doc.behaviorApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.behavior = result._doc.behaviorAccepted.behavior;
+                lastRec.behavior = result._doc.behaviorApprovedInUse.behavior;
               }
 
-              if(result._doc.interactionsAccepted == null){
+              if(result._doc.interactionsApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.interactions = result._doc.interactionsAccepted.interactions;
+                lastRec.interactions = result._doc.interactionsApprovedInUse.interactions;
               }
 
-              if(result._doc.molecularDataAccepted == null){
+              if(result._doc.molecularDataApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.molecularData = result._doc.molecularDataAccepted.molecularData;
+                lastRec.molecularData = result._doc.molecularDataApprovedInUse.molecularData;
               }
 
-              if(result._doc.migratoryAccepted == null){
+              if(result._doc.migratoryApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.migratory = result._doc.migratoryAccepted.migratory;
+                lastRec.migratory = result._doc.migratoryApprovedInUse.migratory;
               }
 
-              if(result._doc.habitatsAccepted == null){
+              if(result._doc.habitatsApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.habitats = result._doc.habitatsAccepted.habitats;
+                lastRec.habitats = result._doc.habitatsApprovedInUse.habitats;
               }
 
-              if(result._doc.distributionAccepted == null){
+              if(result._doc.distributionApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.distribution = result._doc.distributionAccepted.distribution;
+                lastRec.distribution = result._doc.distributionApprovedInUse.distribution;
               }
 
-              if(result._doc.territoryAccepted == null){
+              if(result._doc.territoryApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.territory = result._doc.territoryAccepted.territory;
+                lastRec.territory = result._doc.territoryApprovedInUse.territory;
               }
 
-              if(result._doc.populationBiologyAccepted == null){
+              if(result._doc.populationBiologyApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.populationBiology = result._doc.populationBiologyAccepted.populationBiology;
+                lastRec.populationBiology = result._doc.populationBiologyApprovedInUse.populationBiology;
               }
 
-              if(result._doc.moreInformationAccepted == null){
+              if(result._doc.moreInformationApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.moreInformation = result._doc.moreInformationAccepted.moreInformation;
+                lastRec.moreInformation = result._doc.moreInformationApprovedInUse.moreInformation;
               }
 
-              if(result._doc.threatStatusAccepted == null){
+              if(result._doc.threatStatusApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.threatStatus = result._doc.threatStatusAccepted.threatStatus;
+                lastRec.threatStatus = result._doc.threatStatusApprovedInUse.threatStatus;
               }
 
-              if(result._doc.legislationAccepted == null){
+              if(result._doc.legislationApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.legislation = result._doc.legislationAccepted.legislation;
+                lastRec.legislation = result._doc.legislationApprovedInUse.legislation;
               }
 
-              if(result._doc.usesManagementAndConservationAccepted == null){
+              if(result._doc.usesManagementAndConservationApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.usesManagementAndConservation = result._doc.usesManagementAndConservationAccepted.usesManagementAndConservation;
+                lastRec.usesManagementAndConservation = result._doc.usesManagementAndConservationApprovedInUse.usesManagementAndConservation;
               }
 
-              if(result._doc.directThreatsAccepted == null){
+              if(result._doc.directThreatsApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.directThreats = result._doc.directThreatsAccepted.directThreats;
+                lastRec.directThreats = result._doc.directThreatsApprovedInUse.directThreats;
               }
 
-              if(result._doc.ancillaryDataAccepted == null){
+              if(result._doc.ancillaryDataApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.ancillaryData = result._doc.ancillaryDataAccepted.ancillaryData;
+                lastRec.ancillaryData = result._doc.ancillaryDataApprovedInUse.ancillaryData;
               }
 
-              if(result._doc.endemicAtomizedAccepted == null){
+              if(result._doc.endemicAtomizedApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.endemicAtomized = result._doc.endemicAtomizedAccepted.endemicAtomized;
+                lastRec.endemicAtomized = result._doc.endemicAtomizedApprovedInUse.endemicAtomized;
               }
 
-              if(result._doc.referencesAccepted == null){
+              if(result._doc.referencesApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.references = result._doc.referencesAccepted.references;
+                lastRec.references = result._doc.referencesApprovedInUse.references;
               }
 
-              if(result._doc.environmentalEnvelopeAccepted == null){
+              if(result._doc.environmentalEnvelopeApprovedInUse == null){
                 console.log("undefined");
               }else{
-               lastRec.environmentalEnvelope = result._doc.environmentalEnvelopeAccepted.environmentalEnvelope;
+               lastRec.environmentalEnvelope = result._doc.environmentalEnvelopeApprovedInUse.environmentalEnvelope;
               }
 
-              if(result._doc.ecologicalSignificanceAccepted == null){
+              if(result._doc.ecologicalSignificanceApprovedInUse == null){
                console.log("undefined");
               }else{
-                lastRec.ecologicalSignificance = result._doc.ecologicalSignificanceAccepted.ecologicalSignificance;
+                lastRec.ecologicalSignificance = result._doc.ecologicalSignificanceApprovedInUse.ecologicalSignificance;
               }
 
-              if(result._doc.invasivenessAccepted == null){
+              if(result._doc.invasivenessApprovedInUse == null){
                 console.log("undefined");
               }else{
-                lastRec.invasiveness = result._doc.invasivenessAccepted.invasiveness;
+                lastRec.invasiveness = result._doc.invasivenessApprovedInUse.invasiveness;
               }
             res.json(lastRec);
           }else{
@@ -296,7 +295,7 @@ function lastRecord(req, res) {
       lastRec._id=record._id;
       async.waterfall([
         function(callback){
-          AssociatedPartyVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          AssociatedPartyVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get AssociatedParty element for the record with id: "+id_rc+" : " + err.message));
              }else{ 
@@ -321,7 +320,7 @@ function lastRecord(req, res) {
           });
         },*/
         function(callback){
-          CommonNamesAtomizedVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          CommonNamesAtomizedVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get CommonNamesAtomized element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -333,7 +332,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          SynonymsAtomizedVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          SynonymsAtomizedVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
              if(err){
               callback(new Error("Error to get SynonymsAtomized element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -345,7 +344,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          TaxonRecordNameVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          TaxonRecordNameVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get TaxonRecordName element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -357,7 +356,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          LifeCycleVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          LifeCycleVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get LifeCycle element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -369,7 +368,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          LifeFormVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          LifeFormVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get LifeForm element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -381,7 +380,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          IdentificationKeysVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          IdentificationKeysVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get IdentificationKeys element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -393,7 +392,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          FullDescriptionVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          FullDescriptionVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get FullDescription element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -405,7 +404,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          BriefDescriptionVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          BriefDescriptionVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get BriefDescription element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -417,7 +416,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          AbstractVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          AbstractVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Abstract element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -429,7 +428,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          HierarchyVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          HierarchyVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Hierarchy element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -441,7 +440,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          ReproductionVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          ReproductionVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Reproduction element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -453,7 +452,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          AnnualCyclesVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          AnnualCyclesVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get AnnualCycles element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -465,7 +464,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          FeedingVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          FeedingVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Feeding element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -477,7 +476,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          DispersalVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          DispersalVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Dispersal element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -489,7 +488,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          BehaviorVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          BehaviorVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Behavior element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -501,7 +500,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          InteractionsVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          InteractionsVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Interactions element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -513,7 +512,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          MolecularDataVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          MolecularDataVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get MolecularData element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -525,7 +524,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          MigratoryVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          MigratoryVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Migratory element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -537,7 +536,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          HabitatsVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          HabitatsVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Habitats element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -549,7 +548,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          DistributionVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          DistributionVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Distribution element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -561,7 +560,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          TerritoryVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          TerritoryVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Territory element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -573,7 +572,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          PopulationBiologyVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          PopulationBiologyVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get PopulationBiology element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -585,7 +584,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          MoreInformationVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          MoreInformationVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get PopulationBiology element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -597,7 +596,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          ThreatStatusVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          ThreatStatusVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get ThreatStatus element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -609,7 +608,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          LegislationVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          LegislationVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Legislation element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -622,7 +621,7 @@ function lastRecord(req, res) {
         },
         function(callback){
           console.log(id_rc);
-          UsesManagementAndConservationVersion.findOne({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          UsesManagementAndConservationVersion.findOne({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get UsesManagementAndConservation element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -634,7 +633,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          DirectThreatsVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          DirectThreatsVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get DirectThreats element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -646,7 +645,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          AncillaryDataVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          AncillaryDataVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get AncillaryData element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -658,7 +657,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          EndemicAtomizedVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          EndemicAtomizedVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get EndemicAtomized element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -670,7 +669,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          ReferencesVersion.findOne({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "accepted" }).exec(function (err, elementVer) {
+          ReferencesVersion.findOne({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "approved_in_use" }).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get References element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -682,7 +681,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          EnvironmentalEnvelopeVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          EnvironmentalEnvelopeVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get EnvironmentalEnvelope element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -694,7 +693,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          EcologicalSignificanceVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          EcologicalSignificanceVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get EcologicalSignificance element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -706,7 +705,7 @@ function lastRecord(req, res) {
           });
         },
         function(callback){
-          InvasivenessVersion.findOne({ id_record : id_rc, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+          InvasivenessVersion.findOne({ id_record : id_rc, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
             if(err){
               callback(new Error("Error to get Invasiveness element for the record with id: "+id_rc+" : " + err.message));
             }else{
@@ -732,7 +731,7 @@ function lastRecord(req, res) {
 };
 
 function getRecordListTest(req, res) {
-  var query = add_objects.Record.find({}).select('taxonRecordNameAccepted.taxonRecordName.scientificName.simple associatedPartyAccepted.associatedParty _id');
+  var query = add_objects.Record.find({}).select('taxonRecordNameApprovedInUse.taxonRecordName.scientificName.simple associatedPartyApprovedInUse.associatedParty _id');
   query.exec(function (err, data) {
     if(err){
       res.json(err);
