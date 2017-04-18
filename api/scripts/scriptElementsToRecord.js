@@ -46,14 +46,14 @@ query = add_objects.RecordVersion.find({}).select('_id').sort({ _id: -1});
 
 var lastRec ={};
 
-var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbJunio', function(err) {
-	if(err) {
-    	console.log('connection error', err);
+var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI', function(err) {
+  if(err) {
+      console.log('connection error', err);
     }else{
-    	console.log('connection successful');
-    	//var RecordVersion = mongoose.model('RecordVersion').schema;
+      console.log('connection successful');
+      //var RecordVersion = mongoose.model('RecordVersion').schema;
 
-    	var recordSchema = add_objects.Record.schema;
+      var recordSchema = add_objects.Record.schema;
       var Record = catalogoDb.model('Record', recordSchema );
 
       var recordVersionSchema = add_objects.RecordVersion.schema;
@@ -162,36 +162,37 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
       InvasivenessVersion = catalogoDb.model('InvasivenessVersion', InvasivenessSchema );
 
 
-    	async.waterfall([
-    		function(callback){
-    			console.log("***!Execution of the query***");
-    			query = RecordVersion.find({}).select('_id').sort({ _id: -1});
-    			query.exec(function (err, data) {
-        			if(err){
+      async.waterfall([
+        function(callback){
+          console.log("***!Execution of the query***");
+          query = RecordVersion.find({}).select('_id').sort({ _id: -1});
+          query.exec(function (err, data) {
+              if(err){
                   console.log("1");
-          				callback(new Error("Error getting the total of Records:" + err.message));
-        			}else{
+                  callback(new Error("Error getting the total of Records:" + err.message));
+              }else{
                   console.log("2");
-          				callback(null, data);
-        			}
-      			});
-    		},
-    		function(data,callback){
-    			console.log(data.length);
-    			async.eachSeries(data, function(record_data, callback){
-    				console.log(record_data._id);
+                  callback(null, data);
+              }
+            });
+        },
+        function(data,callback){
+          console.log(data.length);
+          async.eachSeries(data, function(record_data, callback){
+            console.log(record_data._id);
             //record_data._id = "56702bfef289f5a40c0cd2ac";
+            lastRec.creation_date = record_data._id.getTimestamp();
             async.waterfall([
               function(callback){
                 //console.log("! "+record_data._id);
-                TaxonRecordNameVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                TaxonRecordNameVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("TaxonRecordName");
                   if(err){
                     callback(new Error("Error to get TaxonRecordName element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
                       lastRec._id = mongoose.Types.ObjectId(record_data._id);
-                      lastRec.taxonRecordNameAccepted = elementVer;
+                      lastRec.taxonRecordNameApprovedInUse = elementVer;
                     }else{
                       console.log("No existe TaxonRecordNameVersion for id record : "+record_data._id);
                     }
@@ -201,13 +202,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
               },
               function(callback){
                 //console.log("!*");
-                AssociatedPartyVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                AssociatedPartyVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("AssociatedParty");
                   if(err){
                     callback(new Error("Error to get AssociatedParty element for the record with id: "+record_data._id+" : " + err.message));
                   }else{ 
                     if(elementVer){
-                      lastRec.associatedPartyAccepted = elementVer;
+                      lastRec.associatedPartyApprovedInUse = elementVer;
                     }else{
                       console.log("No exist AssociatedPartyVersion for id record : "+record_data._id);
                     }
@@ -216,14 +217,14 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                CommonNamesAtomizedVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                CommonNamesAtomizedVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("CommonNamesAtomized");
                   if(err){
                     console.log(err);
                     callback(new Error("Error to get CommonNamesAtomized element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.commonNamesAtomizedAccepted = elementVer;
+                      lastRec.commonNamesAtomizedApprovedInUse = elementVer;
                     }else{
                       console.log("No exist CommonNamesAtomizedVersion for id record : "+record_data._id);
                     }
@@ -232,13 +233,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                SynonymsAtomizedVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                SynonymsAtomizedVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("SynonymsAtomized");
                   if(err){
                     callback(new Error("Error to get SynonymsAtomized element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.synonymsAtomizedAccepted = elementVer;
+                      lastRec.synonymsAtomizedApprovedInUse = elementVer;
                     }else{
                       console.log("No exist SynonymsAtomizedVersion for id record : "+record_data._id);
                     }
@@ -247,13 +248,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                LifeCycleVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                LifeCycleVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("LifeCycle");
                   if(err){
                     callback(new Error("Error to get LifeCycle element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.lifeCycleAccepted = elementVer;
+                      lastRec.lifeCycleApprovedInUse = elementVer;
                     }else{
                       console.log("No exist LifeCycleVersion for id record : "+record_data._id);
                     }
@@ -262,13 +263,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                LifeFormVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                LifeFormVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("LifeForm");
                   if(err){
                     callback(new Error("Error to get LifeForm element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.lifeFormAccepted = elementVer;
+                      lastRec.lifeFormApprovedInUse = elementVer;
                     }else{
                       console.log("No exist LifeFormVersion for id record : "+record_data._id);
                     }
@@ -277,13 +278,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                IdentificationKeysVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                IdentificationKeysVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("IdentificationKeys");
                   if(err){
                     callback(new Error("Error to get IdentificationKeys element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.identificationKeysAccepted = elementVer;
+                      lastRec.identificationKeysApprovedInUse = elementVer;
                     }else{
                       console.log("No exist IdentificationKeysVersion for id record : "+record_data._id);
                     }
@@ -292,13 +293,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                FullDescriptionVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                FullDescriptionVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("FullDescription");
                   if(err){
                     callback(new Error("Error to get FullDescription element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.fullDescriptionAccepted = elementVer;
+                      lastRec.fullDescriptionApprovedInUse = elementVer;
                     }else{
                       console.log("No exist FullDescriptionVersion for id record : "+record_data._id);
                     }
@@ -307,13 +308,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                BriefDescriptionVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                BriefDescriptionVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("BriefDescription");
                   if(err){
                     callback(new Error("Error to get BriefDescription element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.briefDescriptionAccepted = elementVer;
+                      lastRec.briefDescriptionApprovedInUse = elementVer;
                     }else{
                       console.log("No exist BriefDescriptionVersion for id record : "+record_data._id);
                     }
@@ -322,13 +323,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                AbstractVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                AbstractVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Abstract");
                   if(err){
                     callback(new Error("Error to get Abstract element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.abstractAccepted = elementVer;
+                      lastRec.abstractApprovedInUse = elementVer;
                     }else{
                       console.log("No exist AbstractVersion for id record : "+record_data._id);
                     }
@@ -337,13 +338,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                HierarchyVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                HierarchyVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Hierarchy");
                   if(err){
                     callback(new Error("Error to get Hierarchy element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.hierarchyAccepted = elementVer;
+                      lastRec.hierarchyApprovedInUse = elementVer;
                     }else{
                       console.log("No exist HierarchyVersion for id record : "+record_data._id);
                     }
@@ -352,13 +353,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                ReproductionVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                ReproductionVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Reproduction");
                   if(err){
                     callback(new Error("Error to get Reproduction element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.reproductionAccepted = elementVer;
+                      lastRec.reproductionApprovedInUse = elementVer;
                     }else{
                       console.log("No exist ReproductionVersion for id record : "+record_data._id);
                     }
@@ -367,13 +368,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                AnnualCyclesVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                AnnualCyclesVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("AnnualCycles");
                   if(err){
                     callback(new Error("Error to get AnnualCycles element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.annualCyclesAccepted = elementVer;
+                      lastRec.annualCyclesApprovedInUse = elementVer;
                     }else{
                       console.log("No exist AnnualCyclesVersion for id record : "+record_data._id);
                     }
@@ -382,13 +383,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                FeedingVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                FeedingVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Feeding");
                   if(err){
                     callback(new Error("Error to get Feeding element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.feedingAccepted = elementVer;
+                      lastRec.feedingApprovedInUse = elementVer;
                     }else{
                       console.log("No exist FeedingVersion for id record : "+record_data._id);
                     }
@@ -397,13 +398,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                DispersalVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                DispersalVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Dispersal");
                   if(err){
                     callback(new Error("Error to get Dispersal element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.dispersalAccepted = elementVer;
+                      lastRec.dispersalApprovedInUse = elementVer;
                     }else{
                       console.log("No exist DispersalVersion for id record : "+record_data._id);
                     }
@@ -412,13 +413,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                BehaviorVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                BehaviorVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Behavior");
                   if(err){
                     callback(new Error("Error to get Behavior element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.behaviorAccepted = elementVer;
+                      lastRec.behaviorApprovedInUse = elementVer;
                     }else{
                       console.log("No exist BehaviorVersion for id record : "+record_data._id);
                     }
@@ -427,13 +428,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                InteractionsVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                InteractionsVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Interactions");
                   if(err){
                     callback(new Error("Error to get Interactions element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.interactionsAccepted = elementVer;
+                      lastRec.interactionsApprovedInUse = elementVer;
                     }else{
                       console.log("No exist InteractionsVersion for id record : "+record_data._id);
                     }
@@ -442,13 +443,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                MolecularDataVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                MolecularDataVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("MolecularData");
                   if(err){
                     callback(new Error("Error to get MolecularData element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.molecularDataAccepted = elementVer;
+                      lastRec.molecularDataApprovedInUse = elementVer;
                     }else{
                       console.log("No exist MolecularDataVersion for id record : "+record_data._id);
                     }
@@ -457,13 +458,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                MigratoryVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                MigratoryVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Migratory");
                   if(err){
                     callback(new Error("Error to get Migratory element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.migratoryAccepted = elementVer;
+                      lastRec.migratoryApprovedInUse = elementVer;
                     }else{
                       console.log("No exist MolecularDataVersion for id record : "+record_data._id);
                     }
@@ -472,13 +473,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                HabitatsVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                HabitatsVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Habitats");
                   if(err){
                     callback(new Error("Error to get Habitats element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.habitatsAccepted = elementVer;
+                      lastRec.habitatsApprovedInUse = elementVer;
                     }else{
                       console.log("No exist HabitatsVersion for id record : "+record_data._id);
                     }
@@ -487,13 +488,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                DistributionVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                DistributionVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Distribution");
                   if(err){
                     callback(new Error("Error to get Distribution element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.distributionAccepted = elementVer;
+                      lastRec.distributionApprovedInUse = elementVer;
                     }else{
                       console.log("No exist DistributionVersion for id record : "+record_data._id);
                     }
@@ -502,13 +503,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                TerritoryVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                TerritoryVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("TerritoryVersion");
                   if(err){
                     callback(new Error("Error to get Territory element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.territoryAccepted = elementVer;
+                      lastRec.territoryApprovedInUse = elementVer;
                     }else{
                       console.log("No exist TerritoryVersion for id record : "+record_data._id);
                     }
@@ -517,13 +518,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                PopulationBiologyVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                PopulationBiologyVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("PopulationBiology");
                   if(err){
                     callback(new Error("Error to get PopulationBiology element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.populationBiologyAccepted = elementVer;
+                      lastRec.populationBiologyApprovedInUse = elementVer;
                     }else{
                       console.log("No exist PopulationBiologyVersion for id record : "+record_data._id);
                     }
@@ -532,13 +533,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                MoreInformationVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                MoreInformationVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("MoreInformation");
                   if(err){
                     callback(new Error("Error to get PopulationBiology element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.moreInformationAccepted = elementVer;
+                      lastRec.moreInformationApprovedInUse = elementVer;
                     }else{
                       console.log("No exist MoreInformationVersion for id record : "+record_data._id);
                     }
@@ -547,13 +548,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                ThreatStatusVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                ThreatStatusVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("ThreatStatus");
                   if(err){
                     callback(new Error("Error to get ThreatStatus element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.threatStatusAccepted = elementVer;
+                      lastRec.threatStatusApprovedInUse = elementVer;
                     }else{
                       console.log("No exist ThreatStatusVersion for id record : "+record_data._id);
                     }
@@ -562,13 +563,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                LegislationVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                LegislationVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Legislation");
                   if(err){
                     callback(new Error("Error to get Legislation element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.legislationAccepted = elementVer;
+                      lastRec.legislationApprovedInUse = elementVer;
                     }else{
                       console.log("No exist LegislationVersion for id record : "+record_data._id);
                     }
@@ -577,13 +578,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                UsesManagementAndConservationVersion.findOne({ "id_record" : mongoose.Types.ObjectId(record_data._id), state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                UsesManagementAndConservationVersion.findOne({ "id_record" : mongoose.Types.ObjectId(record_data._id), state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("UsesManagementAndConservation");
                   if(err){
                     callback(new Error("Error to get UsesManagementAndConservation element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.usesManagementAndConservationAccepted = elementVer._doc;
+                      lastRec.usesManagementAndConservationApprovedInUse = elementVer._doc;
                     }else{
                       console.log("No exist UsesManagementAndConservationVersion for id record : "+record_data._id);
                     }
@@ -592,13 +593,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                DirectThreatsVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                DirectThreatsVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("DirectThreats");
                   if(err){
                     callback(new Error("Error to get DirectThreats element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.directThreatsAccepted = elementVer;
+                      lastRec.directThreatsApprovedInUse = elementVer;
                     }else{
                       console.log("No exist DirectThreatsVersion for id record : "+record_data._id);
                     }
@@ -607,13 +608,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                AncillaryDataVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                AncillaryDataVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("AncillaryData");
                   if(err){
                     callback(new Error("Error to get AncillaryData element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.ancillaryDataAccepted = elementVer
+                      lastRec.ancillaryDataApprovedInUse = elementVer
                     }else{
                       console.log("No exist AncillaryDataVersion for id record : "+record_data._id);
                     }
@@ -622,13 +623,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                EndemicAtomizedVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                EndemicAtomizedVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("EndemicAtomized");
                   if(err){
                     callback(new Error("Error to get EndemicAtomized element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.endemicAtomizedAccepted = elementVer;
+                      lastRec.endemicAtomizedApprovedInUse = elementVer;
                     }else{
                       console.log("No exist EndemicAtomizedVersion for id record : "+record_data._id);
                     }
@@ -638,13 +639,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
               },
               function(callback){
                 
-                ReferencesVersion.findOne({ "id_record" : mongoose.Types.ObjectId(record_data._id), state: "accepted" }).exec(function (err, elementVer) {
+                ReferencesVersion.findOne({ "id_record" : mongoose.Types.ObjectId(record_data._id), state: "approved_in_use" }).exec(function (err, elementVer) {
                   console.log("References");
                   if(err){
                     callback(new Error("Error to get References element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.referencesAccepted = elementVer;
+                      lastRec.referencesApprovedInUse = elementVer;
                     }else{
                       console.log("No exist ReferencesVersion for id record : "+record_data._id);
                     }
@@ -653,13 +654,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                EnvironmentalEnvelopeVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                EnvironmentalEnvelopeVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("EnvironmentalEnvelope");
                   if(err){
                     callback(new Error("Error to get EnvironmentalEnvelope element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.environmentalEnvelopeAccepted = elementVer;
+                      lastRec.environmentalEnvelopeApprovedInUse = elementVer;
                     }else{
                       console.log("No exist EnvironmentalEnvelopeVersion for id record : "+record_data._id);
                     }
@@ -668,12 +669,12 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                   });
                 },
               function(callback){
-                EcologicalSignificanceVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                EcologicalSignificanceVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   if(err){
                     callback(new Error("Error to get EcologicalSignificance element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.ecologicalSignificanceAccepted = elementVer
+                      lastRec.ecologicalSignificanceApprovedInUse = elementVer
                     }else{
                       console.log("No exist EcologicalSignificanceVersion for id record : "+record_data._id);
                     }
@@ -682,12 +683,12 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                InvasivenessVersion.findOne({ id_record : record_data._id, state: "accepted" }).sort({created: -1}).exec(function (err, elementVer) {
+                InvasivenessVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   if(err){
                     callback(new Error("Error to get Invasiveness element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      lastRec.invasivenessAccepted = elementVer;
+                      lastRec.invasivenessApprovedInUse = elementVer;
                     }else{
                       console.log("No exist InvasivenessVersion for id record : "+record_data._id);
                     }
@@ -696,8 +697,8 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                acceptedRecord = new Record(lastRec);
-                acceptedRecord.save(function (err){
+                approved_in_useRecord = new Record(lastRec);
+                approved_in_useRecord.save(function (err){
                   if(err){
                     console.log("aquí está el error");
                     console.log(err);
@@ -716,30 +717,30 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 callback();
               }
             });
-    			},function(err){
-    				if(err){
-          				callback(new Error("Error: "+err));
-        			}else{
-          				callback(null, data);
-        			}
-    			});
-    			//callback(null, data);
-    		},
+          },function(err){
+            if(err){
+                  callback(new Error("Error: "+err));
+              }else{
+                  callback(null, data);
+              }
+          });
+          //callback(null, data);
+        },
         function(data,callback){
-	    		console.log("End cascade");
+          console.log("End cascade");
           catalogoDb=mongoose.disconnect();
-	    	}
-	    	],
-    	   function(err, result) {
-      		if(err){
-        		console.log(err);
-      		}else{
+        }
+        ],
+         function(err, result) {
+          if(err){
+            console.log(err);
+          }else{
             catalogoDb=mongoose.disconnect();
-        		console.log("End of the process");
-        		//logger.info('Creation a new AncillaryDataVersion sucess', JSON.stringify({id_record: record_data._id, version: ver, _id: id_v, id_user: user}));
-        		//res.json("End of the process");
-      		}
-    	});
+            console.log("End of the process");
+            //logger.info('Creation a new AncillaryDataVersion sucess', JSON.stringify({id_record: record_data._id, version: ver, _id: id_v, id_user: user}));
+            //res.json("End of the process");
+          }
+      });
     }
 
 });

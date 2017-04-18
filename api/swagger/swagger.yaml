@@ -39,7 +39,7 @@ paths:
       description: get a list of records
       tags:
         - record
-      operationId: getRecordListTest
+      operationId: getRecordList
       responses:
         "200":
           description: Success
@@ -52,7 +52,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   
-  /records/{id}:
+  /record/{id}:
     x-swagger-router-controller: records
     get:
       description: get the latest version of a record
@@ -124,7 +124,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records:
+  /record:
     x-swagger-router-controller: taxonRecordName
     post:
       description: Creates a new  Record with a taxonRecordNameVersion, that is the fisrt element and version of the created record.
@@ -151,7 +151,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/{id}/taxon_record_name/{version}:
+  /record/{id}/taxon_record_name/{version}:
     x-swagger-router-controller: taxonRecordName
     get: 
       description: Returns a taxonRecordNameVersion by Record id and number of version
@@ -183,7 +183,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/to_review/{id}/taxon_record_name:
+  /record/to_review/{id}/taxon_record_name:
     x-swagger-router-controller: taxonRecordName
     get: 
       description: Returns a list of TaxonRecordNameVersion with state "to_review"
@@ -208,7 +208,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/taxon_record_name:
+  /record/approved_in_use/{id}/taxon_record_name:
     x-swagger-router-controller: taxonRecordName
     get: 
       description: Returns the taxonRecordNameVersion approved_in_use 
@@ -232,7 +232,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/taxon_record_name/{version}:
+  /record/approved_in_use/{id}/taxon_record_name/{version}:
     x-swagger-router-controller: taxonRecordName
     put: 
       description: Update a TaxonRecordNameVersion state to approved_in_use
@@ -264,7 +264,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
       
-  /records/{id}/taxon_record_name:
+  /record/{id}/taxon_record_name:
     x-swagger-router-controller: taxonRecordName
     post:
       description: Save a new taxonRecordNameVersion related with the a record with the id

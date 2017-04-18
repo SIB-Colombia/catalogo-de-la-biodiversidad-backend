@@ -9,7 +9,7 @@ function postReferences(req, res) {
     references_version._id = mongoose.Types.ObjectId();
     references_version.created=Date();
     //references_version.state="to_review";
-    references_version.state="accepted";
+    references_version.state="approved_in_use";
     references_version.element="references";
     var user = references_version.id_user;
     var elementValue = references_version.references;
@@ -131,7 +131,7 @@ function getReferences(req, res) {
 }
 
 
-function setAcceptedReferences(req, res) {
+function setApprovedInUseReferences(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedReferences(req, res) {
         });
       },
       function(callback){ 
-        ReferencesVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        ReferencesVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,7 @@ function setAcceptedReferences(req, res) {
         
       },
       function(callback){ 
-        ReferencesVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        ReferencesVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +172,12 @@ function setAcceptedReferences(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set ReferencesVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set ReferencesVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated ReferencesVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated ReferencesVersion to accepted', element: 'references', version : version, id_record : id_rc });
+        logger.info('Updated ReferencesVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated ReferencesVersion to approved_in_use', element: 'references', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +208,16 @@ function getToReviewReferences(req, res) {
   });
 }
 
-function getLastAcceptedReferences(req, res) {
+function getLastApprovedInUseReferences(req, res) {
   var id_rc = req.swagger.params.id.value;
-  ReferencesVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  ReferencesVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last ReferencesVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last ReferencesVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last ReferencesVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last ReferencesVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +231,7 @@ function getLastAcceptedReferences(req, res) {
 module.exports = {
   postReferences,
   getReferences,
-  setAcceptedReferences,
+  setApprovedInUseReferences,
   getToReviewReferences,
-  getLastAcceptedReferences
+  getLastApprovedInUseReferences
 };
