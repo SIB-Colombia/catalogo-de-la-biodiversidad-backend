@@ -373,7 +373,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/associated_party/{version}:
+  /record/{id}/associated_party/{version}:
     x-swagger-router-controller: associatedParty
     get: 
       description: Returns a AssociatedPartyVersion by record_id and number of version
@@ -404,7 +404,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/associated_party:
+  /record/{id}/associated_party:
     x-swagger-router-controller: associatedParty
     post:
       description: Save a new AssociatedPartyVersion related that belongs to the record with id
@@ -434,7 +434,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/associated_party:
+  /record/to_review/{id}/associated_party:
     x-swagger-router-controller: associatedParty
     get: 
       description: Returns a list of AssociatedPartyVersion with state "to_review"
@@ -459,7 +459,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/associated_party:
+  /record/approved_in_use/{id}/associated_party:
     x-swagger-router-controller: associatedParty
     get: 
       description: Returns the associatedParty version approved_in_use #**
@@ -483,7 +483,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/associated_party/{version}:
+  /record/approved_in_use/{id}/associated_party/{version}:
     x-swagger-router-controller: associatedParty
     put: 
       description: Update a AssociatedPartyVersion state to approved_in_use
@@ -516,7 +516,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
 
             
-  /records/{id}/common_names_atomized/{version}:
+  /record/{id}/common_names_atomized/{version}:
     x-swagger-router-controller: commonNamesAtomized
     get: 
       description: Returns a CommonNamesAtomizedVersion by record id and version
@@ -544,7 +544,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/common_names_atomized:
+  /record/{id}/common_names_atomized:
     x-swagger-router-controller: commonNamesAtomized
     post:
       description: Save a new CommonNamesAtomizedVersion that belongs to the record with id
@@ -574,7 +574,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/common_names_atomized:
+  /record/to_review/{id}/common_names_atomized:
     x-swagger-router-controller: commonNamesAtomized
     get: 
       description: Returns a list of CommonNamesAtomized version with state "to_review"
@@ -599,7 +599,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/common_names_atomized:
+  /record/approved_in_use/{id}/common_names_atomized:
     x-swagger-router-controller: commonNamesAtomized
     get: 
       description: Returns the commonNamesAtomized version approved_in_use #**
@@ -623,7 +623,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/common_names_atomized/{version}:
+  /record/approved_in_use/{id}/common_names_atomized/{version}:
     x-swagger-router-controller: commonNamesAtomized
     put: 
       description: Update a CommonNamesAtomizedVersion state to approved_in_use
@@ -656,7 +656,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/{id}/synonyms_atomized/{version}:
+  /record/{id}/synonyms_atomized/{version}:
     x-swagger-router-controller: synonymsAtomized
     get: 
       description: Returns a SynonymsAtomizedVersion by record_id and number of version
@@ -684,7 +684,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/synonyms_atomized:
+  /record/{id}/synonyms_atomized:
     x-swagger-router-controller: synonymsAtomized
     post:
       description: Save a new SynonymsAtomizedVersion that belongs to the record with the id in the route
@@ -714,7 +714,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"   
             
-  /records/to_review/{id}/synonyms_atomized:
+  /record/to_review/{id}/synonyms_atomized:
     x-swagger-router-controller: synonymsAtomized
     get: 
       description: Returns a list of SynonymsAtomizedVersion with state "to_review"
@@ -739,7 +739,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/synonyms_atomized:
+  /record/approved_in_use/{id}/synonyms_atomized:
     x-swagger-router-controller: synonymsAtomized
     get: 
       description: Returns the synonymsAtomizedVersion with state "approved_in_use"
@@ -763,7 +763,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/synonyms_atomized/{version}:
+  /record/approved_in_use/{id}/synonyms_atomized/{version}:
     x-swagger-router-controller: synonymsAtomized
     put: 
       description: Update a SynonymsAtomizedVersion state to "approved_in_use"
@@ -795,10 +795,10 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/life_cycle/{version}:
+  /record/{id}/life_cycle/{version}:
     x-swagger-router-controller: lifeCycle
     get: 
-      description: Returns a LifeCycleVersion by id_rcord and number of version
+      description: Returns a LifeCycleVersion by id_record and number of version
       tags:
         - LifeCycle
       operationId: getLifeCycle
@@ -826,7 +826,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/life_cycle:
+  /record/{id}/life_cycle:
     x-swagger-router-controller: lifeCycle
     post:
       description: Save a new LifeCycleVersion that belongs to the record with the id in the route
@@ -856,7 +856,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"  
             
-  /records/to_review/{id}/life_cycle:
+  /record/to_review/{id}/life_cycle:
     x-swagger-router-controller: lifeCycle
     get: 
       description: Returns a list of LifeCycleVersion with state "to_review"
@@ -881,7 +881,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/life_cycle:
+  /record/approved_in_use/{id}/life_cycle:
     x-swagger-router-controller: lifeCycle
     get: 
       description: Returns the lifeCycleVersion with state "approved_in_use"
@@ -905,7 +905,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/life_cycle/{version}:
+  /record/approved_in_use/{id}/life_cycle/{version}:
     x-swagger-router-controller: lifeCycle
     put: 
       description: Update a LifeCycleVersion state to approved_in_use
@@ -937,7 +937,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/life_form/{version}:
+  /record/{id}/life_form/{version}:
     x-swagger-router-controller: lifeForm
     get: 
       description: Returns a LifeFormVersion by id_record and number of version
@@ -968,7 +968,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/life_form:
+  /record/{id}/life_form:
     x-swagger-router-controller: lifeForm
     post:
       description: Save a new LifeFormVersion that belongs to the record with the id in the route
@@ -998,7 +998,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/life_form:
+  /record/to_review/{id}/life_form:
     x-swagger-router-controller: lifeForm
     get: 
       description: Returns a list of LifeFormVersion with state "to_review"
@@ -1023,7 +1023,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/life_form:
+  /record/approved_in_use/{id}/life_form:
     x-swagger-router-controller: lifeForm
     get: 
       description: Returns the lifeFormVersion with state "approved_in_use"
@@ -1047,7 +1047,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/life_form/{version}:
+  /record/approved_in_use/{id}/life_form/{version}:
     x-swagger-router-controller: lifeForm
     put: 
       description: Update a LifeFormVersion state to "approved_in_use"
@@ -1079,7 +1079,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/identification_keys/{version}:
+  /record/{id}/identification_keys/{version}:
     x-swagger-router-controller: identificationKeys
     get: 
       description: Returns a IdentificationKeysVersion by id_record and number of version
@@ -1110,7 +1110,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/identification_keys:
+  /record/{id}/identification_keys:
     x-swagger-router-controller: identificationKeys
     post:
       description: Save a new IdentificationKeysVersion that belongs to the record with the id in the route
@@ -1140,7 +1140,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"     
             
-  /records/to_review/{id}/identification_keys:
+  /record/to_review/{id}/identification_keys:
     x-swagger-router-controller: identificationKeys
     get: 
       description: Returns a list of IdentificationKeysVersion with state "to_review"
@@ -1165,7 +1165,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/identification_keys:
+  /record/approved_in_use/{id}/identification_keys:
     x-swagger-router-controller: identificationKeys
     get: 
       description: Returns the identificationKeysVersion with state "approved_in_use"
@@ -1189,7 +1189,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/identification_keys/{version}:
+  /record/approved_in_use/{id}/identification_keys/{version}:
     x-swagger-router-controller: identificationKeys
     put: 
       description: Update a IdentificationKeysVersion state to "approved_in_use"
@@ -1221,7 +1221,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   
-  /records/{id}/full_description/{version}:
+  /record/{id}/full_description/{version}:
     x-swagger-router-controller: fullDescription
     get: 
       description: Returns a FullDescriptionVersion by id_record and number of version
@@ -1250,7 +1250,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/full_description:
+  /record/{id}/full_description:
     x-swagger-router-controller: fullDescription
     post:
       description: Save a new  FullDescriptionVersion that belongs to the record with the id in the route
@@ -1280,7 +1280,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"   
             
-  /records/to_review/{id}/full_description:
+  /record/to_review/{id}/full_description:
     x-swagger-router-controller: fullDescription
     get: 
       description: Returns a list of FullDescriptionVersion with state "to_review"
@@ -1305,7 +1305,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/full_description:
+  /record/approved_in_use/{id}/full_description:
     x-swagger-router-controller: fullDescription
     get: 
       description: Returns the FullDescriptionVersion with state "approved_in_use"
@@ -1329,7 +1329,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/full_description/{version}:
+  /record/approved_in_use/{id}/full_description/{version}:
     x-swagger-router-controller: fullDescription
     put: 
       description: Update a FullDescriptionVersion state to "approved_in_use"
@@ -1361,7 +1361,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"    
             
-  /records/{id}/abstract/{version}:
+  /record/{id}/abstract/{version}:
     x-swagger-router-controller: abstract
     get: 
       description: Returns a AbstractVersion by id_record and number of version
@@ -1392,7 +1392,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/abstract:
+  /record/{id}/abstract:
     x-swagger-router-controller: abstract
     post:
       description: Save a new AbstractVersion that belongs to the record with the id in the route
@@ -1422,7 +1422,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"  
             
-  /records/to_review/{id}/abstract:
+  /record/to_review/{id}/abstract:
     x-swagger-router-controller: abstract
     get: 
       description: Returns a list of AbstractVersion with state "to_review"
@@ -1447,7 +1447,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/abstract:
+  /record/approved_in_use/{id}/abstract:
     x-swagger-router-controller: abstract
     get: 
       description: Returns the AbstractVersion with state "approved_in_use"
@@ -1471,7 +1471,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/abstract/{version}:
+  /record/approved_in_use/{id}/abstract/{version}:
     x-swagger-router-controller: abstract
     put: 
       description: Update a AbstractVersion state to "approved_in_use"
@@ -1503,7 +1503,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/hierarchy/{version}:
+  /record/{id}/hierarchy/{version}:
     x-swagger-router-controller: hierarchy
     get: 
       description: Returns a HierarchyVersion element by record id and version
@@ -1534,7 +1534,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/hierarchy:
+  /record/{id}/hierarchy:
     x-swagger-router-controller: hierarchy
     post:
       description: Save a new HierarchyVersion that belongs to the record with the id in the route
@@ -1564,7 +1564,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/hierarchy:
+  /record/to_review/{id}/hierarchy:
     x-swagger-router-controller: hierarchy
     get: 
       description: Returns a list of HierarchyVersion with state "to_review"
@@ -1589,7 +1589,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/hierarchy:
+  /record/approved_in_use/{id}/hierarchy:
     x-swagger-router-controller: hierarchy
     get: 
       description: Returns the HierarchyVersion with state "approved_in_use"
@@ -1613,7 +1613,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/hierarchy/{version}:
+  /record/approved_in_use/{id}/hierarchy/{version}:
     x-swagger-router-controller: hierarchy
     put: 
       description: Update a HierarchyVersion state to "approved_in_use"
@@ -1645,7 +1645,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/reproduction/{version}:
+  /record/{id}/reproduction/{version}:
     x-swagger-router-controller: reproduction
     get: 
       description: Returns a ReproductionVersion by id_record and number of version
@@ -1676,7 +1676,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/reproduction:
+  /record/{id}/reproduction:
     x-swagger-router-controller: reproduction
     post:
       description: Save a new ReproductionVersion that belongs to the record with the id in the route
@@ -1706,7 +1706,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/reproduction:
+  /record/to_review/{id}/reproduction:
     x-swagger-router-controller: reproduction
     get: 
       description: Returns a list of ReproductionVersion with state "to_review"
@@ -1731,7 +1731,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/reproduction:
+  /record/approved_in_use/{id}/reproduction:
     x-swagger-router-controller: reproduction
     get: 
       description: Returns the ReproductionVersion with state "approved_in_use"
@@ -1755,7 +1755,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/reproduction/{version}:
+  /record/approved_in_use/{id}/reproduction/{version}:
     x-swagger-router-controller: reproduction
     put: 
       description: Update a ReproductionVersion state to "approved_in_use"
@@ -1787,7 +1787,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/annual_cycles/{version}:
+  /record/{id}/annual_cycles/{version}:
     x-swagger-router-controller: annualCycles
     get: 
       description: Returns an AnnualCyclesVersion by id_record and number of version
@@ -1818,7 +1818,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/annual_cycles:
+  /record/{id}/annual_cycles:
     x-swagger-router-controller: annualCycles
     post:
       description: Save a new AnnualCyclesVersion that belongs to the record with the id in the route
@@ -1848,7 +1848,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/annual_cycles:
+  /record/to_review/{id}/annual_cycles:
     x-swagger-router-controller: annualCycles
     get: 
       description: Returns a list of AnnualCyclesVersion with state "to_review"
@@ -1873,7 +1873,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/annual_cycles:
+  /record/approved_in_use/{id}/annual_cycles:
     x-swagger-router-controller: annualCycles
     get: 
       description: Returns the annualCycles with state "approved_in_use"
@@ -1897,7 +1897,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/annual_cycles/{version}:
+  /record/approved_in_use/{id}/annual_cycles/{version}:
     x-swagger-router-controller: annualCycles
     put: 
       description: Update a AnnualCyclesVersion state to "approved_in_use"

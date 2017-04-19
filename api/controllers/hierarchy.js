@@ -9,7 +9,7 @@ function postHierarchy(req, res) {
     hierarchy_version._id = mongoose.Types.ObjectId();
     hierarchy_version.created=Date();
     hierarchy_version.state="to_review";
-    //hierarchy_version.state="accepted";
+    //hierarchy_version.state="approved_in_use";
     hierarchy_version.element="hierarchy";
     var user = hierarchy_version.id_user;
     var elementValue = hierarchy_version.hierarchy;
@@ -131,7 +131,7 @@ function getHierarchy(req, res) {
 }
 
 
-function setAcceptedHierarchy(req, res) {
+function setApprovedInUseHierarchy(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedHierarchy(req, res) {
         });
       },
       function(callback){ 
-        HierarchyVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        HierarchyVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedHierarchy(req, res) {
         
       },
       function(callback){ 
-        HierarchyVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        HierarchyVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ hierarchyApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedHierarchy(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set HierarchyVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set HierarchyVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated HierarchyVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated HierarchyVersion to accepted', element: 'hierarchy', version : version, id_record : id_rc });
+        logger.info('Updated HierarchyVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated HierarchyVersion to approved_in_use', element: 'hierarchy', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewHierarchy(req, res) {
   });
 }
 
-function getLastAcceptedHierarchy(req, res) {
+function getLastApprovedInUseHierarchy(req, res) {
   var id_rc = req.swagger.params.id.value;
-  HierarchyVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  HierarchyVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last HierarchyVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last HierarchyVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last HierarchyVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last HierarchyVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedHierarchy(req, res) {
 module.exports = {
   postHierarchy,
   getHierarchy,
-  setAcceptedHierarchy,
+  setApprovedInUseHierarchy,
   getToReviewHierarchy,
-  getLastAcceptedHierarchy
+  getLastApprovedInUseHierarchy
 };

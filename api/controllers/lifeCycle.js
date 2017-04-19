@@ -8,8 +8,8 @@ function postLifeCycle(req, res) {
   var life_cycle_version  = req.body; 
     life_cycle_version._id = mongoose.Types.ObjectId();
     life_cycle_version.created=Date();
-    //life_cycle_version.state="to_review";
-    life_cycle_version.state="accepted";
+    life_cycle_version.state="to_review";
+    //life_cycle_version.state="approved_in_use";
     life_cycle_version.element="lifeCycle";
     var user = life_cycle_version.id_user;
     var elementValue = life_cycle_version.lifeCycle;
@@ -131,7 +131,7 @@ function getLifeCycle(req, res) {
 }
 
 
-function setAcceptedLifeCycle(req, res) {
+function setApprovedInUseLifeCycle(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedLifeCycle(req, res) {
         });
       },
       function(callback){ 
-        LifeCycleVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        LifeCycleVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedLifeCycle(req, res) {
         
       },
       function(callback){ 
-        LifeCycleVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        LifeCycleVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ lifeCycleApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedLifeCycle(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set LifeCycleVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set LifeCycleVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated LifeCycleVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated LifeCycleVersion to accepted', element: 'lifeCycle', version : version, id_record : id_rc });
+        logger.info('Updated LifeCycleVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated LifeCycleVersion to approved_in_use', element: 'lifeCycle', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewLifeCycle(req, res) {
   });
 }
 
-function getLastAcceptedLifeCycle(req, res) {
+function getLastApprovedInUseLifeCycle(req, res) {
   var id_rc = req.swagger.params.id.value;
-  LifeCycleVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  LifeCycleVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last LifeCycleVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last LifeCycleVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last LifeCycleVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last LifeCycleVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedLifeCycle(req, res) {
 module.exports = {
   postLifeCycle,
   getLifeCycle,
-  setAcceptedLifeCycle,
+  setApprovedInUseLifeCycle,
   getToReviewLifeCycle,
-  getLastAcceptedLifeCycle
+  getLastApprovedInUseLifeCycle
 };

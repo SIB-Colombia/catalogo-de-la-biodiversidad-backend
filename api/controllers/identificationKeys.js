@@ -9,7 +9,7 @@ function postIdentificationKeys(req, res) {
     identification_keys_version._id = mongoose.Types.ObjectId();
     identification_keys_version.created=Date();
     identification_keys_version.state="to_review";
-    //identification_keys_version.state="accepted";
+    //identification_keys_version.state="approved_in_use";
     identification_keys_version.element="identificationKeys";
     var user = identification_keys_version.id_user;
     var elementValue = identification_keys_version.identificationKeys;
@@ -131,7 +131,7 @@ function getIdentificationKeys(req, res) {
 }
 
 
-function setAcceptedIdentificationKeys(req, res) {
+function setApprovedInUseIdentificationKeys(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedIdentificationKeys(req, res) {
         });
       },
       function(callback){ 
-        IdentificationKeysVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        IdentificationKeysVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedIdentificationKeys(req, res) {
         
       },
       function(callback){ 
-        IdentificationKeysVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        IdentificationKeysVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ identificationKeysApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedIdentificationKeys(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set IdentificationKeysVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set IdentificationKeysVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated IdentificationKeysVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated IdentificationKeysVersion to accepted', element: 'identificationKeys', version : version, id_record : id_rc });
+        logger.info('Updated IdentificationKeysVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated IdentificationKeysVersion to approved_in_use', element: 'identificationKeys', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewIdentificationKeys(req, res) {
   });
 }
 
-function getLastAcceptedIdentificationKeys(req, res) {
+function getLastApprovedInUseIdentificationKeys(req, res) {
   var id_rc = req.swagger.params.id.value;
-  IdentificationKeysVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  IdentificationKeysVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last IdentificationKeysVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last IdentificationKeysVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last IdentificationKeysVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last IdentificationKeysVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedIdentificationKeys(req, res) {
 module.exports = {
   postIdentificationKeys,
   getIdentificationKeys,
-  setAcceptedIdentificationKeys,
+  setApprovedInUseIdentificationKeys,
   getToReviewIdentificationKeys,
-  getLastAcceptedIdentificationKeys
+  getLastApprovedInUseIdentificationKeys
 };

@@ -285,14 +285,6 @@ function getLastApprovedInUseTaxonRecordName(req, res) {
   });
 }
 
-/*
-function getLastApprovedInUseTaxonRecordNameTest(req, res) {
-  console.log("function");
-  var id_rc = req.swagger.params.id.value;
-  var result = generalController.getLastApprovedInUseElement(TaxonRecordNameVersion, "TaxonRecordName", id_rc);
-  console.log("result: "+result);
-}
-*/
 
 function getTaxonRecordName(req, res) {
     var id_rc = req.swagger.params.id.value;

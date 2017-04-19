@@ -9,7 +9,7 @@ function postFeeding(req, res) {
     feeding_version._id = mongoose.Types.ObjectId();
     feeding_version.created=Date();
     feeding_version.state="to_review";
-    //feeding_version.state="accepted";
+    //feeding_version.state="approved_in_use";
     feeding_version.element="feeding";
     var user = feeding_version.id_user;
     var elementValue = feeding_version.feeding;
@@ -131,7 +131,7 @@ function getFeeding(req, res) {
 }
 
 
-function setAcceptedFeeding(req, res) {
+function setApprovedInUseFeeding(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedFeeding(req, res) {
         });
       },
       function(callback){ 
-        FeedingVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        FeedingVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,7 @@ function setAcceptedFeeding(req, res) {
         
       },
       function(callback){ 
-        FeedingVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        FeedingVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
           if(err){
             callback(new Error(err.message));
           }else{
@@ -170,8 +170,8 @@ function setAcceptedFeeding(req, res) {
         });
       },
       function(elementVer,callback){ 
-        elementVer.state="accepted";
-        add_objects.Record.update({_id:id_rc},{ feedingAccepted: elementVer }, function(err, result){
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ feedingApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -182,12 +182,12 @@ function setAcceptedFeeding(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set FeedingVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set FeedingVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated FeedingVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated FeedingVersion to accepted', element: 'feeding', version : version, id_record : id_rc });
+        logger.info('Updated FeedingVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated FeedingVersion to approved_in_use', element: 'feeding', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -218,16 +218,16 @@ function getToReviewFeeding(req, res) {
   });
 }
 
-function getLastAcceptedFeeding(req, res) {
+function getLastApprovedInUseFeeding(req, res) {
   var id_rc = req.swagger.params.id.value;
-  FeedingVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  FeedingVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last FeedingVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last FeedingVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last FeedingVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last FeedingVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -241,7 +241,7 @@ function getLastAcceptedFeeding(req, res) {
 module.exports = {
   postFeeding,
   getFeeding,
-  setAcceptedFeeding,
+  setApprovedInUseFeeding,
   getToReviewFeeding,
-  getLastAcceptedFeeding
+  getLastApprovedInUseFeeding
 };

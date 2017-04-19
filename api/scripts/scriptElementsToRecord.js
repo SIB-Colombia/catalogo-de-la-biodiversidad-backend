@@ -37,6 +37,8 @@ var EcologicalSignificanceVersion = require('../models/ecologicalSignificance.js
 var InvasivenessVersion = require('../models/invasiveness.js');
 var add_objects = require('../models/additionalModels.js');
 
+mongoose.Promise = require('bluebird');
+
 var value={};
 var response=[];
 var dataObject ={};
@@ -179,6 +181,7 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
         function(data,callback){
           console.log(data.length);
           async.eachSeries(data, function(record_data, callback){
+            lastRec ={};
             console.log(record_data._id);
             //record_data._id = "56702bfef289f5a40c0cd2ac";
             lastRec.creation_date = record_data._id.getTimestamp();
@@ -217,6 +220,13 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
+                /*
+                console.log("CommonNamesAtomizedVersion");
+                console.log("id_record: "+record_data._id);
+                if(record_data._id == 56e83d6383c45700544e43d7){
+                  console.log("!!!!");
+                }
+                */
                 CommonNamesAtomizedVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("CommonNamesAtomized");
                   if(err){
