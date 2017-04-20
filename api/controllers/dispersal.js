@@ -9,7 +9,7 @@ function postDispersal(req, res) {
     dispersal_version._id = mongoose.Types.ObjectId();
     dispersal_version.created=Date();
     dispersal_version.state="to_review";
-    //dispersal_version.state="accepted";
+    //dispersal_version.state="approved_in_use";
     dispersal_version.element="dispersal";
     var user = dispersal_version.id_user;
     var elementValue = dispersal_version.dispersal;
@@ -131,7 +131,7 @@ function getDispersal(req, res) {
 }
 
 
-function setAcceptedDispersal(req, res) {
+function setApprovedInUseDispersal(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedDispersal(req, res) {
         });
       },
       function(callback){ 
-        DispersalVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        DispersalVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedDispersal(req, res) {
         
       },
       function(callback){ 
-        DispersalVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        DispersalVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ dispersalApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedDispersal(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set DispersalVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set DispersalVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated DispersalVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated DispersalVersion to accepted', element: 'dispersal', version : version, id_record : id_rc });
+        logger.info('Updated DispersalVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated DispersalVersion to approved_in_use', element: 'dispersal', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewDispersal(req, res) {
   });
 }
 
-function getLastAcceptedDispersal(req, res) {
+function getLastApprovedInUseDispersal(req, res) {
   var id_rc = req.swagger.params.id.value;
-  DispersalVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  DispersalVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last DispersalVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last DispersalVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last DispersalVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last DispersalVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedDispersal(req, res) {
 module.exports = {
   postDispersal,
   getDispersal,
-  setAcceptedDispersal,
+  setApprovedInUseDispersal,
   getToReviewDispersal,
-  getLastAcceptedDispersal
+  getLastApprovedInUseDispersal
 };

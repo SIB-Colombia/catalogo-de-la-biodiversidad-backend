@@ -1929,7 +1929,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/feeding/{version}:
+  /record/{id}/feeding/{version}:
     x-swagger-router-controller: feeding
     get: 
       description: Returns a FeedingVersion by id_record and number of version
@@ -1960,7 +1960,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/feeding:
+  /record/{id}/feeding:
     x-swagger-router-controller: feeding
     post:
       description: Save a new FeedingVersion that belongs to the record with the id in the route
@@ -1991,7 +1991,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
         
-  /records/to_review/{id}/feeding:
+  /record/to_review/{id}/feeding:
     x-swagger-router-controller: feeding
     get: 
       description: Returns a list of FeedingVersion with state "to_review"
@@ -2016,7 +2016,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/feeding:
+  /record/approved_in_use/{id}/feeding:
     x-swagger-router-controller: feeding
     get: 
       description: Returns the FeedingVersion with state "approved_in_use"
@@ -2040,7 +2040,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/feeding/{version}:
+  /record/approved_in_use/{id}/feeding/{version}:
     x-swagger-router-controller: feeding
     put: 
       description: Update a FeedingVersion state to "approved_in_use"
@@ -2072,7 +2072,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/dispersal/{version}:
+  /record/{id}/dispersal/{version}:
     x-swagger-router-controller: dispersal
     get: 
       description: Returns a DispersalVersion by id_record and number of version
@@ -2103,7 +2103,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/dispersal:
+  /record/{id}/dispersal:
     x-swagger-router-controller: dispersal
     post:
       description: Save a new DispersalVersion that belongs to the record with the id in the route
@@ -2133,7 +2133,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/dispersal:
+  /record/to_review/{id}/dispersal:
     x-swagger-router-controller: dispersal
     get: 
       description: Returns a list of DispersalVersion with state "to_review"
@@ -2158,7 +2158,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/dispersal:
+  /record/approved_in_use/{id}/dispersal:
     x-swagger-router-controller: dispersal
     get: 
       description: Returns the DispersalVersion with state "approved_in_use"
@@ -2182,7 +2182,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/dispersal/{version}:
+  /record/approved_in_use/{id}/dispersal/{version}:
     x-swagger-router-controller: dispersal
     put: 
       description: Update a DispersalVersion state to "approved_in_use"
@@ -2214,7 +2214,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/behavior/{version}:
+  /record/{id}/behavior/{version}:
     x-swagger-router-controller: behavior
     get: 
       description: Returns a BehaviorVersion by id_record and number of version
@@ -2245,7 +2245,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/behavior:
+  /record/{id}/behavior:
     x-swagger-router-controller: behavior
     post:
       description: Save a new BehaviorVersion that belongs to the record with the id in the route
@@ -2275,7 +2275,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/behavior:
+  /record/to_review/{id}/behavior:
     x-swagger-router-controller: behavior
     get: 
       description: Returns a list of BehaviorVersion with state "to_review"
@@ -2300,7 +2300,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/behavior:
+  /record/approved_in_use/{id}/behavior:
     x-swagger-router-controller: behavior
     get: 
       description: Returns the BehaviorVersion with state "approved_in_use"
@@ -2324,7 +2324,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/behavior/{version}:
+  /record/approved_in_use/{id}/behavior/{version}:
     x-swagger-router-controller: behavior
     put: 
       description: Update a BehaviorVersion state to "approved_in_use"
@@ -2356,7 +2356,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/interactions/{version}:
+  /record/{id}/interactions/{version}:
     x-swagger-router-controller: interactions
     get: 
       description: Returns a InteractionsVersion by id_record and number of version
@@ -2387,7 +2387,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/interactions:
+  /record/{id}/interactions:
     x-swagger-router-controller: interactions
     post:
       description: Save a new InteractionsVersion that belongs to the record with the id in the route
@@ -2417,7 +2417,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/interactions:
+  /record/to_review/{id}/interactions:
     x-swagger-router-controller: interactions
     get: 
       description: Returns a list of InteractionsVersion with state "to_review"
@@ -2442,7 +2442,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/interactions:
+  /record/approved_in_use/{id}/interactions:
     x-swagger-router-controller: interactions
     get: 
       description: Returns the InteractionsVersion with state "approved_in_use"
@@ -2466,7 +2466,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/interactions/{version}:
+  /record/approved_in_use/{id}/interactions/{version}:
     x-swagger-router-controller: interactions
     put: 
       description: Update a InteractionsVersion state to "approved_in_use"
@@ -2498,7 +2498,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/molecular_data/{version}:
+  /record/{id}/molecular_data/{version}:
     x-swagger-router-controller: molecularData
     get: 
       description: Returns a MolecularDataVersion by id_record and number of version
@@ -2529,7 +2529,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/molecular_data:
+  /record/{id}/molecular_data:
     x-swagger-router-controller: molecularData
     post:
       description: Save a new MolecularDataVersion that belongs to the record with the id in the route
@@ -2559,7 +2559,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/molecular_data:
+  /record/to_review/{id}/molecular_data:
     x-swagger-router-controller: molecularData
     get: 
       description: Returns a list of MolecularDataVersion with state "to_review"
@@ -2584,7 +2584,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/molecular_data:
+  /record/approved_in_use/{id}/molecular_data:
     x-swagger-router-controller: molecularData
     get: 
       description: Returns the molecularDataVersion  with state "approved_in_use"
@@ -2608,7 +2608,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/molecular_data/{version}:
+  /record/approved_in_use/{id}/molecular_data/{version}:
     x-swagger-router-controller: molecularData
     put: 
       description: Update a MolecularDataVersion state to "approved_in_use"
@@ -2640,7 +2640,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/migratory/{version}:
+  /record/{id}/migratory/{version}:
     x-swagger-router-controller: migratory
     get: 
       description: Returns MigratoryVersion by id_record and number of version
@@ -2671,7 +2671,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/migratory:
+  /record/{id}/migratory:
     x-swagger-router-controller: migratory
     post:
       description: Save a new MigratoryVersion that belongs to the record with the id in the route
@@ -2701,7 +2701,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"   
           
-  /records/to_review/{id}/migratory:
+  /record/to_review/{id}/migratory:
     x-swagger-router-controller: migratory
     get: 
       description: Returns a list of MigratoryVersion with state "to_review"
@@ -2726,7 +2726,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/migratory:
+  /record/approved_in_use/{id}/migratory:
     x-swagger-router-controller: migratory
     get: 
       description: Returns the MigratoryVersion with state "approved_in_use"
@@ -2750,7 +2750,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/migratory/{version}:
+  /record/approved_in_use/{id}/migratory/{version}:
     x-swagger-router-controller: migratory
     put: 
       description: Update a MigratoryVersion state to "approved_in_use"

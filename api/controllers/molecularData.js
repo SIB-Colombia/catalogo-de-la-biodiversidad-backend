@@ -10,7 +10,7 @@ function postMolecularData(req, res) {
     molecular_data_version._id = mongoose.Types.ObjectId();
     molecular_data_version.created=Date();
     molecular_data_version.state="to_review";
-    //molecular_data_version.state="accepted";
+    //molecular_data_version.state="approved_in_use";
     var user = molecular_data_version.id_user;
     molecular_data_version.element="molecularData";
     var elementValue = molecular_data_version.molecularData;
@@ -132,7 +132,7 @@ function getMolecularData(req, res) {
 }
 
 
-function setAcceptedMolecularData(req, res) {
+function setApprovedInUseMolecularData(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -151,7 +151,7 @@ function setAcceptedMolecularData(req, res) {
         });
       },
       function(callback){ 
-        MolecularDataVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        MolecularDataVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -162,7 +162,17 @@ function setAcceptedMolecularData(req, res) {
         
       },
       function(callback){ 
-        MolecularDataVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        MolecularDataVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ molecularDataApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -174,12 +184,12 @@ function setAcceptedMolecularData(req, res) {
     function(err, result) {
       if (err) {
         console.log("Error: "+err);
-        logger.error('Error to set MolecularDataVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set MolecularDataVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated MolecularDataVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated MolecularDataVersion to accepted', element: 'molecularData', version : version, id_record : id_rc });
+        logger.info('Updated MolecularDataVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated MolecularDataVersion to approved_in_use', element: 'molecularData', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -209,16 +219,16 @@ function getToReviewMolecularData(req, res) {
   });
 }
 
-function getLastAcceptedMolecularData(req, res) {
+function getLastApprovedInUseMolecularData(req, res) {
   var id_rc = req.swagger.params.id.value;
-  MolecularDataVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  MolecularDataVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last MolecularDataVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last MolecularDataVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer.length !== 0){
-        logger.info('Get last MolecularDataVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last MolecularDataVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -232,7 +242,7 @@ function getLastAcceptedMolecularData(req, res) {
 module.exports = {
   postMolecularData,
   getMolecularData,
-  setAcceptedMolecularData,
+  setApprovedInUseMolecularData,
   getToReviewMolecularData,
-  getLastAcceptedMolecularData
+  getLastApprovedInUseMolecularData
 };

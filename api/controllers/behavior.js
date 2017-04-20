@@ -8,8 +8,8 @@ function postBehavior(req, res) {
   var behavior_version  = req.body; 
     behavior_version._id = mongoose.Types.ObjectId();
     behavior_version.created=Date();
-    //behavior_version.state="to_review";
-    behavior_version.state="accepted";
+    behavior_version.state="to_review";
+    //behavior_version.state="approved_in_use";
     behavior_version.element="behavior";
     var user = behavior_version.id_user;
     var elementValue = behavior_version.behavior;
@@ -131,7 +131,7 @@ function getBehavior(req, res) {
 }
 
 
-function setAcceptedBehavior(req, res) {
+function setApprovedInUseBehavior(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedBehavior(req, res) {
         });
       },
       function(callback){ 
-        BehaviorVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        BehaviorVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedBehavior(req, res) {
         
       },
       function(callback){ 
-        BehaviorVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        BehaviorVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ behaviorApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedBehavior(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set BehaviorVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set BehaviorVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated BehaviorVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated BehaviorVersion to accepted', element: 'behavior', version : version, id_record : id_rc });
+        logger.info('Updated BehaviorVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated BehaviorVersion to approved_in_use', element: 'behavior', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewBehavior(req, res) {
   });
 }
 
-function getLastAcceptedBehavior(req, res) {
+function getLastApprovedInUseBehavior(req, res) {
   var id_rc = req.swagger.params.id.value;
-  BehaviorVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  BehaviorVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last BehaviorVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last BehaviorVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last BehaviorVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last BehaviorVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedBehavior(req, res) {
 module.exports = {
   postBehavior,
   getBehavior,
-  setAcceptedBehavior,
+  setApprovedInUseBehavior,
   getToReviewBehavior,
-  getLastAcceptedBehavior
+  getLastApprovedInUseBehavior
 };

@@ -9,7 +9,7 @@ function postInteractions(req, res) {
     interactions_version._id = mongoose.Types.ObjectId();
     interactions_version.created=Date();
     interactions_version.state="to_review";
-    //interactions_version.state="accepted";
+    //interactions_version.state="approved_in_use";
     interactions_version.element="interactions";
     var user = interactions_version.id_user;
     var elementValue = interactions_version.interactions;
@@ -131,7 +131,7 @@ function getInteractions(req, res) {
 }
 
 
-function setAcceptedInteractions(req, res) {
+function setApprovedInUseInteractions(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedInteractions(req, res) {
         });
       },
       function(callback){ 
-        InteractionsVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        InteractionsVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedInteractions(req, res) {
         
       },
       function(callback){ 
-        InteractionsVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        InteractionsVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ interactionsApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedInteractions(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set InteractionsVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set InteractionsVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated InteractionsVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated InteractionsVersion to accepted', element: 'interactions', version : version, id_record : id_rc });
+        logger.info('Updated InteractionsVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated InteractionsVersion to approved_in_use', element: 'interactions', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewInteractions(req, res) {
   });
 }
 
-function getLastAcceptedInteractions(req, res) {
+function getLastApprovedInUseInteractions(req, res) {
   var id_rc = req.swagger.params.id.value;
-  InteractionsVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  InteractionsVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last InteractionsVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last InteractionsVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last InteractionsVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last InteractionsVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedInteractions(req, res) {
 module.exports = {
   postInteractions,
   getInteractions,
-  setAcceptedInteractions,
+  setApprovedInUseInteractions,
   getToReviewInteractions,
-  getLastAcceptedInteractions
+  getLastApprovedInUseInteractions
 };
