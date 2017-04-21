@@ -8,8 +8,8 @@ function postThreatStatus(req, res) {
   var threat_status_version  = req.body; 
     threat_status_version._id = mongoose.Types.ObjectId();
     threat_status_version.created=Date();
-    //threat_status_version.state="to_review";
-    threat_status_version.state="accepted";
+    threat_status_version.state="to_review";
+    //threat_status_version.state="approved_in_use";
     threat_status_version.element="threatStatus";
     var user = threat_status_version.id_user;
     var elementValue = threat_status_version.threatStatus;
@@ -131,7 +131,7 @@ function getThreatStatus(req, res) {
 }
 
 
-function setAcceptedThreatStatus(req, res) {
+function setApprovedInUseThreatStatus(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,18 +150,27 @@ function setAcceptedThreatStatus(req, res) {
         });
       },
       function(callback){ 
-        ThreatStatusVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        ThreatStatusVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
             console.log("response: "+raw);
             callback();
           }
-        });
-        
+        }); 
       },
       function(callback){ 
-        ThreatStatusVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        ThreatStatusVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ threatStatusApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +181,12 @@ function setAcceptedThreatStatus(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set ThreatStatusVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set ThreatStatusVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated ThreatStatusVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated ThreatStatusVersion to accepted', element: 'threatStatus', version : version, id_record : id_rc });
+        logger.info('Updated ThreatStatusVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated ThreatStatusVersion to approved_in_use', element: 'threatStatus', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +217,16 @@ function getToReviewThreatStatus(req, res) {
   });
 }
 
-function getLastAcceptedThreatStatus(req, res) {
+function getLastApprovedInUseThreatStatus(req, res) {
   var id_rc = req.swagger.params.id.value;
-  ThreatStatusVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  ThreatStatusVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last ThreatStatusVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last ThreatStatusVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last ThreatStatusVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last ThreatStatusVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +240,7 @@ function getLastAcceptedThreatStatus(req, res) {
 module.exports = {
   postThreatStatus,
   getThreatStatus,
-  setAcceptedThreatStatus,
+  setApprovedInUseThreatStatus,
   getToReviewThreatStatus,
-  getLastAcceptedThreatStatus
+  getLastApprovedInUseThreatStatus
 };

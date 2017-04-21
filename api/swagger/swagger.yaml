@@ -2782,7 +2782,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/habitats/{version}:
+  /record/{id}/habitats/{version}:
     x-swagger-router-controller: habitats
     get: 
       description: Returns a HabitatsVersion by id_record and number of version
@@ -2813,7 +2813,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/habitats:
+  /record/{id}/habitats:
     x-swagger-router-controller: habitats
     post:
       description: Save a new HabitatsVersion that belongs to the record with the id in the route
@@ -2843,7 +2843,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/habitats:
+  /record/to_review/{id}/habitats:
     x-swagger-router-controller: habitats
     get: 
       description: Returns a list of HabitatsVersion with state "to_review"
@@ -2868,7 +2868,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/habitats:
+  /record/approved_in_use/{id}/habitats:
     x-swagger-router-controller: habitats
     get: 
       description: Returns the HabitatsVersion with state "approved_in_use"
@@ -2892,7 +2892,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/habitats/{version}:
+  /record/approved_in_use/{id}/habitats/{version}:
     x-swagger-router-controller: habitats
     put: 
       description: Update a HabitatsVersion state to "approved_in_use"
@@ -2924,7 +2924,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/distribution/{version}:
+  /record/{id}/distribution/{version}:
     x-swagger-router-controller: distribution
     get: 
       description: Returns a DistributionVersion by id_record and number of version
@@ -2955,7 +2955,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/distribution:
+  /record/{id}/distribution:
     x-swagger-router-controller: distribution
     post:
       description: Save a new DistributionVersion that belongs to the record with the id in the route
@@ -2985,7 +2985,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/distribution:
+  /record/to_review/{id}/distribution:
     x-swagger-router-controller: distribution
     get: 
       description: Returns a list of DistributionVersion with state "to_review"
@@ -3010,7 +3010,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/distribution:
+  /record/approved_in_use/{id}/distribution:
     x-swagger-router-controller: distribution
     get: 
       description: Returns the DistributionVersion  with state "approved_in_use"
@@ -3034,7 +3034,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/distribution/{version}:
+  /record/approved_in_use/{id}/distribution/{version}:
     x-swagger-router-controller: distribution
     put: 
       description: Update a DistributionVersion state to "approved_in_use"
@@ -3066,7 +3066,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/territory/{version}:
+  /record/{id}/territory/{version}:
     x-swagger-router-controller: territory
     get: 
       description: Returns a TerritoryVersion by id_record and number of version
@@ -3097,7 +3097,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/territory:
+  /record/{id}/territory:
     x-swagger-router-controller: territory
     post:
       description: Save a TerritoryVersion that belongs to the record with the id in the route
@@ -3127,7 +3127,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/territory:
+  /record/to_review/{id}/territory:
     x-swagger-router-controller: territory
     get: 
       description: Returns a list of TerritoryVersion with state "to_review"
@@ -3152,7 +3152,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/territory:
+  /record/approved_in_use/{id}/territory:
     x-swagger-router-controller: territory
     get: 
       description: Returns the TerritoryVersion with state "approved_in_use"
@@ -3176,7 +3176,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/territory/{version}:
+  /record/approved_in_use/{id}/territory/{version}:
     x-swagger-router-controller: territory
     put: 
       description: Update a TerritoryVersion state to "approved_in_use"
@@ -3208,7 +3208,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/population_biology/{version}:
+  /record/{id}/population_biology/{version}:
     x-swagger-router-controller: populationBiology
     get: 
       description: Returns a PopulationBiologyVersion by id_record and number of version
@@ -3239,7 +3239,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/population_biology:
+  /record/{id}/population_biology:
     x-swagger-router-controller: populationBiology
     post:
       description: Save a new PopulationBiologyVersion that belongs to the record with the id in the route
@@ -3269,7 +3269,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/population_biology:
+  /record/to_review/{id}/population_biology:
     x-swagger-router-controller: populationBiology
     get: 
       description: Returns a list of PopulationBiologyVersion with state "to_review"
@@ -3294,7 +3294,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/population_biology:
+  /record/approved_in_use/{id}/population_biology:
     x-swagger-router-controller: populationBiology
     get: 
       description: Returns the PopulationBiologyVersion with state "approved_in_use"
@@ -3318,7 +3318,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/population_biology/{version}:
+  /record/approved_in_use/{id}/population_biology/{version}:
     x-swagger-router-controller: populationBiology
     put: 
       description: Update a PopulationBiologyVersion with state "approved_in_use"
@@ -3350,7 +3350,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/threat_status/{version}:
+  /record/{id}/threat_status/{version}:
     x-swagger-router-controller: threatStatus
     get: 
       description: Returns a ThreatStatusVersion by id_record and number of version
@@ -3381,7 +3381,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/threat_status:
+  /record/{id}/threat_status:
     x-swagger-router-controller: threatStatus
     post:
       description: Save a new ThreatStatusVersion that belongs to the record with the id in the path
@@ -3411,7 +3411,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/threat_status:
+  /record/to_review/{id}/threat_status:
     x-swagger-router-controller: threatStatus
     get: 
       description: Returns a list of ThreatStatus version with state "to_review"
@@ -3436,7 +3436,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/threat_status:
+  /record/approved_in_use/{id}/threat_status:
     x-swagger-router-controller: threatStatus
     get: 
       description: Returns the ThreatStatusVersion with state "approved_in_use"
@@ -3460,7 +3460,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/threat_status/{version}:
+  /record/approved_in_use/{id}/threat_status/{version}:
     x-swagger-router-controller: threatStatus
     put: 
       description: Update a ThreatStatusVersion state to "approved_in_use"
@@ -3492,7 +3492,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/legislation/{version}:
+  /record/{id}/legislation/{version}:
     x-swagger-router-controller: legislation
     get: 
       description: Returns a LegislationVersion by id_record and number of version
@@ -3523,7 +3523,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/legislation:
+  /record/{id}/legislation:
     x-swagger-router-controller: legislation
     post:
       description: Save a new LegislationVersion that belongs to the record with the id in the path
@@ -3553,7 +3553,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /records/to_review/{id}/legislation:
+  /record/to_review/{id}/legislation:
     x-swagger-router-controller: legislation
     get: 
       description: Returns a list of LegislationVersion with state "to_review"
@@ -3578,7 +3578,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/legislation:
+  /record/approved_in_use/{id}/legislation:
     x-swagger-router-controller: legislation
     get: 
       description: Returns the LegislationVersion with state "approved_in_use"
@@ -3602,7 +3602,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/legislation/{version}:
+  /record/approved_in_use/{id}/legislation/{version}:
     x-swagger-router-controller: legislation
     put: 
       description: Update a LegislationVersion state to "approved_in_use"

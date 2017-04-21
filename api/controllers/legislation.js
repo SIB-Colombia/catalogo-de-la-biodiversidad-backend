@@ -9,7 +9,7 @@ function postLegislation(req, res) {
     legislation_version._id = mongoose.Types.ObjectId();
     legislation_version.created=Date();
     //legislation_version.state="to_review";
-    legislation_version.state="accepted";
+    legislation_version.state="approved_in_use";
     legislation_version.element="legislation";
     var user = legislation_version.id_user;
     var elementValue = legislation_version.legislation;
@@ -131,7 +131,7 @@ function getLegislation(req, res) {
 }
 
 
-function setAcceptedLegislation(req, res) {
+function setApprovedInUseLegislation(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedLegislation(req, res) {
         });
       },
       function(callback){ 
-        LegislationVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        LegislationVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedLegislation(req, res) {
         
       },
       function(callback){ 
-        LegislationVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        LegislationVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ legislationApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedLegislation(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set LegislationVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set LegislationVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated LegislationVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated LegislationVersion to accepted', element: 'legislation', version : version, id_record : id_rc });
+        logger.info('Updated LegislationVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated LegislationVersion to approved_in_use', element: 'legislation', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewLegislation(req, res) {
   });
 }
 
-function getLastAcceptedLegislation(req, res) {
+function getLastApprovedInUseLegislation(req, res) {
   var id_rc = req.swagger.params.id.value;
-  LegislationVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  LegislationVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last LegislationVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last LegislationVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last LegislationVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last LegislationVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedLegislation(req, res) {
 module.exports = {
   postLegislation,
   getLegislation,
-  setAcceptedLegislation,
+  setApprovedInUseLegislation,
   getToReviewLegislation,
-  getLastAcceptedLegislation
+  getLastApprovedInUseLegislation
 };

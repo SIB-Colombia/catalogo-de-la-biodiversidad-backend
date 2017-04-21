@@ -8,8 +8,8 @@ function postDistribution(req, res) {
   var distribution_version  = req.body; 
     distribution_version._id = mongoose.Types.ObjectId();
     distribution_version.created=Date();
-    //distribution_version.state="to_review";
-    distribution_version.state="accepted";
+    distribution_version.state="to_review";
+    //distribution_version.state="approved_in_use";
     distribution_version.element="distribution";
     var user = distribution_version.id_user;
     var elementValue = distribution_version.distribution;
@@ -131,7 +131,7 @@ function getDistribution(req, res) {
 }
 
 
-function setAcceptedDistribution(req, res) {
+function setApprovedInUseDistribution(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedDistribution(req, res) {
         });
       },
       function(callback){ 
-        DistributionVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        DistributionVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedDistribution(req, res) {
         
       },
       function(callback){ 
-        DistributionVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        DistributionVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ distributionApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedDistribution(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set DistributionVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set DistributionVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated DistributionVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated DistributionVersion to accepted', element: 'distribution', version : version, id_record : id_rc });
+        logger.info('Updated DistributionVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated DistributionVersion to approved_in_use', element: 'distribution', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewDistribution(req, res) {
   });
 }
 
-function getLastAcceptedDistribution(req, res) {
+function getLastApprovedInUseDistribution(req, res) {
   var id_rc = req.swagger.params.id.value;
-  DistributionVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  DistributionVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last DistributionVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last DistributionVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last DistributionVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last DistributionVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedDistribution(req, res) {
 module.exports = {
   postDistribution,
   getDistribution,
-  setAcceptedDistribution,
+  setApprovedInUseDistribution,
   getToReviewDistribution,
-  getLastAcceptedDistribution
+  getLastApprovedInUseDistribution
 };

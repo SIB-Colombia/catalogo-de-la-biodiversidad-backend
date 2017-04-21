@@ -9,7 +9,7 @@ function postHabitats(req, res) {
     habitats_version._id = mongoose.Types.ObjectId();
     habitats_version.created=Date();
     //habitats_version.state="to_review";
-    habitats_version.state="accepted";
+    habitats_version.state="approved_in_use";
     habitats_version.element="habitats";
     var user = habitats_version.id_user;
     var elementValue = habitats_version.habitats;
@@ -131,7 +131,7 @@ function getHabitats(req, res) {
 }
 
 
-function setAcceptedHabitats(req, res) {
+function setApprovedInUseHabitats(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedHabitats(req, res) {
         });
       },
       function(callback){ 
-        HabitatsVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        HabitatsVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedHabitats(req, res) {
         
       },
       function(callback){ 
-        HabitatsVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        HabitatsVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ habitatsApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedHabitats(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set HabitatsVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set HabitatsVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated HabitatsVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated HabitatsVersion to accepted', element: 'habitats', version : version, id_record : id_rc });
+        logger.info('Updated HabitatsVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated HabitatsVersion to approved_in_use', element: 'habitats', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewHabitats(req, res) {
   });
 }
 
-function getLastAcceptedHabitats(req, res) {
+function getLastApprovedInUseHabitats(req, res) {
   var id_rc = req.swagger.params.id.value;
-  HabitatsVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  HabitatsVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last HabitatsVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last HabitatsVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last HabitatsVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last HabitatsVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedHabitats(req, res) {
 module.exports = {
   postHabitats,
   getHabitats,
-  setAcceptedHabitats,
+  setApprovedInUseHabitats,
   getToReviewHabitats,
-  getLastAcceptedHabitats
+  getLastApprovedInUseHabitats
 };

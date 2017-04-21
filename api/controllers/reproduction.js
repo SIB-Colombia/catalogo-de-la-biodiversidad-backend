@@ -9,8 +9,8 @@ function postReproduction(req, res) {
   var reproduction_version  = req.body; 
     reproduction_version._id = mongoose.Types.ObjectId();
     reproduction_version.created=Date();
-    //reproduction_version.state="to_review";
-    reproduction_version.state="approved_in_use";
+    reproduction_version.state="to_review";
+    //reproduction_version.state="approved_in_use";
     reproduction_version.element="reproduction";
     var user = reproduction_version.id_user;
     var elementValue = reproduction_version.reproduction;

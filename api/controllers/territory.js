@@ -8,8 +8,8 @@ function postTerritory(req, res) {
   var territory_version  = req.body; 
     territory_version._id = mongoose.Types.ObjectId();
     territory_version.created=Date();
-    //territory_version.state="to_review";
-    territory_version.state="accepted";
+    territory_version.state="to_review";
+    //territory_version.state="approved_in_use";
     territory_version.element="territory";
     var user = territory_version.id_user;
     var elementValue = territory_version.territory;
@@ -131,7 +131,7 @@ function getTerritory(req, res) {
 }
 
 
-function setAcceptedTerritory(req, res) {
+function setApprovedInUseTerritory(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedTerritory(req, res) {
         });
       },
       function(callback){ 
-        TerritoryVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        TerritoryVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedTerritory(req, res) {
         
       },
       function(callback){ 
-        TerritoryVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        TerritoryVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ territoryApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedTerritory(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set TerritoryVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set TerritoryVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated TerritoryVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated TerritoryVersion to accepted', element: 'territory', version : version, id_record : id_rc });
+        logger.info('Updated TerritoryVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated TerritoryVersion to approved_in_use', element: 'territory', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewTerritory(req, res) {
   });
 }
 
-function getLastAcceptedTerritory(req, res) {
+function getLastApprovedInUseTerritory(req, res) {
   var id_rc = req.swagger.params.id.value;
-  TerritoryVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  TerritoryVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last TerritoryVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last TerritoryVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last TerritoryVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last TerritoryVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedTerritory(req, res) {
 module.exports = {
   postTerritory,
   getTerritory,
-  setAcceptedTerritory,
+  setApprovedInUseTerritory,
   getToReviewTerritory,
-  getLastAcceptedTerritory
+  getLastApprovedInUseTerritory
 };
