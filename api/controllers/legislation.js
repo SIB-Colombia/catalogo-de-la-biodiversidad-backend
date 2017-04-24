@@ -8,8 +8,8 @@ function postLegislation(req, res) {
   var legislation_version  = req.body; 
     legislation_version._id = mongoose.Types.ObjectId();
     legislation_version.created=Date();
-    //legislation_version.state="to_review";
-    legislation_version.state="approved_in_use";
+    legislation_version.state="to_review";
+    //legislation_version.state="approved_in_use";
     legislation_version.element="legislation";
     var user = legislation_version.id_user;
     var elementValue = legislation_version.legislation;

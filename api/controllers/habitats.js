@@ -8,8 +8,8 @@ function postHabitats(req, res) {
   var habitats_version  = req.body; 
     habitats_version._id = mongoose.Types.ObjectId();
     habitats_version.created=Date();
-    //habitats_version.state="to_review";
-    habitats_version.state="approved_in_use";
+    habitats_version.state="to_review";
+    //habitats_version.state="approved_in_use";
     habitats_version.element="habitats";
     var user = habitats_version.id_user;
     var elementValue = habitats_version.habitats;

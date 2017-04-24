@@ -8,8 +8,8 @@ function postReferences(req, res) {
   var references_version  = req.body; 
     references_version._id = mongoose.Types.ObjectId();
     references_version.created=Date();
-    //references_version.state="to_review";
-    references_version.state="approved_in_use";
+    references_version.state="to_review";
+    //references_version.state="approved_in_use";
     references_version.element="references";
     var user = references_version.id_user;
     var elementValue = references_version.references;
@@ -161,7 +161,17 @@ function setApprovedInUseReferences(req, res) {
         
       },
       function(callback){ 
-        ReferencesVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+        ReferencesVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ referencesApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{

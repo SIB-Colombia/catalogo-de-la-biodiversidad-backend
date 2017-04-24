@@ -8,8 +8,8 @@ function postEndemicAtomized(req, res) {
   var endemic_atomized_version  = req.body; 
     endemic_atomized_version._id = mongoose.Types.ObjectId();
     endemic_atomized_version.created=Date();
-    //endemic_atomized_version.state="to_review";
-    endemic_atomized_version.state="accepted";
+    endemic_atomized_version.state="to_review";
+    //endemic_atomized_version.state="approved_in_use";
     endemic_atomized_version.element="endemicAtomized";
     var user = endemic_atomized_version.id_user;
     var elementValue = endemic_atomized_version.endemicAtomized;
@@ -131,7 +131,7 @@ function getEndemicAtomized(req, res) {
 }
 
 
-function setAcceptedEndemicAtomized(req, res) {
+function setApprovedInUseEndemicAtomized(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedEndemicAtomized(req, res) {
         });
       },
       function(callback){ 
-        EndemicAtomizedVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        EndemicAtomizedVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedEndemicAtomized(req, res) {
         
       },
       function(callback){ 
-        EndemicAtomizedVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        EndemicAtomizedVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ endemicAtomizedApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedEndemicAtomized(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set EndemicAtomizedVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set EndemicAtomizedVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated EndemicAtomizedVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated EndemicAtomizedVersion to accepted', element: 'endemicAtomized', version : version, id_record : id_rc });
+        logger.info('Updated EndemicAtomizedVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated EndemicAtomizedVersion to approved_in_use', element: 'endemicAtomized', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewEndemicAtomized(req, res) {
   });
 }
 
-function getLastAcceptedEndemicAtomized(req, res) {
+function getLastApprovedInUseEndemicAtomized(req, res) {
   var id_rc = req.swagger.params.id.value;
-  EndemicAtomizedVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  EndemicAtomizedVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last EndemicAtomizedVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last EndemicAtomizedVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last EndemicAtomizedVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last EndemicAtomizedVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedEndemicAtomized(req, res) {
 module.exports = {
   postEndemicAtomized,
   getEndemicAtomized,
-  setAcceptedEndemicAtomized,
+  setApprovedInUseEndemicAtomized,
   getToReviewEndemicAtomized,
-  getLastAcceptedEndemicAtomized
+  getLastApprovedInUseEndemicAtomized
 };

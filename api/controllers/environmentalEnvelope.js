@@ -12,7 +12,8 @@ function postEnvironmentalEnvelope(req, res) {
     var ver = "";
     environmental_envelope_version._id = mongoose.Types.ObjectId();
     environmental_envelope_version.created=Date();
-    environmental_envelope_version.state="accepted";
+    environmental_envelope_version.state="to_review";
+    //environmental_envelope_version.state="approved_in_use";
     environmental_envelope_version.element="environmentalEnvelope";
     var user = environmental_envelope_version.id_user;
     var elementValue = environmental_envelope_version.environmentalEnvelope;
@@ -131,7 +132,7 @@ function getEnvironmentalEnvelope(req, res) {
 }
 
 
-function setAcceptedEnvironmentalEnvelope(req, res) {
+function setApprovedInUseEnvironmentalEnvelope(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +151,7 @@ function setAcceptedEnvironmentalEnvelope(req, res) {
         });
       },
       function(callback){ 
-        EnvironmentalEnvelopeVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        EnvironmentalEnvelopeVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +162,17 @@ function setAcceptedEnvironmentalEnvelope(req, res) {
         
       },
       function(callback){ 
-        EnvironmentalEnvelopeVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        EnvironmentalEnvelopeVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ environmentalEnvelopeApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +183,12 @@ function setAcceptedEnvironmentalEnvelope(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set EnvironmentalEnvelopeVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set EnvironmentalEnvelopeVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated EnvironmentalEnvelopeVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated EnvironmentalEnvelopeVersion to accepted', element: 'environmentalEnvelope', version : version, id_record : id_rc });
+        logger.info('Updated EnvironmentalEnvelopeVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated EnvironmentalEnvelopeVersion to approved_in_use', element: 'environmentalEnvelope', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +219,16 @@ function getToReviewEnvironmentalEnvelope(req, res) {
   });
 }
 
-function getLastAcceptedEnvironmentalEnvelope(req, res) {
+function getLastApprovedInUseEnvironmentalEnvelope(req, res) {
   var id_rc = req.swagger.params.id.value;
-  EnvironmentalEnvelopeVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  EnvironmentalEnvelopeVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last EnvironmentalEnvelopeVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last EnvironmentalEnvelopeVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last EnvironmentalEnvelopeVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last EnvironmentalEnvelopeVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +242,7 @@ function getLastAcceptedEnvironmentalEnvelope(req, res) {
 module.exports = {
   postEnvironmentalEnvelope,
   getEnvironmentalEnvelope,
-  setAcceptedEnvironmentalEnvelope,
+  setApprovedInUseEnvironmentalEnvelope,
   getToReviewEnvironmentalEnvelope,
-  getLastAcceptedEnvironmentalEnvelope
+  getLastApprovedInUseEnvironmentalEnvelope
 };

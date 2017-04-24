@@ -9,8 +9,8 @@ function postUsesManagementAndConservation(req, res) {
   var uses_management_conservation_version  = req.body; 
     uses_management_conservation_version._id = mongoose.Types.ObjectId();
     uses_management_conservation_version.created=Date();
-    //uses_management_conservation_version.state="to_review";
-    uses_management_conservation_version.state="accepted";
+    uses_management_conservation_version.state="to_review";
+    //uses_management_conservation_version.state="approved_in_use";
     uses_management_conservation_version.version=0;
     uses_management_conservation_version.id_record= mongoose.Types.ObjectId();
     uses_management_conservation_version.element="usesManagementAndConservation";
@@ -167,7 +167,7 @@ function getUsesManagementAndConservation(req, res) {
 }
 
 
-function setAcceptedUsesManagementAndConservation(req, res) {
+function setApprovedInUseUsesManagementAndConservation(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -186,7 +186,7 @@ function setAcceptedUsesManagementAndConservation(req, res) {
         });
       },
       function(callback){ 
-        UsesManagementAndConservationVersion.update({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        UsesManagementAndConservationVersion.update({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -197,7 +197,17 @@ function setAcceptedUsesManagementAndConservation(req, res) {
         
       },
       function(callback){ 
-        UsesManagementAndConservationVersion.update({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        UsesManagementAndConservationVersion.findOneAndUpdate({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ usesManagementAndConservationApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -208,12 +218,12 @@ function setAcceptedUsesManagementAndConservation(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set UsesManagementAndConservationVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set UsesManagementAndConservationVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated UsesManagementAndConservationVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated UsesManagementAndConservationVersion to accepted', element: 'UsesManagementAndConservation', version : version, id_record : id_rc });
+        logger.info('Updated UsesManagementAndConservationVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated UsesManagementAndConservationVersion to approved_in_use', element: 'UsesManagementAndConservation', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -243,16 +253,16 @@ function getToReviewUsesManagementAndConservation(req, res) {
   });
 }
 
-function getLastAcceptedUsesManagementAndConservation(req, res) {
+function getLastApprovedInUseUsesManagementAndConservation(req, res) {
   var id_rc = req.swagger.params.id.value;
-  UsesManagementAndConservationVersion.find({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "accepted" }).exec(function (err, elementVer) {
+  UsesManagementAndConservationVersion.find({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last UsesManagementAndConservation at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last UsesManagementAndConservation at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer.length !== 0){
-        logger.info('Get last UsesManagementAndConservation with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last UsesManagementAndConservation with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -266,7 +276,7 @@ function getLastAcceptedUsesManagementAndConservation(req, res) {
 module.exports = {
   postUsesManagementAndConservation,
   getUsesManagementAndConservation,
-  setAcceptedUsesManagementAndConservation,
+  setApprovedInUseUsesManagementAndConservation,
   getToReviewUsesManagementAndConservation,
-  getLastAcceptedUsesManagementAndConservation
+  getLastApprovedInUseUsesManagementAndConservation
 };
