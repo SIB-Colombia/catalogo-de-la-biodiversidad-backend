@@ -2163,6 +2163,7 @@ var Schema = mongoose.Schema;
                       }else{
                         uses_management_and_conservation_version.id_record=id_rc;
                         uses_management_and_conservation_version.version=doc.usesManagementAndConservationVersion.length+1;
+                        console.log("uses_management_and_conservation_version.version: "+uses_management_and_conservation_version.version)
                         var ver = uses_management_and_conservation_version.version;
                         uses_management_and_conservation_version.save(function(err){
                           if(err){

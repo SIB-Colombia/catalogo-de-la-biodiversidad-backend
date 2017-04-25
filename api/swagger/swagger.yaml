@@ -4337,7 +4337,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/ecological_significance/{version}:
+  /record/{id}/ecological_significance/{version}:
     x-swagger-router-controller: ecologicalSignificance
     get: 
       description: Returns a version of a EcologicalSignificance element by record id and version
@@ -4365,7 +4365,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/ecological_significance:
+  /record/{id}/ecological_significance:
     x-swagger-router-controller: ecologicalSignificance
     post:
       description: Save a new version of a EcologicalSignificance element which belongs to record with id in the url
@@ -4395,7 +4395,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/ecological_significance:
+  /record/to_review/{id}/ecological_significance:
     x-swagger-router-controller: ecologicalSignificance
     get: 
       description: Returns a list of EcologicalSignificance version with state "to_review"
@@ -4420,7 +4420,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/ecological_significance:
+  /record/approved_in_use/{id}/ecological_significance:
     x-swagger-router-controller: ecologicalSignificance
     get: 
       description: Returns the ecologicalSignificance version approved_in_use #**
@@ -4444,7 +4444,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/ecological_significance/{version}:
+  /record/approved_in_use/{id}/ecological_significance/{version}:
     x-swagger-router-controller: ecologicalSignificance
     put: 
       description: Update a EcologicalSignificanceVersion state to approved_in_use
@@ -4477,7 +4477,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
       
             
-  /records/{id}/invasiveness/{version}:
+  /record/{id}/invasiveness/{version}:
     x-swagger-router-controller: invasiveness
     get: 
       description: Returns a version of a Invasiveness element by record id and version
@@ -4505,7 +4505,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/invasiveness:
+  /record/{id}/invasiveness:
     x-swagger-router-controller: invasiveness
     post:
       description: Save a new version of a Invasiveness element which belongs to record with id in the url
@@ -4535,7 +4535,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/invasiveness:
+  /record/to_review/{id}/invasiveness:
     x-swagger-router-controller: invasiveness
     get: 
       description: Returns a list of Invasiveness version with state "to_review"
@@ -4560,7 +4560,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/invasiveness:
+  /record/approved_in_use/{id}/invasiveness:
     x-swagger-router-controller: invasiveness
     get: 
       description: Returns the invasiveness version approved_in_use #**
@@ -4584,7 +4584,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/invasiveness/{version}:
+  /record/approved_in_use/{id}/invasiveness/{version}:
     x-swagger-router-controller: invasiveness
     put: 
       description: Update a InvasivenessVersion state to approved_in_use
@@ -4616,7 +4616,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/more_information/{version}:
+  /record/{id}/more_information/{version}:
     x-swagger-router-controller: moreInformation
     get: 
       description: Returns a version of a MoreInformation element by record id and version
@@ -4644,7 +4644,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/more_information:
+  /record/{id}/more_information:
     x-swagger-router-controller: moreInformation
     post:
       description: Save a new version of a MoreInformation element which belongs to record with id in the url
@@ -4674,7 +4674,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/more_information:
+  /record/to_review/{id}/more_information:
     x-swagger-router-controller: moreInformation
     get: 
       description: Returns a list of MoreInformation version with state "to_review"
@@ -4699,7 +4699,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/more_information:
+  /record/approved_in_use/{id}/more_information:
     x-swagger-router-controller: moreInformation
     get: 
       description: Returns the moreInformation version approved_in_use #**
@@ -4723,7 +4723,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/more_information/{version}:
+  /record/approved_in_use/{id}/more_information/{version}:
     x-swagger-router-controller: moreInformation
     put: 
       description: Update a MoreInformationVersion state to approved_in_use
@@ -4755,7 +4755,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/brief_description/{version}:
+  /record/{id}/brief_description/{version}:
     x-swagger-router-controller: briefDescription
     get: 
       description: Returns a version of a BriefDescription element by record id and version
@@ -4783,7 +4783,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/brief_description:
+  /record/{id}/brief_description:
     x-swagger-router-controller: briefDescription
     post:
       description: Save a new version of a BriefDescription element which belongs to record with id in the url
@@ -4813,7 +4813,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/brief_description:
+  /record/to_review/{id}/brief_description:
     x-swagger-router-controller: briefDescription
     get: 
       description: Returns a list of BriefDescription version with state "to_review"
@@ -4838,7 +4838,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/brief_description:
+  /record/approved_in_use/{id}/brief_description:
     x-swagger-router-controller: briefDescription
     get: 
       description: Returns the briefDescription version approved_in_use #**
@@ -4862,7 +4862,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/brief_description/{version}:
+  /record/approved_in_use/{id}/brief_description/{version}:
     x-swagger-router-controller: briefDescription
     put: 
       description: Update a BriefDescriptionVersion state to approved_in_use
@@ -4895,7 +4895,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/{id}/ancillary_data/{version}:
+  /record/{id}/ancillary_data/{version}:
     x-swagger-router-controller: ancillaryData
     get: 
       description: Returns a version of a AncillaryData element by record id and version
@@ -4923,7 +4923,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/{id}/ancillary_data:
+  /record/{id}/ancillary_data:
     x-swagger-router-controller: ancillaryData
     post:
       description: Save a new version of a AncillaryData element which belongs to record with id in the url
@@ -4953,7 +4953,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/to_review/{id}/ancillary_data:
+  /record/to_review/{id}/ancillary_data:
     x-swagger-router-controller: ancillaryData
     get: 
       description: Returns a list of AncillaryData version with state "to_review"
@@ -4978,7 +4978,7 @@ paths:
             $ref: "#/definitions/ErrorResponse"
             
             
-  /records/approved_in_use/{id}/ancillary_data:
+  /record/approved_in_use/{id}/ancillary_data:
     x-swagger-router-controller: ancillaryData
     get: 
       description: Returns the ancillaryData version approved_in_use #**
@@ -5002,7 +5002,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
             
-  /records/approved_in_use/{id}/ancillary_data/{version}:
+  /record/approved_in_use/{id}/ancillary_data/{version}:
     x-swagger-router-controller: ancillaryData
     put: 
       description: Update a AncillaryDataVersion state to approved_in_use

@@ -171,7 +171,7 @@ function setApprovedInUseDirectThreats(req, res) {
       },
       function(elementVer,callback){ 
         elementVer.state="approved_in_use";
-        add_objects.Record.update({_id:id_rc},{ directThreatsVersionApprovedInUse: elementVer }, function(err, result){
+        add_objects.Record.update({_id:id_rc},{ directThreatsApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{

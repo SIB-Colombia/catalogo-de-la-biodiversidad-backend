@@ -115,7 +115,10 @@ function getUsesManagementAndConservation(req, res) {
     var id_rc = req.swagger.params.id.value;
     var version = req.swagger.params.version.value;
 
-    UsesManagementAndConservationVersion.findOne({ "id_record" : mongoose.Types.ObjectId(id_rc), version: version }).exec(function (err, elementVer) {
+    console.log("version: "+version);
+    console.log("id: "+id_rc);
+
+    UsesManagementAndConservationVersion.findOne({ "id_record" : mongoose.Types.ObjectId(id_rc)}).exec(function (err, elementVer) {
             
             if(err){
               logger.error('Error getting the indicated UsesManagementAndConservationVersion', JSON.stringify({ message:err, id_record : id_rc, version: version }) );

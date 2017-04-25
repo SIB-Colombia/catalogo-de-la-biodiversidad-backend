@@ -8,8 +8,8 @@ function postAncillaryData(req, res) {
   var ancillary_data_version  = req.body; 
     ancillary_data_version._id = mongoose.Types.ObjectId();
     ancillary_data_version.created=Date();
-    //ancillary_data_version.state="to_review";
-    ancillary_data_version.state="approved_in_use";
+    ancillary_data_version.state="to_review";
+    //ancillary_data_version.state="approved_in_use";
     ancillary_data_version.element="ancillaryData";
     var user = ancillary_data_version.id_user;
     var elementValue = ancillary_data_version.ancillaryData;
@@ -161,7 +161,17 @@ function setApprovedInUseAncillaryData(req, res) {
         
       },
       function(callback){ 
-        AncillaryDataVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+        AncillaryDataVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{

@@ -8,8 +8,8 @@ function postInvasiveness(req, res) {
   var invasiveness_version  = req.body; 
     invasiveness_version._id = mongoose.Types.ObjectId();
     invasiveness_version.created=Date();
-    //invasiveness_version.state="to_review";
-    invasiveness_version.state="accepted";
+    invasiveness_version.state="to_review";
+    //invasiveness_version.state="approved_in_use";
     invasiveness_version.element="invasiveness";
     var user = invasiveness_version.id_user;
     var elementValue = invasiveness_version.invasiveness;
@@ -131,7 +131,7 @@ function getInvasiveness(req, res) {
 }
 
 
-function setAcceptedInvasiveness(req, res) {
+function setApprovedInUseInvasiveness(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
   var id_rc = req.swagger.params.id.value;
@@ -150,7 +150,7 @@ function setAcceptedInvasiveness(req, res) {
         });
       },
       function(callback){ 
-        InvasivenessVersion.update({ id_record : id_rc, state: "accepted" },{ state: "deprecated" }, { multi: true },function (err, raw){
+        InvasivenessVersion.update({ id_record : id_rc, state: "approved_in_use" },{ state: "approved" }, { multi: true },function (err, raw){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -161,7 +161,17 @@ function setAcceptedInvasiveness(req, res) {
         
       },
       function(callback){ 
-        InvasivenessVersion.update({ id_record : id_rc, state: "to_review", version : version }, { state: "accepted" }, function (err, elementVer) {
+        InvasivenessVersion.findOneAndUpdate({ id_record : id_rc, state: "to_review", version : version }, { state: "approved_in_use" }, function (err, elementVer) {
+          if(err){
+            callback(new Error(err.message));
+          }else{
+            callback(null, elementVer);
+          }
+        });
+      },
+      function(elementVer,callback){ 
+        elementVer.state="approved_in_use";
+        add_objects.Record.update({_id:id_rc},{ invasivenessApprovedInUse: elementVer }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
@@ -172,12 +182,12 @@ function setAcceptedInvasiveness(req, res) {
     ],
     function(err, result) {
       if (err) {
-        logger.error('Error to set InvasivenessVersion accepted', JSON.stringify({ message:err }) );
+        logger.error('Error to set InvasivenessVersion approved_in_use', JSON.stringify({ message:err }) );
         res.status(400);
         res.json({ ErrorResponse: {message: ""+err }});
       }else{
-        logger.info('Updated InvasivenessVersion to accepted', JSON.stringify({ version:version, id_record: id_rc }) );
-        res.json({ message: 'Updated InvasivenessVersion to accepted', element: 'invasiveness', version : version, id_record : id_rc });
+        logger.info('Updated InvasivenessVersion to approved_in_use', JSON.stringify({ version:version, id_record: id_rc }) );
+        res.json({ message: 'Updated InvasivenessVersion to approved_in_use', element: 'invasiveness', version : version, id_record : id_rc });
       }      
     });
   }else{
@@ -208,16 +218,16 @@ function getToReviewInvasiveness(req, res) {
   });
 }
 
-function getLastAcceptedInvasiveness(req, res) {
+function getLastApprovedInUseInvasiveness(req, res) {
   var id_rc = req.swagger.params.id.value;
-  InvasivenessVersion.find({ id_record : id_rc, state: "accepted" }).exec(function (err, elementVer) {
+  InvasivenessVersion.find({ id_record : id_rc, state: "approved_in_use" }).exec(function (err, elementVer) {
     if(err){
-      logger.error('Error getting the last InvasivenessVersion at state accepted', JSON.stringify({ message:err }) );
+      logger.error('Error getting the last InvasivenessVersion at state approved_in_use', JSON.stringify({ message:err }) );
       res.status(400);
       res.send(err);
     }else{
       if(elementVer){
-        logger.info('Get last InvasivenessVersion with state accepted', JSON.stringify({ id_record: id_rc }) );
+        logger.info('Get last InvasivenessVersion with state approved_in_use', JSON.stringify({ id_record: id_rc }) );
         var len = elementVer.length;
         res.json(elementVer[len-1]);
       }else{
@@ -231,7 +241,7 @@ function getLastAcceptedInvasiveness(req, res) {
 module.exports = {
   postInvasiveness,
   getInvasiveness,
-  setAcceptedInvasiveness,
+  setApprovedInUseInvasiveness,
   getToReviewInvasiveness,
-  getLastAcceptedInvasiveness
+  getLastApprovedInUseInvasiveness
 };
