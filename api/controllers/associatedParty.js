@@ -147,7 +147,19 @@ function setApprovedInUseAssociatedParty(req, res) {
       },
       function(elementVer,callback){ 
         elementVer.state="approved_in_use";
-        add_objects.Record.update({_id:id_rc},{ associatedPartyApprovedInUse: elementVer }, function(err, result){
+        var update_date = Date();
+        var associatedParty = {}
+        if(typeof elementVer.associatedParty[0].firstName != 'undefined' && elementVer.associatedParty[0].firstName != ''){
+          associatedParty.firstName = elementVer.associatedParty[0].firstName;
+        }else{
+          associatedParty.firstName = '';
+        }
+        if(typeof elementVer.associatedParty[0].lastName != 'undefined' && elementVer.associatedParty[0].lastName != ''){
+          associatedParty.lastName = elementVer.associatedParty[0].lastName;
+        }else{
+          associatedParty.lastName = '';
+        }
+        add_objects.Record.update({_id:id_rc},{ associatedPartyApprovedInUse: elementVer, update_date: update_date, associatedParty: associatedParty }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{

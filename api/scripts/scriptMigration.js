@@ -2146,6 +2146,7 @@ var Schema = mongoose.Schema;
             uses_management_and_conservation_version.id_user="sib+ac@humboldt.org.co";
             uses_management_and_conservation_version.state="approved_in_use";
             uses_management_and_conservation_version.element="usesManagementAndConservation";
+            uses_management_and_conservation_version.version=0;
             uses_management_and_conservation_version = new UsesManagementAndConservationVersionModel(uses_management_and_conservation_version);
             var id_v = uses_management_and_conservation_version._id;
             var id_rc = uses_management_and_conservation_version.id_record;

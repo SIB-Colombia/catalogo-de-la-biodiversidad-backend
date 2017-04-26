@@ -86,7 +86,7 @@ var Element = new Schema ({
 });
 */
 
-var Record = new Schema({name:String}, { collection: 'Record', strict: false, versionKey: false });
+var Record = new Schema({ update_date : { type: Date, index: true }, scientificNameSimple : { type: String, index: true } }, { collection: 'Record', strict: false, versionKey: false });
 
 var Element = new Schema ({
 	//ancillaryData : [AncillaryData]

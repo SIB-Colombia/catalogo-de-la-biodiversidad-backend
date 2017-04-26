@@ -183,7 +183,6 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
           async.eachSeries(data, function(record_data, callback){
             lastRec ={};
             console.log(record_data._id);
-            //record_data._id = "56702bfef289f5a40c0cd2ac";
             lastRec.creation_date = record_data._id.getTimestamp();
             async.waterfall([
               function(callback){
@@ -196,6 +195,9 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                     if(elementVer){
                       lastRec._id = mongoose.Types.ObjectId(record_data._id);
                       lastRec.taxonRecordNameApprovedInUse = elementVer;
+                      if(typeof elementVer.taxonRecordName.scientificName.simple != 'undefined' && elementVer.taxonRecordName.scientificName.simple != ''){
+                        lastRec.scientificNameSimple = elementVer.taxonRecordName.scientificName.simple;
+                      }
                     }else{
                       console.log("No existe TaxonRecordNameVersion for id record : "+record_data._id);
                     }
@@ -204,14 +206,20 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                //console.log("!*");
                 AssociatedPartyVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("AssociatedParty");
                   if(err){
                     callback(new Error("Error to get AssociatedParty element for the record with id: "+record_data._id+" : " + err.message));
                   }else{ 
                     if(elementVer){
+                      lastRec.associatedParty = {};
                       lastRec.associatedPartyApprovedInUse = elementVer;
+                      if(typeof elementVer.associatedParty[0].firstName != 'undefined' && elementVer.associatedParty[0].firstName != ''){
+                        lastRec.associatedParty.firstName = elementVer.associatedParty[0].firstName;
+                      }
+                      if(typeof elementVer.associatedParty[0].lastName != 'undefined' && elementVer.associatedParty[0].lastName != ''){
+                        lastRec.associatedParty.lastName = elementVer.associatedParty[0].lastName;
+                      }
                     }else{
                       console.log("No exist AssociatedPartyVersion for id record : "+record_data._id);
                     }
@@ -220,13 +228,6 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                /*
-                console.log("CommonNamesAtomizedVersion");
-                console.log("id_record: "+record_data._id);
-                if(record_data._id == 56e83d6383c45700544e43d7){
-                  console.log("!!!!");
-                }
-                */
                 CommonNamesAtomizedVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("CommonNamesAtomized");
                   if(err){

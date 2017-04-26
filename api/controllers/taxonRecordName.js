@@ -151,7 +151,9 @@ function postRecord(req, res) {
                 res.status(400);
                 res.json({message: err });
               }else{
-                add_objects.Record.create({ _id:id_rc, taxonRecordNameApprovedInUse: taxonRecordNameElement },function(err, doc){
+                var update_date = Date();
+                var scientificNameSimple = taxonRecordNameElement.taxonRecordName.scientificName.simple;
+                add_objects.Record.create({ _id:id_rc, taxonRecordNameApprovedInUse: taxonRecordNameElement, scientificNameSimple: scientificNameSimple, update_date: update_date },function(err, doc){
                   if(err){
                     logger.error('Creation of a record error, error saving approved_in_use version Record', JSON.stringify({ message:err }) );
                     res.status(400);
@@ -219,7 +221,9 @@ function setApprovedInUseTaxonRecordName(req, res) {
       },
       function(elementVer,callback){ 
         elementVer.state="approved_in_use";
-        add_objects.Record.update({_id:id_rc},{ taxonRecordNameApprovedInUse: elementVer }, function(err, result){
+        var update_date = Date();
+        var scientificNameSimple = elementVer.taxonRecordName.scientificName.simple;
+        add_objects.Record.update({_id:id_rc},{ taxonRecordNameApprovedInUse: elementVer, update_date: update_date, scientificNameSimple: scientificNameSimple }, function(err, result){
           if(err){
             callback(new Error(err.message));
           }else{
