@@ -153,7 +153,7 @@ function postRecord(req, res) {
               }else{
                 var update_date = Date();
                 var scientificNameSimple = taxonRecordNameElement.taxonRecordName.scientificName.simple;
-                add_objects.Record.create({ _id:id_rc, taxonRecordNameApprovedInUse: taxonRecordNameElement, scientificNameSimple: scientificNameSimple, update_date: update_date },function(err, doc){
+                add_objects.Record.create({ _id:id_rc, taxonRecordNameApprovedInUse: taxonRecordNameElement, scientificNameSimple: scientificNameSimple, update_date: update_date, creation_date: update_date},function(err, doc){
                   if(err){
                     logger.error('Creation of a record error, error saving approved_in_use version Record', JSON.stringify({ message:err }) );
                     res.status(400);

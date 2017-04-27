@@ -18,7 +18,7 @@ function postUsesManagementAndConservation(req, res) {
     var elementValue = uses_management_conservation_version.usesManagementAndConservation;
     uses_management_conservation_version = new UsesManagementAndConservationVersion(uses_management_conservation_version);
     var id_v = uses_management_conservation_version._id;
-    var id_rc = req.swagger.params.id.value;
+    var id_rc = mongoose.Types.ObjectId(req.swagger.params.id.value);
 
     var ob_ids= new Array();
     ob_ids.push(id_v);
@@ -115,19 +115,17 @@ function getUsesManagementAndConservation(req, res) {
     var id_rc = req.swagger.params.id.value;
     var version = req.swagger.params.version.value;
 
-    console.log("version: "+version);
-    console.log("id: "+id_rc);
-
-    UsesManagementAndConservationVersion.findOne({ "id_record" : mongoose.Types.ObjectId(id_rc)}).exec(function (err, elementVer) {
-            
+    UsesManagementAndConservationVersion.findOne({ "id_record" : mongoose.Types.ObjectId(id_rc), version: version}).exec(function (err, elementVer) {
             if(err){
               logger.error('Error getting the indicated UsesManagementAndConservationVersion', JSON.stringify({ message:err, id_record : id_rc, version: version }) );
               res.status(400);
               res.send(err);
             }else{
               if(elementVer){
+                
                 if(!(elementVer._doc.usesManagementAndConservation === undefined || elementVer._doc.usesManagementAndConservation === null)){
                   for(var i=0;i<elementVer._doc.usesManagementAndConservation.usesAtomized.length;i++){
+                    if(elementVer._doc.usesManagementAndConservation.usesAtomized[i].ancillaryData === undefined || elementVer._doc.usesManagementAndConservation.usesAtomized[i].ancillaryData === null){
                     for(var j=0;j<elementVer._doc.usesManagementAndConservation.usesAtomized[i].ancillaryData.length;j++){
                       for(var k=0;k<elementVer._doc.usesManagementAndConservation.usesAtomized[i].ancillaryData[j].reference.length;k++){
                         if(!(elementVer._doc.usesManagementAndConservation.usesAtomized[i].ancillaryData[j].reference[k].authors.constructor === Array)){
@@ -140,6 +138,7 @@ function getUsesManagementAndConservation(req, res) {
                           elementVer._doc.usesManagementAndConservation.usesAtomized[i].ancillaryData[j].reference[k].keywords = elementVer._doc.usesManagementAndConservation.usesAtomized[i].ancillaryData[j].reference[k].keywords.split(";");
                         }
                       }
+                    }
                     }
                   }
                   if(!(elementVer._doc.usesManagementAndConservation.managementAndConservation.ancillaryData === undefined || elementVer._doc.usesManagementAndConservation.managementAndConservation.ancillaryData === null)){
@@ -166,7 +165,6 @@ function getUsesManagementAndConservation(req, res) {
               }
             }
     });
-
 }
 
 
@@ -193,7 +191,6 @@ function setApprovedInUseUsesManagementAndConservation(req, res) {
           if(err){
             callback(new Error(err.message));
           }else{
-            console.log("response: "+raw);
             callback();
           }
         });

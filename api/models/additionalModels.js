@@ -86,7 +86,7 @@ var Element = new Schema ({
 });
 */
 
-var Record = new Schema({ update_date : { type: Date, index: true }, scientificNameSimple : { type: String, index: true } }, { collection: 'Record', strict: false, versionKey: false });
+var Record = new Schema({ creation_date : { type: Date, index: true }, update_date : { type: Date, index: true }, scientificNameSimple : { type: String, index: true } }, { collection: 'Record', strict: false, versionKey: false });
 
 var Element = new Schema ({
 	//ancillaryData : [AncillaryData]
@@ -105,9 +105,6 @@ var ElementVersion = new Schema ({
 
 var RecordVersion = new Schema({
 	language : String,
-	scientificName : String,
-	associatedParty_firstName: String,
-	associatedParty_lastName: String,
 	moreInformationVersion : [{ type: Schema.Types.ObjectId, ref: 'MoreInformationVersion' }],
 	associatedPartyVersion : [{ type: Schema.Types.ObjectId, ref: 'AssociatedPartyVersion' }],
 	directThreatsVersion : [{ type: Schema.Types.ObjectId, ref: 'DirectThreatsVersion' }],
