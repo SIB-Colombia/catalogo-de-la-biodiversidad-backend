@@ -43,7 +43,15 @@ var value={};
 var response=[];
 var dataObject ={};
 
-//query = add_objects.RecordVersion.find({}).select('taxonRecordNameVersion associatedPartyVersion').populate('taxonRecordNameVersion associatedPartyVersion').sort({ _id: -1}).limit(1);
+/*
+var options = {
+  user: 'testcatalogo',
+  pass: '1323catalogotest'
+}
+*/
+
+//mongodb://54.175.237.66:27017/catalogoDbTest
+
 query = add_objects.RecordVersion.find({}).select('_id').sort({ _id: -1});
 
 var lastRec ={};
@@ -174,6 +182,7 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                   callback(new Error("Error getting the total of Records:" + err.message));
               }else{
                   console.log("2");
+                  //console.log(data);
                   callback(null, data);
               }
             });

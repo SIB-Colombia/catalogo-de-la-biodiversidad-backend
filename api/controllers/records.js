@@ -213,7 +213,7 @@ function lastRecord(req, res) {
 
 
 function getRecordList(req, res) {
-  var query = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date');
+  var query = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date');
   query.exec(function (err, data) {
     if(err){
       logger.error('Error getting list of records', JSON.stringify({ message:err }) );
