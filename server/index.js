@@ -4,7 +4,6 @@ import cors from 'cors';
 import bodyParser from 'body-parser';
 import db from './db';
 import middleware from './middleware';
-// import api from './api';
 import { config } from '../config/application-config';
 import { logger } from './log';
 import SwaggerExpress from 'swagger-express-mw';
