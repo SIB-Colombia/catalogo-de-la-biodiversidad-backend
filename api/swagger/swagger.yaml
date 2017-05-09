@@ -76,13 +76,14 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /record-info/{id}:
+
+  /complete-record/{id}:
     x-swagger-router-controller: records
     get:
       description: get the latest version of a record
       tags:
         - record
-      operationId: lastRecordTest
+      operationId: completeLastRecordTest
       parameters:
         - name: id
           type: string
@@ -100,15 +101,15 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /complete-record/{id}:
+  /record/legacy_id/{legacy_id}:
     x-swagger-router-controller: records
     get:
-      description: get the latest version of a record
+      description: get the latest version of a record using the id in the Catalogue V1
       tags:
         - record
-      operationId: completeLastRecordTest
+      operationId: lastRecordLegacyId
       parameters:
-        - name: id
+        - name: legacy_id
           type: string
           in: path
           required: true
