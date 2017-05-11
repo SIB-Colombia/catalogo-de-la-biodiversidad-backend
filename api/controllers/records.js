@@ -46,9 +46,13 @@ function completeLastRecordTest(req, res) {
   add_objects.Record.findById(id_rc,function(err, result){
     if(err){
       logger.error('Error getting the complete last Record', JSON.stringify({ message:err }) );
-      res.send("Error: "+err);
+      res.send("Error getting the complete last Record: "+err);
     }else{
-      res.json(result);
+      if(!(result == null)){
+        res.json(result);
+      }else{
+        res.send("Didn't find any record for the indicated id: "+id_rc);
+      }
     }
   });
 }
@@ -371,15 +375,29 @@ function lastRecordLegacyId(req, res) {
 };
 
 function getMostRecentRecordsUpdated(req, res) {
-  var query = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({update_date: -1}).limit(20);
-  query.exec(function (err, data) {
+  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({update_date: -1}).limit(5);
+  //var query_c = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({creation_date: 1}).limit(5);
+  query_u.exec(function (err, data_u) {
     if(err){
-      logger.error('Error getting list of records', JSON.stringify({ message:err }) );
+      logger.error('Error getting most recent updated records', JSON.stringify({ message:err }) );
       res.json(err);
-    }else if(data.length==0){
+    }else if(data_u.length == 0){
+      /*
+      query_c.exec(function (err, data_c) {
+        console.log("!!");
+        if(err){
+          logger.error('Error getting most recent updated records', JSON.stringify({ message:err }) );
+          res.json(err);
+        }else if(data_c.length == 0){
+          res.json({"message" : "No data in the database"});
+        }else{
+          res.json(data_c);
+        }
+      });
+      */
       res.json({"message" : "No data in the database"});
     }else{
-      res.json(data);
+      res.json(data_u);
     }
   });
 }
@@ -418,5 +436,6 @@ module.exports = {
   lastRecord,
   getRecordList,
   completeLastRecordTest,
-  lastRecordLegacyId
+  lastRecordLegacyId,
+  getMostRecentRecordsUpdated
 };
