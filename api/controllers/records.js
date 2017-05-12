@@ -380,7 +380,7 @@ function getMostRecentRecordsUpdated(req, res) {
   query_u.exec(function (err, data_u) {
     if(err){
       logger.error('Error getting most recent updated records', JSON.stringify({ message:err }) );
-      res.json(err);
+      res.json({ message:err });
     }else if(data_u.length == 0){
       /*
       query_c.exec(function (err, data_c) {

@@ -8,4 +8,4 @@ var Property = new Schema ({
 	plinianCoreElement : String,
 	translation : String,
 	definition: String
-},{ strict: false, versionKey: false });
+},{ collection: 'Properties', versionKey: false });
