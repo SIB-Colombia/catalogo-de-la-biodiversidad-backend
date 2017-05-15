@@ -37,6 +37,8 @@ import EnvironmentalEnvelopeVersion from '../models/environmentalEnvelope.js';
 import EcologicalSignificanceVersion from '../models/ecologicalSignificance.js';
 import InvasivenessVersion from '../models/invasiveness.js';
 import add_objects from '../models/additionalModels.js';
+import mapElements from '../models/elementNames.js';
+import Property from '../models/property.js';
 import { logger }  from '../../server/log';
 
 mongoose.Promise = require('bluebird');
@@ -374,6 +376,23 @@ function lastRecordLegacyId(req, res) {
   });
 };
 
+function getProperties(req, res) {
+  var element_name=req.swagger.params.element.value;
+  console.log(element_name);
+  console.log(JSON.stringify(mapElements));
+  console.log(mapElements[element_name]);
+  //propertyDoc = new FeedingVersion(feeding_version);
+  Property.find({ plinianCoreElement : mapElements[element_name] }).exec(function (err, doc) {
+    if(err){
+      logger.error('Error getting the properties for the element: ' + mapElements[element_name], JSON.stringify({ message:err }) );
+      res.send("Error: "+err);
+    }else{
+      res.json(doc);
+    }
+  });
+
+}
+
 function getMostRecentRecordsUpdated(req, res) {
   var query_u = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({update_date: -1}).limit(5);
   //var query_c = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({creation_date: 1}).limit(5);
@@ -382,19 +401,6 @@ function getMostRecentRecordsUpdated(req, res) {
       logger.error('Error getting most recent updated records', JSON.stringify({ message:err }) );
       res.json({ message:err });
     }else if(data_u.length == 0){
-      /*
-      query_c.exec(function (err, data_c) {
-        console.log("!!");
-        if(err){
-          logger.error('Error getting most recent updated records', JSON.stringify({ message:err }) );
-          res.json(err);
-        }else if(data_c.length == 0){
-          res.json({"message" : "No data in the database"});
-        }else{
-          res.json(data_c);
-        }
-      });
-      */
       res.json({"message" : "No data in the database"});
     }else{
       res.json(data_u);
@@ -437,5 +443,6 @@ module.exports = {
   getRecordList,
   completeLastRecordTest,
   lastRecordLegacyId,
-  getMostRecentRecordsUpdated
+  getMostRecentRecordsUpdated,
+  getProperties
 };

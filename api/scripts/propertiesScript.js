@@ -14,12 +14,21 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
 	if(err) {
      	console.log('connection error', err);
     }else{
+
      	console.log("Load data from google spreadsheet");
+     	var propertySchema = Property.schema;
+     	propertyModel = catalogoDb.model('Property', propertySchema );
       	var parserProperties = csv({objectMode: true, columns: true});
-      	parser.on('readable', function (err, result) {
-			var line = parser.read();
+      	parserProperties.on('readable', function (err, result) {
+			var line = parserProperties.read();
 			if(line!==null){
-				console.log("result: "+result);
+				console.log("Line: "+JSON.stringify(line));
+				var propertyDoc = new propertyModel(line);
+				propertyDoc.save(function (err) {
+					if(err){
+						console.log("Error saving the properties from spreadsheet: "+err);
+					}
+				});
 				/*
 				if(line.titulo_capitulo) {
 					line.num = counter;
@@ -31,5 +40,5 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
 		});
     }
 
-    request("https://docs.google.com/spreadsheets/d/11AVyDWhf6vk1MrhkMnU5VvN2oDrco52LVOyd9c5OVjc/export?format=csv&id=11AVyDWhf6vk1MrhkMnU5VvN2oDrco52LVOyd9c5OVjc&gid=1690015484").pipe(parser);
+    request("https://docs.google.com/spreadsheets/d/11AVyDWhf6vk1MrhkMnU5VvN2oDrco52LVOyd9c5OVjc/export?format=csv&id=11AVyDWhf6vk1MrhkMnU5VvN2oDrco52LVOyd9c5OVjc&gid=1690015484").pipe(parserProperties);
 });

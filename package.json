@@ -37,7 +37,8 @@
     "mongoose-unique-validator": "latest",
     "bluebird": "latest",
     "csv-parse": "latest",
-    "restler": "latest"
+    "restler": "latest",
+    "csv-streamify": "latest"
   },
   "bugs": {
     "url": ""

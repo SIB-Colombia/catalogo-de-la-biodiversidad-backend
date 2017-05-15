@@ -9,3 +9,5 @@ var Property = new Schema ({
 	translation : String,
 	definition: String
 },{ collection: 'Properties', versionKey: false });
+
+module.exports = mongoose.model('Property', Property );
