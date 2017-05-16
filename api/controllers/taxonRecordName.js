@@ -24,9 +24,9 @@ function postTaxonRecordName(req, res) {
 
     var ver = "";
 
-    if(typeof  id_rc!=="undefined" && id_rc!=""){
+    if(typeof  id_rc!=="undefined" && id_rc!==""){
       //Validation no empty element
-      if(typeof  elementValue!=="undefined" && elementValue!=""){
+      if(typeof  elementValue!=="undefined" && elementValue!==""){
         async.waterfall([
           //find the Record to add the taxonRecordName element
           function(callback){ 
@@ -40,7 +40,7 @@ function postTaxonRecordName(req, res) {
             },
             function(data,callback){
               if(data){
-                if(data.taxonRecordNameVersion && data.taxonRecordNameVersion.length !=0){
+                if(data.taxonRecordNameVersion && data.taxonRecordNameVersion.length !==0){
                   var lentaxonRecordName = data.taxonRecordNameVersion.length;
                   var idLast = data.taxonRecordNameVersion[lentaxonRecordName-1];
                   TaxonRecordNameVersion.findById(idLast , function (err, doc){
@@ -122,7 +122,7 @@ function postRecord(req, res) {
   taxon_record_name_version.id_record=mongoose.Types.ObjectId();
   taxon_record_name_version.created=Date();
   //taxon_record_name_version.state="to_review";
-  taxon_record_name_version.state="approved_in_use"
+  taxon_record_name_version.state="approved_in_use";
   taxon_record_name_version.element="taxonRecordName";
   var user = taxon_record_name_version.id_user;
   var elementValue = taxon_record_name_version.taxonRecordName;
@@ -136,7 +136,7 @@ function postRecord(req, res) {
 
   if(typeof  elementValue!=="undefined" && elementValue!=""){
     add_objects.RecordVersion.count({ _id : id_rc }, function (err, count){
-      if(count==0){
+      if(count===0){
         //Also create a Record (approved_in_use versions of elements) and put the approved_in_use taxonRecordName
         add_objects.RecordVersion.create({ _id:id_rc, taxonRecordNameVersion: ob_ids },function(err, doc){
           if(err){
@@ -185,15 +185,13 @@ function postRecord(req, res) {
 function setApprovedInUseTaxonRecordName(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
-  var id_rc = req.swagger.params.id.value;
-
   if(typeof  id_rc!=="undefined" && id_rc!=""){
     async.waterfall([
       function(callback){ 
         TaxonRecordNameVersion.findOne({ id_record : id_rc, state: "to_review", version : version }).exec(function (err, elementVer) {
           if(err){
             callback(new Error(err.message));
-          }else if(elementVer == null){
+          }else if(elementVer === null){
             callback(new Error("Doesn't exist a TaxonRecordNameVersion with the properties sent."));
           }else{
             callback();

@@ -37,7 +37,7 @@ function postAnnualCycles(req, res) {
             },
             function(data,callback){
               if(data){
-                if(data.annualCyclesVersion && data.annualCyclesVersion.length !=0){
+                if(data.annualCyclesVersion !== null && data.annualCyclesVersion.length !=0){
                   var lenannualCycles = data.annualCyclesVersion.length;
                   var idLast = data.annualCyclesVersion[lenannualCycles-1];
                   AnnualCyclesVersion.findById(idLast , function (err, doc){

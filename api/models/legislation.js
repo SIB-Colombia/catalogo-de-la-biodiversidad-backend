@@ -17,7 +17,7 @@ var LegislationAtomized = Element.extend({
 		stateProvince : String,
 		county : String,
 		municipality : String,
-		locality : String
+		locality: String
 	}
 }, { versionKey: false });
 

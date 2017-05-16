@@ -1,7 +1,0 @@
-{
-  database: {
-    mongoDb: {
-      url: ['localhost:27017/catalogoDbJunio']
-    }
-  }
-}

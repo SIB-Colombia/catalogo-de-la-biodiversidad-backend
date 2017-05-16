@@ -22,4 +22,4 @@ var BehaviorVersion = ElementVersion.extend({
 	behavior : Behavior
 },{ collection: 'BehaviorVersion', versionKey: false });
 
-module.exports = mongoose.model('BehaviorVersion', BehaviorVersion )
+module.exports = mongoose.model('BehaviorVersion', BehaviorVersion );

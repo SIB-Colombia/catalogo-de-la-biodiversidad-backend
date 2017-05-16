@@ -134,7 +134,6 @@ function getCommonNamesAtomized(req, res) {
 function setApprovedInUseCommonNamesAtomized(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
-  var id_rc = req.swagger.params.id.value;
 
   if(typeof  id_rc!=="undefined" && id_rc!=""){
     async.waterfall([

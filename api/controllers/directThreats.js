@@ -142,7 +142,7 @@ function setApprovedInUseDirectThreats(req, res) {
         DirectThreatsVersion.findOne({ id_record : id_rc, state: "to_review", version : version }).exec(function (err, elementVer) {
           if(err){
             callback(new Error(err.message));
-          }else if(elementVer == null){
+          }else if(elementVer === null){
             callback(new Error("Doesn't exist a DirectThreatsVersion with the properties sent."));
           }else{
             callback();

@@ -1,7 +1,7 @@
 var mapElements = {};
 
-mapElements["taxon_record_name"] = "taxonRecordName";
-mapElements["common_names_atomized"] = "commonNamesAtomized";
+mapElements['taxon_record_name'] = 'taxonRecordName';
+mapElements['common_names_atomized'] = 'commonNamesAtomized';
 
 module.exports = mapElements;
 /*

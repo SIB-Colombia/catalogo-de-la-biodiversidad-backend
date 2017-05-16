@@ -19,7 +19,7 @@ function ScriptException(message) {
 
 var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI', function(err) {
 	if(err) {
-      
+      console.log('connection error: '+err); 
     }else{
     	console.log('connection successful to the CatalogoDb');
     	async.waterfall([
@@ -30,7 +30,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
         		var input = fs.createReadStream("/home/oscar/Desktop/catalogo_old_ids.csv");
         		var parser = parse({delimiter: ','});
         		parser.on('readable', function(){
-  					while(record = parser.read()){
+  					while(record == parser.read()){
     					scNames.push(record);
   					}
 				});

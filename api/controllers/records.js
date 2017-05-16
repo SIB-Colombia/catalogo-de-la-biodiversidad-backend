@@ -2,40 +2,6 @@ import mongoose from 'mongoose';
 import async from 'async';
 import winston from 'winston';
 import TaxonRecordNameVersion from '../models/taxonRecordName.js';
-import AssociatedPartyVersion from '../models/associatedParty.js';
-import BaseElementsVersion from '../models/baseElements.js';
-import CommonNamesAtomizedVersion from '../models/commonNamesAtomized.js';
-import SynonymsAtomizedVersion from '../models/synonymsAtomized.js';
-import LifeCycleVersion from '../models/lifeCycle.js';
-import LifeFormVersion from '../models/lifeForm.js';
-import IdentificationKeysVersion from '../models/identificationKeys.js';
-import FullDescriptionVersion from '../models/fullDescription.js';
-import BriefDescriptionVersion from '../models/briefDescription.js';
-import AbstractVersion from '../models/abstract.js';
-import HierarchyVersion from '../models/hierarchy.js';
-import ReproductionVersion from '../models/reproduction.js';
-import AnnualCyclesVersion from '../models/annualCycles.js';
-import FeedingVersion from '../models/feeding.js';
-import DispersalVersion from '../models/dispersal.js';
-import BehaviorVersion from '../models/behavior.js';
-import InteractionsVersion from '../models/interactions.js';
-import MolecularDataVersion from '../models/molecularData.js';
-import MigratoryVersion from '../models/migratory.js';
-import HabitatsVersion from '../models/habitats.js';
-import DistributionVersion from '../models/distribution.js';
-import TerritoryVersion from '../models/territory.js';
-import PopulationBiologyVersion from '../models/populationBiology.js';
-import MoreInformationVersion from '../models/moreInformation.js';
-import ThreatStatusVersion from '../models/threatStatus.js';
-import LegislationVersion from '../models/legislation.js';
-import UsesManagementAndConservationVersion from '../models/usesManagementAndConservation.js';
-import DirectThreatsVersion from '../models/directThreats.js';
-import AncillaryDataVersion from '../models/ancillaryData.js';
-import EndemicAtomizedVersion from '../models/endemicAtomized.js';
-import ReferencesVersion from '../models/references.js';
-import EnvironmentalEnvelopeVersion from '../models/environmentalEnvelope.js';
-import EcologicalSignificanceVersion from '../models/ecologicalSignificance.js';
-import InvasivenessVersion from '../models/invasiveness.js';
 import add_objects from '../models/additionalModels.js';
 import mapElements from '../models/elementNames.js';
 import Property from '../models/property.js';
@@ -394,7 +360,7 @@ function getProperties(req, res) {
 }
 
 function getMostRecentRecordsUpdated(req, res) {
-  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({update_date: -1}).limit(5);
+  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date').sort({update_date: -1}).limit(5);
   //var query_c = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({creation_date: 1}).limit(5);
   query_u.exec(function (err, data_u) {
     if(err){
@@ -410,7 +376,7 @@ function getMostRecentRecordsUpdated(req, res) {
 
 
 function getRecordList(req, res) {
-  var query = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date');
+  var query = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date');
   query.exec(function (err, data) {
     if(err){
       logger.error('Error getting list of records', JSON.stringify({ message:err }) );

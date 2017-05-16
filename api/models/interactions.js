@@ -25,7 +25,7 @@ var Interactions = Element.extend({
 },{ versionKey: false });
 
 var InteractionsVersion = ElementVersion.extend({
-	interactions : Interactions
+	interactions: Interactions
 },{ collection: 'InteractionsVersion', versionKey: false });
 
 module.exports = mongoose.model('InteractionsVersion', InteractionsVersion )

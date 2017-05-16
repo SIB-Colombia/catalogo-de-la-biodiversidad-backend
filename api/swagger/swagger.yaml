@@ -44,8 +44,10 @@ paths:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/Record"
+            type: array
+            items:
+              # a pointer to a definition
+              $ref: "#/definitions/RecordList"
         # responses may fall through to errors
         "400":
           description: Error
@@ -63,8 +65,10 @@ paths:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/Record"
+            type: array
+            items:
+              # a pointer to a definition
+              $ref: "#/definitions/RecordList"
         # responses may fall through to errors
         "400":
           description: Error
@@ -170,7 +174,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /record/properties-front/{element}:
+  /record/properties/{element}:
     x-swagger-router-controller: records
     get: 
       description: Returns the properties
@@ -264,26 +268,6 @@ paths:
           type: string
           in: path
           required: true
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/TaxonRecordNameVersion"
-        # responses may fall through to errors
-        "400":
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-
-  #******TODO******
-  /record/properties/taxon_record_name:
-    x-swagger-router-controller: taxonRecordName
-    get: 
-      description: Returns the properties (definition, translation), for the elment taxonRecordName 
-      tags:
-        - taxonRecordName
-      operationId: getProperties
       responses:
         "200":
           description: Success
@@ -410,32 +394,7 @@ paths:
         "400":
           description: Error
           schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /records/test/message/{name}:
-    x-swagger-router-controller: taxonRecordName
-    get:
-      description: to test controller
-      tags:
-        - Test
-      operationId: returnNameMessage
-      parameters:
-        - name: name
-          type: string
-          description: name to test
-          in: path
-          required: true
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/ResultResponse"
-        # responses may fall through to errors
-        "400":
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
+            $ref: "#/definitions/ErrorResponse"            
             
   /record/{id}/associated_party/{version}:
     x-swagger-router-controller: associatedParty
@@ -5253,6 +5212,7 @@ paths:
   
   /swagger:
     x-swagger-pipe: swagger_raw
+
 # complex objects have schema definitions
 definitions:
   Record:
@@ -5341,7 +5301,17 @@ definitions:
         $ref: '#/definitions/Invasiveness' 
       moreInformation:
         type: string
-      
+  
+  RecordList:
+    properties:
+      _id:
+        type: string
+      creation_date: 
+        type: string
+      scientificNameSimple: 
+        type: string
+      update_date: 
+        type: string
         
   MoreInformationVersion:
     required:
