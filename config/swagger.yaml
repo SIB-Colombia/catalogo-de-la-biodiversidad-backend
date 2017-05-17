@@ -173,7 +173,32 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-          
+
+  /record/properties/{element}:
+    x-swagger-router-controller: records
+    get: 
+      description: Returns the properties
+      tags:
+        - properties
+      operationId: getProperties
+      parameters:
+        - name: element
+          type: string
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/TaxonRecordNameVersion"
+        # responses may fall through to errors
+        "400":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+            
+            
   /record/{id}/taxon_record_name/{version}:
     x-swagger-router-controller: taxonRecordName
     get: 

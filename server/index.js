@@ -7,8 +7,12 @@ import middleware from './middleware';
 import { config } from '../config/application-config';
 import { logger } from './log';
 import SwaggerExpress from 'swagger-express-mw';
-import swaggerUiMiddleware from 'swagger-ui-middleware';
+import swaggerUi from 'swagger-ui-express';
 import mongoose from 'mongoose';
+//import swaggerDocument from '../api/swagger/swagger.yaml'
+//import {swaggerDocument} from '../config/application-config';
+const swaggerDocument = require('../api/swagger/swagger.json');
+
 
 const app = express();
 const swaggerConfig = {
@@ -28,6 +32,7 @@ app.use(bodyParser.json({
 }));
 
 
+
 // connect to db
 db(λ => {
   // internal middleware
@@ -45,7 +50,9 @@ db(λ => {
     if (err) { throw err; }
     swaggerExpress.register(app);
 
-    swaggerUiMiddleware.hostUI(app, { path: '/api-doc', overrides: __dirname+'/swagger-ui' });
+    //swaggerUiMiddleware.hostUI(app, { path: '/api-doc', overrides: __dirname+'/swagger-ui' });
+
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
     app.use(express.static('api/swagger'));
 

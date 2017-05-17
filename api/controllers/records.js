@@ -332,7 +332,7 @@ function lastRecordLegacyId(req, res) {
               if(!(result._doc.invasivenessApprovedInUse == null)){
                 lastRec.invasiveness = result._doc.invasivenessApprovedInUse.invasiveness;
               }
-              logger.info('Get last version of the record', JSON.stringify({ _id: id_rc }) );
+              logger.info('Get last version of the record', JSON.stringify({ _id: legacy_id }) );
               res.json(lastRec);
           }else{
             logger.warn("Doesn't exist a Record with the indicated legacy id: " + legacy_id);
