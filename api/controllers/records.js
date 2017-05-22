@@ -1,6 +1,7 @@
 import mongoose from 'mongoose';
 import async from 'async';
 import winston from 'winston';
+import mongoosePaginate from 'mongoose-paginate';
 import TaxonRecordNameVersion from '../models/taxonRecordName.js';
 import add_objects from '../models/additionalModels.js';
 import mapElements from '../models/elementNames.js';
@@ -374,6 +375,41 @@ function getMostRecentRecordsUpdated(req, res) {
   });
 }
 
+function getMostRecentRecordsUpdatedNumber(req, res) {
+  var numberRecords=req.swagger.params.numberRecords.value;
+  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date').sort({update_date: -1}).limit(numberRecords);
+  //var query_c = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({creation_date: 1}).limit(5);
+  query_u.exec(function (err, data_u) {
+    if(err){
+      logger.error('Error getting most recent updated records', JSON.stringify({ message:err }) );
+      res.json({ message:err });
+    }else if(data_u.length == 0){
+      res.json({"message" : "No data in the database"});
+    }else{
+      res.json(data_u);
+    }
+  });
+}
+
+function getMostRecentRecordsUpdatedPagination(req, res) {
+  var pageNum=req.swagger.params.page.value;
+  var limitNum=req.swagger.params.limit.value;
+  var options = {
+    select: '_id scientificNameSimple creation_date update_date',
+    sort: { update_date: -1 },
+    page: pageNum,
+    limit: limitNum
+  };
+  add_objects.Record.paginate(query, options).then(function(result) {
+    if(err){
+      logger.error('Error getting most recent updated records pagination', JSON.stringify({ message:err }) );
+      res.json({ message:err });
+    }else{
+      res.json(data_u);
+    }
+  });
+}
+
 
 function getRecordList(req, res) {
   var query = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date');
@@ -410,5 +446,7 @@ module.exports = {
   completeLastRecordTest,
   lastRecordLegacyId,
   getMostRecentRecordsUpdated,
+  getMostRecentRecordsUpdatedNumber,
+  getMostRecentRecordsUpdatedPagination,
   getProperties
 };

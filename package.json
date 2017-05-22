@@ -37,7 +37,8 @@
     "bluebird": "latest",
     "csv-parse": "latest",
     "restler": "latest",
-    "csv-streamify": "latest"
+    "csv-streamify": "latest",
+    "mongoose-paginate" : "latest"
   },
   "bugs": {
     "url": ""

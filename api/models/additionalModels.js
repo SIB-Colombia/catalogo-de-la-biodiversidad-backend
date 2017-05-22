@@ -1,5 +1,6 @@
 var mongoose = require('mongoose');
 var extend = require('mongoose-schema-extend');
+var mongoosePaginate = require('mongoose-paginate');
 var Schema = mongoose.Schema;
 
 var Reference = new Schema ({
@@ -87,6 +88,8 @@ var Element = new Schema ({
 */
 
 var Record = new Schema({ creation_date : { type: Date, index: true }, update_date : { type: Date, index: true }, scientificNameSimple : { type: String, index: true } }, { collection: 'Record', strict: false, versionKey: false });
+
+Record.plugin(mongoosePaginate);
 
 var Element = new Schema ({
 	//ancillaryData : [AncillaryData]

@@ -74,6 +74,68 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
+
+  /last_updated_records/{numberRecords}:
+    x-swagger-router-controller: records
+    get:
+      description: get a ordered number of updated records (scientificName and Id)
+      tags:
+        - record
+      operationId: getMostRecentRecordsUpdatedNumber
+      parameters:
+        - name: numberRecords
+          type: integer
+          description: "the number of records in the result"
+          minimum: 1
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              # a pointer to a definition
+              $ref: "#/definitions/RecordList"
+        # responses may fall through to errors
+        "400":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
+  /updated_records/{page}/{limit}:
+    x-swagger-router-controller: records
+    get:
+      description: get for last 5 updated records (scientificName and Id)
+      tags:
+        - record
+      operationId: getMostRecentRecordsUpdatedPagination
+      parameters:
+        - name: page
+          type: integer
+          description: "the page in the collection of Records"
+          minimum: 1
+          in: path
+          required: true
+        - name: limit
+          type: integer
+          description: "size limit in the result of Records"
+          minimum: 1
+          in: path
+          required: true
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              # a pointer to a definition
+              $ref: "#/definitions/RecordList"
+        # responses may fall through to errors
+        "400":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
   
   /record/{id}:
     x-swagger-router-controller: records
