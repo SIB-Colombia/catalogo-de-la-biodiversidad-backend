@@ -38,7 +38,8 @@
     "csv-parse": "latest",
     "restler": "latest",
     "csv-streamify": "latest",
-    "mongoose-paginate" : "latest"
+    "mongoose-paginate" : "latest",
+    "flickrapi" : "latest"
   },
   "bugs": {
     "url": ""
