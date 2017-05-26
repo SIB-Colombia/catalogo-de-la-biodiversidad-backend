@@ -178,11 +178,8 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
           query = RecordVersion.find({}).select('_id').sort({ _id: -1});
           query.exec(function (err, data) {
               if(err){
-                  console.log("1");
                   callback(new Error("Error getting the total of Records:" + err.message));
               }else{
-                  console.log("2");
-                  //console.log(data);
                   callback(null, data);
               }
             });
@@ -245,6 +242,16 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                   }else{
                     if(elementVer){
                       lastRec.commonNamesAtomizedApprovedInUse = elementVer;
+                      if(typeof elementVer.commonNamesAtomized !== 'undefined' && elementVer.commonNamesAtomized.length !== 0){
+                        var commonNames = [];
+                        var commonNamesValues = {};
+                        for(var i=0; i<elementVer.commonNamesAtomized; i++){
+                          commonNamesValues.language = elementVer.commonNamesAtomized[i].language;
+                          commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
+                          commonNames.push(commonNamesValues);
+                        }
+                        lastRec.commonNames = commonNames;
+                      }
                     }else{
                       console.log("No exist CommonNamesAtomizedVersion for id record : "+record_data._id);
                     }
@@ -575,6 +582,10 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                   }else{
                     if(elementVer){
                       lastRec.threatStatusApprovedInUse = elementVer;
+                      if(typeof elementVer.threatStatus !== 'undefined' && elementVer.threatStatus.length !== 0){
+                        console.log("threatStatus: "+elementVer.threatStatus);
+                        lastRec.threatStatusValue = elementVer.threatStatus[0].threatStatusAtomized.threatCategory.measurementValue;
+                      }
                     }else{
                       console.log("No exist ThreatStatusVersion for id record : "+record_data._id);
                     }
@@ -635,6 +646,9 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                   }else{
                     if(elementVer){
                       lastRec.ancillaryDataApprovedInUse = elementVer
+                      if(typeof elementVer.ancillaryData !== 'undefined' && elementVer.ancillaryData.length !== 0){
+                        lastRec.imagesSiB = elementVer.ancillaryData[0].mediaURL;
+                      }
                     }else{
                       console.log("No exist AncillaryDataVersion for id record : "+record_data._id);
                     }
@@ -658,7 +672,6 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
-                
                 ReferencesVersion.findOne({ "id_record" : mongoose.Types.ObjectId(record_data._id), state: "approved_in_use" }).exec(function (err, elementVer) {
                   console.log("References");
                   if(err){

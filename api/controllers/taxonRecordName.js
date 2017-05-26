@@ -185,7 +185,7 @@ function postRecord(req, res) {
 function setApprovedInUseTaxonRecordName(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
-  if(typeof  id_rc!=="undefined" && id_rc!=""){
+  if(typeof  id_rc!=="undefined" && id_rc!==""){
     async.waterfall([
       function(callback){ 
         TaxonRecordNameVersion.findOne({ id_record : id_rc, state: "to_review", version : version }).exec(function (err, elementVer) {

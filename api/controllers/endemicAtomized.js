@@ -22,8 +22,8 @@ function postEndemicAtomized(req, res) {
 
     var ver = "";
 
-    if(typeof  id_rc!=="undefined" && id_rc!=""){
-      if(typeof  elementValue!=="undefined" && elementValue!=""){
+    if(typeof  id_rc!=="undefined" && id_rc!==""){
+      if(typeof  elementValue!=="undefined" && elementValue!==""){
         async.waterfall([
           function(callback){ 
                 add_objects.RecordVersion.findById(id_rc , function (err, data){
@@ -36,7 +36,7 @@ function postEndemicAtomized(req, res) {
             },
             function(data,callback){
               if(data){
-                if(data.endemicAtomizedVersion && data.endemicAtomizedVersion.length !=0){
+                if(data.endemicAtomizedVersion && data.endemicAtomizedVersion.length !== 0){
                   var lenendemicAtomized = data.endemicAtomizedVersion.length;
                   var idLast = data.endemicAtomizedVersion[lenendemicAtomized-1];
                   EndemicAtomizedVersion.findById(idLast , function (err, doc){
@@ -142,7 +142,7 @@ function setApprovedInUseEndemicAtomized(req, res) {
         EndemicAtomizedVersion.findOne({ id_record : id_rc, state: "to_review", version : version }).exec(function (err, elementVer) {
           if(err){
             callback(new Error(err.message));
-          }else if(elementVer == null){
+          }else if(elementVer === null){
             callback(new Error("Doesn't exist a EndemicAtomizedVersion with the properties sent."));
           }else{
             callback();

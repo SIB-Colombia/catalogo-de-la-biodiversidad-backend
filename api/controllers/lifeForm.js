@@ -22,8 +22,8 @@ function postLifeForm(req, res) {
 
     var ver = "";
 
-    if(typeof  id_rc!=="undefined" && id_rc!=""){
-      if(typeof  elementValue!=="undefined" && elementValue!=""){
+    if(typeof  id_rc!=="undefined" && id_rc!==""){
+      if(typeof  elementValue!=="undefined" && elementValue!==""){
         async.waterfall([
           function(callback){ 
                 add_objects.RecordVersion.findById(id_rc , function (err, data){
@@ -134,7 +134,6 @@ function getLifeForm(req, res) {
 function setApprovedInUseLifeForm(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
-  var id_rc = req.swagger.params.id.value;
 
   if(typeof  id_rc!=="undefined" && id_rc!=""){
     async.waterfall([

@@ -36,7 +36,7 @@ function postDispersal(req, res) {
             },
             function(data,callback){
               if(data){
-                if(data.dispersalVersion && data.dispersalVersion.length !=0){
+                if(data.dispersalVersion && data.dispersalVersion.length !== 0){
                   var lendispersal = data.dispersalVersion.length;
                   var idLast = data.dispersalVersion[lendispersal-1];
                   DispersalVersion.findById(idLast , function (err, doc){
