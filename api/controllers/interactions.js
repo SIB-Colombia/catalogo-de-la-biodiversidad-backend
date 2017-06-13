@@ -134,6 +134,7 @@ function getInteractions(req, res) {
 function setApprovedInUseInteractions(req, res) {
   var id_rc = req.swagger.params.id.value;
   var version = req.swagger.params.version.value;
+  var id_rc = req.swagger.params.id.value;
 
   if(typeof  id_rc!=="undefined" && id_rc!=""){
     async.waterfall([
@@ -141,7 +142,7 @@ function setApprovedInUseInteractions(req, res) {
         InteractionsVersion.findOne({ id_record : id_rc, state: "to_review", version : version }).exec(function (err, elementVer) {
           if(err){
             callback(new Error(err.message));
-          }else if(elementVer === null){
+          }else if(elementVer == null){
             callback(new Error("Doesn't exist a InteractionsVersion with the properties sent."));
           }else{
             callback();

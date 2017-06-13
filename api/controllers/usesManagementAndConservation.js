@@ -179,7 +179,7 @@ function setApprovedInUseUsesManagementAndConservation(req, res) {
         UsesManagementAndConservationVersion.findOne({ "id_record" : mongoose.Types.ObjectId(id_rc), state: "to_review", version : version }).exec(function (err, elementVer) {
           if(err){
             callback(new Error(err.message));
-          }else if(elementVer === null){
+          }else if(elementVer == null){
             callback(new Error("Doesn't exist a UsesManagementAndConservationVersion with the properties sent."));
           }else{
             callback();

@@ -22,8 +22,8 @@ function postTerritory(req, res) {
 
     var ver = "";
 
-    if(typeof  id_rc!=="undefined" && id_rc!==""){
-      if(typeof  elementValue!=="undefined" && elementValue!==""){
+    if(typeof  id_rc!=="undefined" && id_rc!=""){
+      if(typeof  elementValue!=="undefined" && elementValue!=""){
         async.waterfall([
           function(callback){ 
                 add_objects.RecordVersion.findById(id_rc , function (err, data){

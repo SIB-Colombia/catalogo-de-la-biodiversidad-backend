@@ -242,16 +242,18 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                   }else{
                     if(elementVer){
                       lastRec.commonNamesAtomizedApprovedInUse = elementVer;
+
                       if(typeof elementVer.commonNamesAtomized !== 'undefined' && elementVer.commonNamesAtomized.length !== 0){
-                        var commonNames = [];
+                        var commonName = [];
                         var commonNamesValues = {};
                         for(var i=0; i<elementVer.commonNamesAtomized; i++){
                           commonNamesValues.language = elementVer.commonNamesAtomized[i].language;
                           commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
                           commonNames.push(commonNamesValues);
                         }
-                        lastRec.commonNames = commonNames;
+                        lastRec.commonName = commonNames;
                       }
+
                     }else{
                       console.log("No exist CommonNamesAtomizedVersion for id record : "+record_data._id);
                     }

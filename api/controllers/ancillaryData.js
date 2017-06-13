@@ -22,8 +22,8 @@ function postAncillaryData(req, res) {
 
     var ver = "";
 
-    if(typeof  id_rc!=="undefined" && id_rc!==""){
-      if(typeof  elementValue!=="undefined" && elementValue!==""){
+    if(typeof  id_rc!=="undefined" && id_rc!=""){
+      if(typeof  elementValue!=="undefined" && elementValue!=""){
         async.waterfall([
           function(callback){ 
                 add_objects.RecordVersion.findById(id_rc , function (err, data){
@@ -36,7 +36,7 @@ function postAncillaryData(req, res) {
             },
             function(data,callback){
               if(data){
-                if(data.ancillaryDataVersion && data.ancillaryDataVersion.length !== 0){
+                if(data.ancillaryDataVersion && data.ancillaryDataVersion.length !=0){
                   var lenancillaryData = data.ancillaryDataVersion.length;
                   var idLast = data.ancillaryDataVersion[lenancillaryData-1];
                   AncillaryDataVersion.findById(idLast , function (err, doc){

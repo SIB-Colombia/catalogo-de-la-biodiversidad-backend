@@ -149,12 +149,12 @@ function setApprovedInUseAssociatedParty(req, res) {
         elementVer.state="approved_in_use";
         var update_date = Date();
         var associatedParty = {}
-        if(typeof elementVer.associatedParty[0].firstName !== 'undefined' && elementVer.associatedParty[0].firstName !== ''){
+        if(typeof elementVer.associatedParty[0].firstName != 'undefined' && elementVer.associatedParty[0].firstName != ''){
           associatedParty.firstName = elementVer.associatedParty[0].firstName;
         }else{
           associatedParty.firstName = '';
         }
-        if(typeof elementVer.associatedParty[0].lastName !== 'undefined' && elementVer.associatedParty[0].lastName !== ''){
+        if(typeof elementVer.associatedParty[0].lastName != 'undefined' && elementVer.associatedParty[0].lastName != ''){
           associatedParty.lastName = elementVer.associatedParty[0].lastName;
         }else{
           associatedParty.lastName = '';

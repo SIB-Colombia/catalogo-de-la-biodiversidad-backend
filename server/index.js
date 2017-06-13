@@ -9,6 +9,8 @@ import { logger } from './log';
 import SwaggerExpress from 'swagger-express-mw';
 import swaggerUi from 'swagger-ui-express';
 import mongoose from 'mongoose';
+//import swaggerDocument from '../api/swagger/swagger.yaml'
+//import {swaggerDocument} from '../config/application-config';
 const swaggerDocument = require('../api/swagger/swagger.json');
 
 
@@ -47,6 +49,8 @@ db(λ => {
   SwaggerExpress.create(swaggerConfig, (err, swaggerExpress) => {
     if (err) { throw err; }
     swaggerExpress.register(app);
+
+    //swaggerUiMiddleware.hostUI(app, { path: '/api-doc', overrides: __dirname+'/swagger-ui' });
 
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
