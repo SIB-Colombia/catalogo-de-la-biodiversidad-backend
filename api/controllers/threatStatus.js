@@ -171,13 +171,24 @@ function setApprovedInUseThreatStatus(req, res) {
       function(elementVer,callback){ 
         elementVer.state="approved_in_use";
         var update_date = Date();
-        add_objects.Record.update({_id:id_rc},{ threatStatusApprovedInUse: elementVer, update_date: update_date }, function(err, result){
-          if(err){
-            callback(new Error(err.message));
-          }else{
-            callback();
-          }
-        });
+        if(typeof elementVer.threatStatus !== 'undefined' && elementVer.threatStatus.length !== 0){
+          //lastRec.threatStatusValue = elementVer.threatStatus[0].threatStatusAtomized.threatCategory.measurementValue;
+          add_objects.Record.update({_id:id_rc},{ threatStatusApprovedInUse: elementVer, update_date: update_date, threatStatusValue: elementVer.threatStatus[0].threatStatusAtomized.threatCategory.measurementValue }, function(err, result){
+            if(err){
+              callback(new Error(err.message));
+            }else{
+              callback();
+            }
+          });
+        }else{
+          add_objects.Record.update({_id:id_rc},{ threatStatusApprovedInUse: elementVer, update_date: update_date }, function(err, result){
+            if(err){
+              callback(new Error(err.message));
+            }else{
+              callback();
+            }
+          });
+        }
       }
     ],
     function(err, result) {
