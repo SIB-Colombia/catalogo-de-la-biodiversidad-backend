@@ -244,14 +244,16 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                       lastRec.commonNamesAtomizedApprovedInUse = elementVer;
 
                       if(typeof elementVer.commonNamesAtomized !== 'undefined' && elementVer.commonNamesAtomized.length !== 0){
-                        var commonName = [];
+                        //console.log(elementVer.commonNamesAtomized.length);
+                        var commonNames = [];
                         var commonNamesValues = {};
-                        for(var i=0; i<elementVer.commonNamesAtomized; i++){
+                        for(var i=0; i<elementVer.commonNamesAtomized.length; i++){
                           commonNamesValues.language = elementVer.commonNamesAtomized[i].language;
                           commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
                           commonNames.push(commonNamesValues);
                         }
-                        lastRec.commonName = commonNames;
+                        //console.log(commonNames.length);
+                        lastRec.commonNames = commonNames;
                       }
 
                     }else{

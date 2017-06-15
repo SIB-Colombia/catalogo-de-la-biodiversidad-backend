@@ -174,7 +174,7 @@ function setApprovedInUseCommonNamesAtomized(req, res) {
         if(typeof elementVer.commonNamesAtomized !== 'undefined' && elementVer.commonNamesAtomized.length !== 0){
           var commonNames = [];
           var commonNamesValues = {};
-          for(var i=0; i<elementVer.commonNamesAtomized; i++){
+          for(var i=0; i<elementVer.commonNamesAtomized.length; i++){
             commonNamesValues.language = elementVer.commonNamesAtomized[i].language;
             commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
             commonNames.push(commonNamesValues);
