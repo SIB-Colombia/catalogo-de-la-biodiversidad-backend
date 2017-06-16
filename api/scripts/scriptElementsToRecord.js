@@ -248,6 +248,7 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         var commonNames = [];
                         var commonNamesValues = {};
                         for(var i=0; i<elementVer.commonNamesAtomized.length; i++){
+                          commonNamesValues = {};
                           commonNamesValues.language = elementVer.commonNamesAtomized[i].language;
                           commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
                           commonNames.push(commonNamesValues);
