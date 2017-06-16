@@ -347,7 +347,7 @@ function getMostRecentRecordsUpdated(req, res) {
 
 function getMostRecentRecordsUpdatedNumber(req, res) {
   var numberRecords=req.swagger.params.numberRecords.value;
-  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date threatStatusApprovedInUse ancillaryDataApprovedInUse commonNamesAtomizedApprovedInUse').sort({update_date: -1}).limit(numberRecords);
+  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date threatStatusValue commonNames imageThumbnail imageMain').sort({update_date: -1}).limit(numberRecords);
   //var query_c = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({creation_date: 1}).limit(5);
   query_u.exec(function (err, data_u) {
     if(err){
