@@ -50,28 +50,39 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
             HierarchyVersion = CatalogoDb.model('HierarchyVersion', hierarchySchema );
 
           	data=data.slice(1, data.length);
+              var canName = '';
+              var sciName = '';
+              var kingdom = '';
+              var phylum = '';
+              var class_es = '';
+              var order = '';
+              var family = '';
+              var genus = '';
+              var specificEpithet = '';
+              var Imagen_Thumbnail = '';
+              var Imagen_Destacada = '';
           		async.eachSeries(data, function(line, callback) {
           			console.log(line);
           			line = line+"";
-          			var specie =line.split(",");
-          			var canName = specie[1];
-          			var sciName = specie[2];
-          			var kingdom = specie[3];
-          			var phylum = specie[4];
-          			var class_es = specie[5];
-          			var order = specie[6];
-          			var family = specie[7];
-          			var genus = specie[8];
-          			var specificEpithet = specie[9];
-          			var Imagen_Thumbnail = specie[10];
-                var Imagen_Destacada = specie[11];
+          			specie =line.split(",");
+          			canName = specie[1];
+          			sciName = specie[2];
+          			kingdom = specie[3];
+          			phylum = specie[4];
+          			class_es = specie[5];
+          			order = specie[6];
+          			family = specie[7];
+          			genus = specie[8];
+          			specificEpithet = specie[9];
+          			Imagen_Thumbnail = specie[10];
+                Imagen_Destacada = specie[11];
           			console.log(canName);
           			/*
           			var name='zantedeschia aethiopicax';
           			var image = 'test.jpg';
           			*/
           			//console.log(sciName);
-                canName ='zantedeschia aethiopicaxz';
+                canName ='zantedeschia aethiopicaxztqwb';
           			var reg_ex = '^'+canName;
           			async.waterfall([
           				function(callback){
@@ -98,8 +109,6 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
           					console.log(id);
           					console.log(sciName);
           					var taxonRecordName = {};
-                    var hierarchy = [];
-                    var hierarchyVal = {}; 
                     var scientificName = {};
                     var canonicalName = {};
           					if(id == ''){
@@ -161,6 +170,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
           					}
           				},
           				function(taxonRecordName, id, create_new_record, callback){
+                    console.log(id);
           					if(create_new_record){
                       console.log(JSON.stringify(taxonRecordName));
           						var id_rc = mongoose.Types.ObjectId();
@@ -199,7 +209,8 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                                 callback(new Error("Error creating a new Record for the name: " + canName +" : " + err.message));
                               }else{
                                 console.log("Document Record: "+doc);
-                                
+                                callback(null,id_rc, create_new_record);
+                                //
                               }
                             });
                           }
@@ -207,13 +218,94 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
 									     }
 								      });
           					}else{
-
+                      //taxonRecordName, id, create_new_record, callback
+                      callback(null,id, create_new_record);
           					}
-          					console.log();
-          				}
+          					//console.log();
+          				},
+                  function(id, create_new_record, callback){
+                    var hierarchy = [];
+                    var hierarchyVal = {}; 
+                    if(create_new_record){
+                      console.log(create_new_record);
+                      console.log(id);
+                      hierarchyVal.kingdom = kingdom;
+                      hierarchyVal.phylum = phylum;
+                      hierarchyVal.classHierarchy = class_es;
+                      hierarchyVal.order = order;
+                      hierarchyVal.family = family;
+                      hierarchyVal.genus = genus;
+                      hierarchyVal.specificEpithet = specificEpithet;
+                      hierarchy.push(hierarchyVal); 
+                    }
+                    callback(null,id, create_new_record, hierarchy);
+                  },
+                  function(id, create_new_record, hierarchy, callback){
+                    console.log(JSON.stringify(hierarchy));
+                    if(create_new_record){
+                      var hierarchy_version = {};
+                      hierarchy_version._id = mongoose.Types.ObjectId();
+                      hierarchy_version.created=Date();
+                      hierarchy_version.state="approved_in_use";
+                      hierarchy_version.element="hierarchy";
+                      var elementValue = hierarchy_version.hierarchy;
+                      hierarchy_version = new HierarchyVersion(hierarchy_version);
+                      var id_v = hierarchy_version._id;
+                      async.waterfall([
+                        function(callback){
+                          hierarchy_version.id_record=id;
+                          hierarchy_version.version=1;
+                          hierarchy_version.save(function(err){
+                            if(err){
+                              callback(new Error("failed saving the element version:" + err.message));
+                            }else{
+                              callback(null, hierarchy_version);
+                            }
+                          });
+                      },
+                      function(hierarchy_version, callback){ 
+                        console.log("id to update:"+id);
+                        RecordVersion.findByIdAndUpdate( id, { $push: { "hierarchyVersion": 1 } },{ safe: true, upsert: true }).exec(function (err, record) {
+                          if(err){
+                            callback(new Error("failed added id to RecordVersion:" + err.message));
+                          }else{
+                            console.log('!!');
+                            callback();
+                          }
+                        });
+                      },
+                      function(callback){
+                        var update_date = Date();
+                        Record.update({_id:id},{ hierarchyApprovedInUse: elementValue, update_date: update_date }, function(err, result){
+                          if(err){
+                            callback(new Error(err.message));
+                          }else{
+                            callback();
+                          }
+                        });
+                      }
+                      ],
+                      function(err, result) {
+                        if (err) {
+                          callback(new Error("failed saving HierarchyVersion for the new record:" + err.message));
+                        }else{
+                          callback(null,id);
+                        }      
+                      });
+                    }
+                  },
+                  function(id, callback){
+                    console.log("id to update image: "+id);
+                    Record.update({_id:id},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
+                      if(err){
+                        callback(new Error(err.message));
+                      }else{
+                        callback();
+                      }
+                    });
+                  }
           			],function (err, result) {
-    		
-					});
+					   });
 
           			/*
           			

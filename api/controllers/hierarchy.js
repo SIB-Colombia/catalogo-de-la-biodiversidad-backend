@@ -105,7 +105,6 @@ function postHierarchy(req, res) {
       res.status(400);
       res.json({message: "The url doesn't have the id for the Record (Ficha)"});
     }
-
 }
 
 function getHierarchy(req, res) {

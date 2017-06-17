@@ -98,6 +98,25 @@ var Element = new Schema ({
 	ancillaryData: { type: [AncillaryData], default: void 0 }
 }, { versionKey: false });
 
+
+var Hierarchy = new Schema ({
+	classification: String,
+	recommended: Number,
+	kingdom : String,
+	phylum : String,
+	classHierarchy: String,
+	order : String,
+	family : String,
+	genus : String,
+	subgenus : String,
+	taxonRank : String,
+	specificEpithet : String,
+	infraspecificEpithet : String,
+	higherClassification : String,
+	parentTaxon : String 
+});
+
+
 var ElementVersion = new Schema ({
 	id_record : { type: Schema.Types.ObjectId, ref: 'RecordVersion' },
 	created : { type: Date, default: Date.now },
