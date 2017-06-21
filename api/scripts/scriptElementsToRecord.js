@@ -242,9 +242,7 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                   }else{
                     if(elementVer){
                       lastRec.commonNamesAtomizedApprovedInUse = elementVer;
-
                       if(typeof elementVer.commonNamesAtomized !== 'undefined' && elementVer.commonNamesAtomized.length !== 0){
-                        //console.log(elementVer.commonNamesAtomized.length);
                         var commonNames = [];
                         var commonNamesValues = {};
                         for(var i=0; i<elementVer.commonNamesAtomized.length; i++){
@@ -253,10 +251,8 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                           commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
                           commonNames.push(commonNamesValues);
                         }
-                        //console.log(commonNames.length);
                         lastRec.commonNames = commonNames;
                       }
-
                     }else{
                       console.log("No exist CommonNamesAtomizedVersion for id record : "+record_data._id);
                     }
@@ -268,10 +264,18 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 SynonymsAtomizedVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("SynonymsAtomized");
                   if(err){
+                    console.log(err);
                     callback(new Error("Error to get SynonymsAtomized element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
                       lastRec.synonymsAtomizedApprovedInUse = elementVer;
+                      if(typeof elementVer.synonymsAtomized !== 'undefined' && elementVer.synonymsAtomized.length !== 0){
+                        var synonymNames = [];
+                        for(var i=0; i<elementVer.synonymsAtomized.length; i++){
+                          synonymNames.push(elementVer.synonymsAtomized[i].synonymName.simple);
+                        }
+                        lastRec.synonymNames = synonymNames;
+                      }
                     }else{
                       console.log("No exist SynonymsAtomizedVersion for id record : "+record_data._id);
                     }
@@ -652,7 +656,12 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                     if(elementVer){
                       lastRec.ancillaryDataApprovedInUse = elementVer
                       if(typeof elementVer.ancillaryData !== 'undefined' && elementVer.ancillaryData.length !== 0){
-                        lastRec.imagesSiB = elementVer.ancillaryData[0].mediaURL;
+                        if(elementVer.ancillaryData[0].source.indexOf("jpg") >= 0){
+                          lastRec.imageMain = elementVer.ancillaryData[0].source;
+                        }
+                        if(elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0){
+                          lastRec.imageThumbnail = elementVer.ancillaryData[0].thumbnailURL;
+                        }
                       }
                     }else{
                       console.log("No exist AncillaryDataVersion for id record : "+record_data._id);

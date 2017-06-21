@@ -186,6 +186,11 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+  /record/search:
+    x-swagger-router-controller: records
+    get:
+      description: get the latest version of a record using the id in the Catalogue V1
+
   /record/legacy_id/{legacy_id}:
     x-swagger-router-controller: records
     get:

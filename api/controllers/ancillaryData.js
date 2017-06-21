@@ -172,13 +172,36 @@ function setApprovedInUseAncillaryData(req, res) {
       function(elementVer,callback){ 
         elementVer.state="approved_in_use";
         var update_date = Date();
-        add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer, update_date: update_date }, function(err, result){
-          if(err){
-            callback(new Error(err.message));
-          }else{
-            callback();
+        if(typeof elementVer.ancillaryData !== 'undefined' && elementVer.ancillaryData.length !== 0){
+          if((elementVer.ancillaryData[0].dataType=='image') && (elementVer.ancillaryData[0].source.indexOf("jpg") >= 0)){
+            add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer, update_date: update_date, imageMain : elementVer.ancillaryData[0].source}, function(err, result){
+              if(err){
+                callback(new Error(err.message));
+              }else{
+                callback();
+              }
+            });
           }
-        });
+          if((elementVer.ancillaryData[0].dataType=='image') && (elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0)){
+            add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer, update_date: update_date, imageThumbnail : elementVer.ancillaryData[0].source}, function(err, result){
+              if(err){
+                callback(new Error(err.message));
+              }else{
+                callback();
+              }
+            });
+          }
+        }else{
+          if(elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0){
+            add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer, update_date: update_date}, function(err, result){
+              if(err){
+                callback(new Error(err.message));
+              }else{
+                callback();
+              }
+            });
+          }
+        }
       }
     ],
     function(err, result) {

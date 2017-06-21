@@ -4,6 +4,7 @@ var fs = require('fs');
 var TaxonRecordNameVersion = require('../models/taxonRecordName.js');
 var SynonymsAtomizedVersion = require('../models/synonymsAtomized.js');
 var CommonNamesAtomizedVersion = require('../models/commonNamesAtomized.js');
+var AncillaryDataVersion = require ('../models/ancillaryData.js');
 var HierarchyVersion = require('../models/hierarchy.js');
 var ThreatStatusVersion = require('../models/threatStatus.js');
 var add_objects = require('../models/additionalModels.js');
@@ -15,27 +16,29 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
 	if(err){
 		console.log('connection error', err);
 	}else{
+    console.log("****Initial waterfal async****");
 		async.waterfall([
 			function(callback){ 
-    			console.log("Read the csv file ");
+    			console.log("Step 1:Read the csv file ");
         		//RecordModel.find({}).exec(callback);
         		//Leer el archivo, Read the file
         		var data = [];
         		var input = fs.createReadStream("/home/oscar/Desktop/SpeciesCO.csv");
         		var parser = parse({delimiter: ','});
         		parser.on('readable', function(){
-  					while(record = parser.read()){
+  					 while(record = parser.read()){
     					data.push(record);
-  					}
-				});
-				parser.on('finish', function(){
-					callback(null, data);
-				});
-				input.pipe(parser);
+  					 }
+				    });
+				    parser.on('finish', function(){
+					   callback(null, data);
+				    });
+				    input.pipe(parser);
         		//var stream = fs.createReadStream(inputFile).pipe(parser);
         		
         	},
         	function(data,callback){
+            console.log("Step 2: Asyn series for each line in the document ");
         		console.log("Number of scientific names to insert: "+data.length);
         		var newRecordSchema = add_objects.Record.schema;
           	var Record = CatalogoDb.model('Record', newRecordSchema );
@@ -48,6 +51,12 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
 
             var hierarchySchema = HierarchyVersion.schema;
             HierarchyVersion = CatalogoDb.model('HierarchyVersion', hierarchySchema );
+
+            var ancillarySchema = AncillaryDataVersion.schema;
+            AncillaryDataVersion = CatalogoDb.model('AncillaryDataVersion', ancillarySchema );
+
+            var number_new_records=0;
+            var number_images_updated=0;
 
           	data=data.slice(1, data.length);
               var canName = '';
@@ -62,6 +71,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
               var Imagen_Thumbnail = '';
               var Imagen_Destacada = '';
           		async.eachSeries(data, function(line, callback) {
+                console.log("Values to save");
           			console.log(line);
           			line = line+"";
           			specie =line.split(",");
@@ -76,101 +86,52 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
           			specificEpithet = specie[9];
           			Imagen_Thumbnail = specie[10];
                 Imagen_Destacada = specie[11];
-          			console.log(canName);
+
+          			console.log("canonical name to search: "+canName);
           			/*
           			var name='zantedeschia aethiopicax';
           			var image = 'test.jpg';
           			*/
           			//console.log(sciName);
-                canName ='zantedeschia aethiopicaxztqwb';
+                //canName ='zantedeschia aethiopicaxztqwbhlp';
           			var reg_ex = '^'+canName;
+                console.log("waterfall for each line");
           			async.waterfall([
           				function(callback){
-          					//newRecordModel.findOne({'scientificNameSimple': new RegExp('^'+name+'$', "i") }, 'scientificNameSimple', function(err, record){
+          					console.log("Step 2.1: Search by canonicalName: "+canName);
           					Record.findOne({'scientificNameSimple': {'$regex' : reg_ex, '$options' : 'i'} }, 'scientificNameSimple', function(err, record){
           						if(err){
           							console.log("Error finding scientificName in the database!: " + canName);
-									callback(new Error("Error to get EcologicalSignificance element for the record with id: "+record_data._id+" : " + err.message));
+									       callback(new Error("Error to get EcologicalSignificance element for the record with id: "+record_data._id+" : " + err.message));
           						}else{	
           							if(record){
-          								/*
-          								console.log(record);
-          								console.log(record._id);
-          								*/
-          								callback(null, record._id, record.scientificNameSimple);
+                          console.log("!!!Exist a record for the canonicalName: "+canName+" id: "+record._id);
+          								callback(null, record._id);
           							}else{
-          								console.log("no record");
+          								console.log("No exist record for the canonicalName: "+canName);
           								callback(null, '');
           							}
           						}
           					});
           				},
           				function(id,callback){
-          					console.log(id);
-          					console.log(sciName);
+                    console.log("Step 2.2: create new elements and record if not exist Record, in other case search by id: "+id);
           					var taxonRecordName = {};
                     var scientificName = {};
                     var canonicalName = {};
+                    var create_new_record = false;
           					if(id == ''){
-          						//call the api
-          						/*
-          						var temp_name = name.trim().replace(/ /g,"%20");
-          						console.log("Scientific Name to search in the GBIF API: "+name);
-          						rest.get('http://api.gbif.org/v1/species?name='+temp_name+'&limit=1').on('complete', function(data) {
-          							console.log("gbif api for "+ name +JSON.stringify(data));
-          							if(data.results.length > 0){
-          								var taxonRecordName = {};
-          								taxonRecordName.scientificName = {};
-          								taxonRecordName.scientificName.canonicalName = {};
-          								taxonRecordName.scientificName.canonicalAuthorship = {};
-          								taxonRecordName.scientificName.publishedln = {};
-  										taxonRecordName.scientificName.simple = (data.results[0].scientificName !== undefined) ? data.results[0].scientificName : '';
-										taxonRecordName.scientificName.rank = (data.results[0].rank !== undefined) ? data.results[0].rank : '';
-										taxonRecordName.scientificName.canonicalName.simple = (data.results[0].canonicalName !== undefined) ? data.results[0].canonicalName : '';
-										taxonRecordName.scientificName.canonicalAuthorship.simple = (data.results[0].authorship !== undefined) ? data.results[0].authorship : '';
-										taxonRecordName.scientificName.publishedln.simple = (data.results[0].publishedIn !== undefined) ? data.results[0].publishedIn : '';
-										var create_new_record=true;
-          							}else{
-          								console.log("No results for the name!: " + name);
-          								var create_new_record=false;
-          							}
-          						});
-								*/
-
-                    /*
-								    taxonRecordName.scientificName.canonicalName = {};
-								    taxonRecordName.scientificName.simple = sciName;
-								    taxonRecordName.scientificName.canonicalName.simple = canName;
-                    taxonRecordName.scientificName.rank = "SPECIES";
-                    */
-                    
-                    scientificName.simple = sciName;
-                    scientificName.rank = "SPECIES";
-                    canonicalName.simple = canName;
-                    scientificName.canonicalName = canonicalName;
-                    taxonRecordName.scientificName = scientificName;
-
-
-
-                    /*
-                    hierarchyVal.kingdom = kingdom;
-                    hierarchyVal.phylum = phylum;
-                    hierarchyVal.classHierarchy = class_es;
-                    hierarchyVal.order = order;
-                    hierarchyVal.family = family;
-                    hierarchyVal.genus = genus;
-                    hierarchyVal.specificEpithet = specificEpithet;
-                    hierarchy.push(hierarchyVal);
-                    */
+                      scientificName.simple = sciName;
+                      scientificName.rank = "SPECIES";
+                      canonicalName.simple = canName;
+                      scientificName.canonicalName = canonicalName;
+                      taxonRecordName.scientificName = scientificName;
 								      var create_new_record=true;
-                      callback(null,taxonRecordName,id, create_new_record);
-          					}else{
-          						var create_new_record=false;
-          						callback(null,taxonRecordName,id, create_new_record);
           					}
+                    callback(null,taxonRecordName,id, create_new_record);
           				},
           				function(taxonRecordName, id, create_new_record, callback){
-                    console.log(id);
+                    console.log("Step 2.2: create a new Record?:"+create_new_record +" id: "+id);
           					if(create_new_record){
                       console.log(JSON.stringify(taxonRecordName));
           						var id_rc = mongoose.Types.ObjectId();
@@ -185,10 +146,8 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                       var taxonRecordNameElement = taxon_record_name_version;
                       taxon_record_name_version.taxonRecordName = taxonRecordName;
 								      taxon_record_name_version = new TaxonRecordNameVersion(taxon_record_name_version);
-								      
 								      var ver = 1;
                       var ob_ids= new Array();
-                      console.log("!");
 								      RecordVersion.create({ _id:id_rc, taxonRecordNameVersion: ob_ids },function(err, doc){
 									     if(err){
 										    console.log("Error creating a new RecordVersion for the name: " + canName);
@@ -208,9 +167,9 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                                 console.log("Error creating a new Record for the name: " + canName);
                                 callback(new Error("Error creating a new Record for the name: " + canName +" : " + err.message));
                               }else{
-                                console.log("Document Record: "+doc);
+                                number_new_records++;
+                                console.log("Created a new Record id: " + id_rc + "; Created a new taxonRecordNameVersion, id: "+id_v);
                                 callback(null,id_rc, create_new_record);
-                                //
                               }
                             });
                           }
@@ -218,12 +177,12 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
 									     }
 								      });
           					}else{
-                      //taxonRecordName, id, create_new_record, callback
+                      console.log("Not created a new Record");
                       callback(null,id, create_new_record);
           					}
-          					//console.log();
           				},
                   function(id, create_new_record, callback){
+                    console.log("Step 2.3: Create hierarchy object, create a new HierarchyVersion?:"+create_new_record +" id: "+id);
                     var hierarchy = [];
                     var hierarchyVal = {}; 
                     if(create_new_record){
@@ -241,12 +200,15 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                     callback(null,id, create_new_record, hierarchy);
                   },
                   function(id, create_new_record, hierarchy, callback){
-                    console.log(JSON.stringify(hierarchy));
+                    console.log("Step 2.4: create a new HierarchyVersion?:"+create_new_record +" id: "+id);
+                    //console.log(JSON.stringify(hierarchy));
                     if(create_new_record){
                       var hierarchy_version = {};
-                      hierarchy_version._id = mongoose.Types.ObjectId();
+                      var id_v = mongoose.Types.ObjectId();
+                      hierarchy_version._id = id_v;
                       hierarchy_version.created=Date();
                       hierarchy_version.state="approved_in_use";
+                      hierarchy_version.id_user = 'sib+ac@humboldt.org.co';
                       hierarchy_version.element="hierarchy";
                       var elementValue = hierarchy_version.hierarchy;
                       hierarchy_version = new HierarchyVersion(hierarchy_version);
@@ -265,8 +227,9 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                       },
                       function(hierarchy_version, callback){ 
                         console.log("id to update:"+id);
-                        RecordVersion.findByIdAndUpdate( id, { $push: { "hierarchyVersion": 1 } },{ safe: true, upsert: true }).exec(function (err, record) {
+                        RecordVersion.findByIdAndUpdate( id, { $push: { "hierarchyVersion": id_v } },{ safe: true, upsert: true }).exec(function (err, record) {
                           if(err){
+                            console.log(err.message);
                             callback(new Error("failed added id to RecordVersion:" + err.message));
                           }else{
                             console.log('!!');
@@ -289,20 +252,117 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         if (err) {
                           callback(new Error("failed saving HierarchyVersion for the new record:" + err.message));
                         }else{
-                          callback(null,id);
+                          console.log("Created a new HierarchyVersion id: " +id_v);
+                          callback(null, id, create_new_record);
                         }      
                       });
+                    }else{
+                      callback(null, id, create_new_record);
+                    }
+                  },
+                  function(id, create_new_record, callback){
+                    console.log("Step 2.5: Update image for a new Record?:"+create_new_record +" id: "+id);
+                    console.log("id to update image: "+id);
+                    if((Imagen_Destacada == '')&&(Imagen_Thumbnail == '')){
+                      console.log('Not exists images to update or save');
+                    }else{
+                      var ancillaryData = [];
+                      var ancillaryDataValue = {};
+                      ancillaryDataValue.source = Imagen_Destacada;
+                      ancillaryDataValue.thumbnailURL = Imagen_Thumbnail;
+                      ancillaryData.push(ancillaryDataValue);
+                      console.log(JSON.stringify(ancillaryData));
+                      var ancillary_data_version = {}
+                      var id_v = mongoose.Types.ObjectId();
+                      ancillary_data_version._id = id_v;
+                      ancillary_data_version.created=Date();
+                      ancillary_data_version.state="approved_in_use";
+                      ancillary_data_version.element="ancillaryData";
+                      ancillary_data_version.id_user = 'sib+ac@humboldt.org.co';
+                      ancillary_data_version.ancillaryData = ancillaryData;
+                      ancillary_data_version = new AncillaryDataVersion(ancillary_data_version);
+                      async.waterfall([
+                        function(callback){ 
+                          if(create_new_record){
+                            var data ={};
+                            callback(null, data);
+                          }else{
+                            add_objects.RecordVersion.findById(id , function (err, data){
+                              if(err){
+                                callback(new Error("The Record (Ficha) with id: "+id_rc+" doesn't exist.:" + err.message));
+                              }else{
+                                callback(null, data);
+                              }
+                            });
+                          }
+                        },
+                        function(data,callback){
+                          if(create_new_record){
+                            ancillary_data_version.id_record=id;
+                            ancillary_data_version.version=1;
+                            callback(null, ancillary_data_version);
+                          }else{
+                            if(data.ancillaryDataVersion && data.ancillaryDataVersion.length !=0){
+                              var lenancillaryData = data.ancillaryDataVersion.length;
+                              var idLast = data.ancillaryDataVersion[lenancillaryData-1];
+                              AncillaryDataVersion.findById(idLast , function (err, doc){
+                                if(err){
+                                  callback(new Error("failed getting the last version of ancillaryDataVersion:" + err.message));
+                                }else{
+                                  ancillary_data_version.id_record=id_rc;
+                                  ancillary_data_version.version=lenancillaryData+1;
+                                  callback(null, ancillary_data_version);
+                                }
+                              });
+                            }else{
+                              ancillary_data_version.id_record=id_rc;
+                              ancillary_data_version.version=1;
+                              callback(null, ancillary_data_version);
+                            }
+                          }
+                        },
+                        function(ancillary_data_version, callback){ 
+                          ver = ancillary_data_version.version;
+                          ancillary_data_version.save(function(err){
+                            if(err){
+                              callback(new Error("failed saving the element version:" + err.message));
+                            }else{
+                              callback(null, ancillary_data_version);
+                            }
+                          });
+                        },
+                        function(ancillary_data_version, callback){ 
+                          RecordVersion.findByIdAndUpdate( id, { $push: { "ancillaryDataVersion": id_v } },{ safe: true, upsert: true }).exec(function (err, record) {
+                            if(err){
+                              callback(new Error("failed added id to RecordVersion:" + err.message));
+                            }else{
+                              callback(null, id);
+                            }
+                          });
+                        },
+                        function(id, callback){
+                          //Record.update({_id:id, imageThumbnail:{$exists: true}, imageMain:{$exists: true}},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
+                          Record.update({_id:id},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
+                            if(err){
+                              callback(new Error(err.message));
+                            }else{
+                              callback();
+                            }
+                          });
+                        }
+                      ],
+                      function(err, result) {
+                        if (err) {
+                          callback(new Error("failed saving AncillaryDataVersion:  " + err.message));
+                        }else{
+                          console.log('Creation a new AncillaryDataVersion sucess for the record:'+id);
+                          //res.json({ message: 'Save AncillaryDataVersion', element: 'ancillaryData', version : ver, _id: id_v, id_record : id_rc });
+                        }      
+                      })
                     }
                   },
                   function(id, callback){
-                    console.log("id to update image: "+id);
-                    Record.update({_id:id},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
-                      if(err){
-                        callback(new Error(err.message));
-                      }else{
-                        callback();
-                      }
-                    });
+                    console.log("created all the new records");
                   }
           			],function (err, result) {
 					   });

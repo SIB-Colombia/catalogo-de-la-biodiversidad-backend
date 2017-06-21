@@ -172,13 +172,27 @@ function setApprovedInUseSynonymsAtomized(req, res) {
       function(elementVer,callback){ 
         elementVer.state="approved_in_use";
         var update_date = Date();
-        add_objects.Record.update({_id:id_rc},{ synonymsAtomizedApprovedInUse: elementVer, update_date: update_date }, function(err, result){
-          if(err){
-            callback(new Error(err.message));
-          }else{
-            callback();
+        if(typeof elementVer.synonymsAtomized !== 'undefined' && elementVer.synonymsAtomized.length !== 0){
+          var synonymNames = [];
+          for(var i=0; i<elementVer.synonymsAtomized.length; i++){
+            synonymNames.push(elementVer.synonymsAtomized[i].synonymName.simple);
           }
-        });
+          add_objects.Record.update({_id:id_rc},{ synonymsAtomizedApprovedInUse: elementVer, update_date: update_date, synonymNames: synonymNames }, function(err, result){
+            if(err){
+              callback(new Error(err.message));
+            }else{
+              callback();
+            }
+          });
+        }else{
+          add_objects.Record.update({_id:id_rc},{ synonymsAtomizedApprovedInUse: elementVer, update_date: update_date }, function(err, result){
+            if(err){
+              callback(new Error(err.message));
+            }else{
+              callback();
+            }
+          });
+        }
       }
     ],
     function(err, result) {
