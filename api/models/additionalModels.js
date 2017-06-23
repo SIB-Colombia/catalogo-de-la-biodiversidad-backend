@@ -36,7 +36,7 @@ var Reference = new Schema ({
 	issn : String,
 	link : String,
 	recordId : String
-},{ collection: 'Reference', versionKey: false });
+},{ collection: 'Reference', versionKey: false, _id : false });
 
 var Agent = new Schema({
 	firstName: String,
@@ -68,9 +68,9 @@ var AncillaryData = new Schema({
 	rights  : String,
 	rightsHolder : String,
 	bibliographicCitation : String,
-	audience: [String],
+	audience: { type: [String], default: void 0 },
 	source : String,
-	subject : [String],
+	subject : {type: [String], default: void 0 },
 	description : String,
 	mediaURL : [String],
 	thumbnailURL : String,
@@ -94,7 +94,6 @@ var Record = new Schema({ creation_date : { type: Date, index: true }, update_da
 Record.plugin(mongoosePaginate);
 
 var Element = new Schema ({
-	//ancillaryData : [AncillaryData]
 	ancillaryData: { type: [AncillaryData], default: void 0 }
 }, { versionKey: false });
 

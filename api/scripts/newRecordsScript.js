@@ -24,7 +24,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
         		//Leer el archivo, Read the file
         		var data = [];
         		var input = fs.createReadStream("/home/oscar/Desktop/SpeciesCO.csv");
-        		var parser = parse({delimiter: ','});
+        		var parser = parse({delimiter: '\t'});
         		parser.on('readable', function(){
   					 while(record = parser.read()){
     					data.push(record);
@@ -83,9 +83,14 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
           			order = specie[6];
           			family = specie[7];
           			genus = specie[8];
-          			specificEpithet = specie[9];
-          			Imagen_Thumbnail = specie[10];
-                Imagen_Destacada = specie[11];
+                specificEpithet = specie[9];
+                status = specie[10];
+          			Imagen_Destacada = specie[10];
+                Imagen_Thumbnail = specie[11];
+                rightsHolder = specie[12];
+                source = specie[13];
+                license = specie[14];
+                agent = specie[15];
 
           			console.log("canonical name to search: "+canName);
           			/*
@@ -265,6 +270,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                     console.log("id to update image: "+id);
                     if((Imagen_Destacada == '')&&(Imagen_Thumbnail == '')){
                       console.log('Not exists images to update or save');
+                      callback();
                     }else{
                       var ancillaryData = [];
                       var ancillaryDataValue = {};
@@ -287,10 +293,11 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                             var data ={};
                             callback(null, data);
                           }else{
-                            add_objects.RecordVersion.findById(id , function (err, data){
+                            RecordVersion.findById(id , function (err, data){
                               if(err){
-                                callback(new Error("The Record (Ficha) with id: "+id_rc+" doesn't exist.:" + err.message));
+                                callback(new Error("The Record (Ficha) with id: "+id+" doesn't exist.:" + err.message));
                               }else{
+                                console.log("Found a record for the id: "+id);
                                 callback(null, data);
                               }
                             });
@@ -298,10 +305,12 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         },
                         function(data,callback){
                           if(create_new_record){
+                            console.log("!");
                             ancillary_data_version.id_record=id;
                             ancillary_data_version.version=1;
                             callback(null, ancillary_data_version);
                           }else{
+                            console.log("!*")
                             if(data.ancillaryDataVersion && data.ancillaryDataVersion.length !=0){
                               var lenancillaryData = data.ancillaryDataVersion.length;
                               var idLast = data.ancillaryDataVersion[lenancillaryData-1];
@@ -309,13 +318,13 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                                 if(err){
                                   callback(new Error("failed getting the last version of ancillaryDataVersion:" + err.message));
                                 }else{
-                                  ancillary_data_version.id_record=id_rc;
+                                  ancillary_data_version.id_record=id;
                                   ancillary_data_version.version=lenancillaryData+1;
                                   callback(null, ancillary_data_version);
                                 }
                               });
                             }else{
-                              ancillary_data_version.id_record=id_rc;
+                              ancillary_data_version.id_record=id;
                               ancillary_data_version.version=1;
                               callback(null, ancillary_data_version);
                             }
@@ -327,6 +336,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                             if(err){
                               callback(new Error("failed saving the element version:" + err.message));
                             }else{
+                              console.log("saved new AncillaryDataVersion");
                               callback(null, ancillary_data_version);
                             }
                           });
@@ -342,10 +352,12 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         },
                         function(id, callback){
                           //Record.update({_id:id, imageThumbnail:{$exists: true}, imageMain:{$exists: true}},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
-                          Record.update({_id:id},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
+                          console.log("Update Record images");  
+                          Record.update({_id:id},{ ancillaryDataApprovedInUse: ancillary_data_version.ancillaryData, imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
                             if(err){
                               callback(new Error(err.message));
                             }else{
+                              number_images_updated++;
                               callback();
                             }
                           });
@@ -356,34 +368,39 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                           callback(new Error("failed saving AncillaryDataVersion:  " + err.message));
                         }else{
                           console.log('Creation a new AncillaryDataVersion sucess for the record:'+id);
-                          //res.json({ message: 'Save AncillaryDataVersion', element: 'ancillaryData', version : ver, _id: id_v, id_record : id_rc });
+                          callback();
                         }      
                       })
                     }
                   },
-                  function(id, callback){
-                    console.log("created all the new records");
+                  function(callback){
+                    console.log("Saved info for: "+canName);
+                    //callback();
                   }
           			],function (err, result) {
-					   });
-
-          			/*
-          			
-          			*/
-
+                  if(err){
+                      callback(new Error("Error: "+err));
+                  }else{
+                      callback(null, data);
+                  }
+					      });
           		},function(err){
             		if(err){
                   		callback(new Error("Error: "+err));
-              		}else{
+              	}else{
                   		callback(null, data);
-              		}
+              	}
           		});
+            console.log("Number: "+number_new_records);
         	}
-
 		], function (err, result) {
-    		
+    		if(err){
+          console.log(err);
+        }else{
+          console.log("Disconnect the database");
+          catalogoDb=mongoose.disconnect();
+          console.log("End of the process");
+        }
 		});
-
 	}
-
 });

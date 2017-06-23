@@ -30,7 +30,7 @@ var scientificName = Element.extend({
 	replacementNameFor : { ruleConsidered : String, note : String, reletedName : { identifier : String, datatype : String, source : String }, publishedln : { identifier : String, datatype : String, source : String }, microReference : String },
 	publicationStatus : { ruleConsidered : String, note : String, reletedName : { identifier : String, datatype : String, source : String }, publishedln : { identifier : String, datatype : String, source : String }, microReference : String },
 	providerLink : String,
-	providerSpecificData : { anyOne : [String], anyTwo : String }
+	providerSpecificData : { anyOne :{type: [String], default: void 0 }, anyTwo : String }
 }, { versionKey: false });
 
 var TaxonRecordName = Element.extend({

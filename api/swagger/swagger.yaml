@@ -185,11 +185,40 @@ paths:
           description: Error
           schema:
             $ref: "#/definitions/ErrorResponse"
-
-  /record/search:
-    x-swagger-router-controller: records
+  
+  /record-search/search:
+    x-swagger-router-controller: search
     get:
-      description: get the latest version of a record using the id in the Catalogue V1
+      description: Returns Records according to query parameters
+      tags:
+        - occurrence
+      # used as the method name of the controller
+      operationId: searchRecord
+      parameters:
+        - name: q
+          in: query
+          description: Simple search parameter. 
+          required: false
+          type: string
+        - name: size
+          in: query
+          description: The maximum number of results to return. This can't be greater than 1000.
+          required: false
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 1000
+      responses:
+        "200":
+          description: Success
+          schema:
+            # a pointer to a definition
+            $ref: "#/definitions/Record"
+        # responses may fall through to errors
+        "400":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
 
   /record/legacy_id/{legacy_id}:
     x-swagger-router-controller: records
