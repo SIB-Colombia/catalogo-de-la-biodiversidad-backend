@@ -16,14 +16,14 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
 	if(err){
 		console.log('connection error', err);
 	}else{
-    console.log("****Initial waterfal async****");
+    console.log('****Initial waterfal async****');
 		async.waterfall([
 			function(callback){ 
     			console.log("Step 1:Read the csv file ");
         		//RecordModel.find({}).exec(callback);
         		//Leer el archivo, Read the file
         		var data = [];
-        		var input = fs.createReadStream("/home/oscar/Desktop/SpeciesCO.csv");
+        		var input = fs.createReadStream('/home/oscar/Desktop/SpeciesCO.csv');
         		var parser = parse({delimiter: '\t'});
         		parser.on('readable', function(){
   					 while(record = parser.read()){
@@ -38,8 +38,8 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
         		
         	},
         	function(data,callback){
-            console.log("Step 2: Asyn series for each line in the document ");
-        		console.log("Number of scientific names to insert: "+data.length);
+            console.log('Step 2: Asyn series for each line in the document ');
+        		console.log('Number of scientific names to insert: '+data.length);
         		var newRecordSchema = add_objects.Record.schema;
           	var Record = CatalogoDb.model('Record', newRecordSchema );
 
@@ -273,10 +273,21 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                       callback();
                     }else{
                       var ancillaryData = [];
+                      var mediaURL = [];
                       var ancillaryDataValue = {};
-                      ancillaryDataValue.source = Imagen_Destacada;
+                      ancillaryDataValue.source = source;
                       ancillaryDataValue.thumbnailURL = Imagen_Thumbnail;
+                      mediaURL.push(Imagen_Destacada);
+                      ancillaryDataValue.mediaURL = mediaURL;
+                      ancillaryDataValue.rightsHolder = rightsHolder;
+                      ancillaryDataValue.license = license;
                       ancillaryData.push(ancillaryDataValue);
+                      var imageInfo = {};
+                      imageInfo.mainImage = Imagen_Destacada;
+                      imageInfo.thumbnailImage = Imagen_Thumbnail;
+                      imageInfo.source = source;
+                      imageInfo.rightsHolder = rightsHolder;
+                      imageInfo.license = license;
                       console.log(JSON.stringify(ancillaryData));
                       var ancillary_data_version = {}
                       var id_v = mongoose.Types.ObjectId();
@@ -353,7 +364,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         function(id, callback){
                           //Record.update({_id:id, imageThumbnail:{$exists: true}, imageMain:{$exists: true}},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
                           console.log("Update Record images");  
-                          Record.update({_id:id},{ ancillaryDataApprovedInUse: ancillary_data_version.ancillaryData, imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
+                          Record.update({_id:id},{ ancillaryDataApprovedInUse: ancillary_data_version.ancillaryData, imageInfo: imageInfo }, function(err, result){
                             if(err){
                               callback(new Error(err.message));
                             }else{

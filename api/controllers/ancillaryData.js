@@ -172,35 +172,35 @@ function setApprovedInUseAncillaryData(req, res) {
       function(elementVer,callback){ 
         elementVer.state="approved_in_use";
         var update_date = Date();
-        if(typeof elementVer.ancillaryData !== 'undefined' && elementVer.ancillaryData.length !== 0){
-          if((elementVer.ancillaryData[0].dataType=='image') && (elementVer.ancillaryData[0].source.indexOf("jpg") >= 0)){
-            add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer, update_date: update_date, imageMain : elementVer.ancillaryData[0].source}, function(err, result){
+        if(typeof elementVer.ancillaryData !== 'undefined' && elementVer.ancillaryData.length !== 0 && elementVer.ancillaryData[0].dataType=='image'){
+          var imageInfo = {};
+          if(typeof elementVer.ancillaryData[0].mediaURL !== 'undefined' && elementVer.ancillaryData[0].mediaURL.length !== 0 && elementVer.ancillaryData[0].mediaURL[0].indexOf("jpg") >= 0){
+            imageInfo.mainImage = elementVer.ancillaryData[0].mediaURL[0];
+          }
+          if(typeof elementVer.ancillaryData[0].thumbnailURL !== 'undefined' && elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0){
+            imageInfo.thumbnailImage = elementVer.ancillaryData[0].thumbnailURL;
+          }
+          if(typeof elementVer.ancillaryData[0].source !== 'undefined' && elementVer.ancillaryData[0].source != ''){
+            imageInfo.source = elementVer.ancillaryData[0].source;
+          }
+          if(typeof elementVer.ancillaryData[0].rightsHolder !== 'undefined' && elementVer.ancillaryData[0].rightsHolder != ''){
+            imageInfo.rightsHolder = elementVer.ancillaryData[0].rightsHolder;
+          }
+          add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer, imageInfo: imageInfo, update_date: update_date}, function(err, result){
               if(err){
                 callback(new Error(err.message));
               }else{
                 callback();
               }
-            });
-          }
-          if((elementVer.ancillaryData[0].dataType=='image') && (elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0)){
-            add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer, update_date: update_date, imageThumbnail : elementVer.ancillaryData[0].source}, function(err, result){
-              if(err){
-                callback(new Error(err.message));
-              }else{
-                callback();
-              }
-            });
-          }
+          });
         }else{
-          if(elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0){
-            add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer, update_date: update_date}, function(err, result){
+          add_objects.Record.update({_id:id_rc},{ ancillaryDataApprovedInUse: elementVer, update_date: update_date}, function(err, result){
               if(err){
                 callback(new Error(err.message));
               }else{
                 callback();
               }
-            });
-          }
+          });
         }
       }
     ],

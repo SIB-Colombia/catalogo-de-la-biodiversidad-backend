@@ -89,6 +89,8 @@ var Element = new Schema ({
 
 var CommonNames = new Schema({language: String, name: String},{ _id : false });
 
+var ImageInfo = new Schema({ mainImage: String, thumbnailImage: String, source: String, rightsHolder: String, license: String },{ _id : false });
+
 var Record = new Schema({ creation_date : { type: Date, index: true }, update_date : { type: Date, index: true }, scientificNameSimple : { type: String, index: true }, imageThumbnail : { type: String, index: true }, imageMain : { type: String, index: true }, threatStatusValue: { type: String, index: true }, commonNames: [CommonNames] }, { collection: 'Record', strict: false, versionKey: false });
 
 Record.plugin(mongoosePaginate);

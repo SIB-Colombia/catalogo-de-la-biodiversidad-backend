@@ -5721,6 +5721,7 @@ definitions:
   SynonymsAtomizedVersion:
     required:
       - synonymsAtomized
+      - id_user
     properties:
       id:
         type: string
@@ -7222,6 +7223,8 @@ definitions:
         type: string
         
   AncillaryData:
+    required:
+      - dataType
     properties:
       dataType:
         type: string 
