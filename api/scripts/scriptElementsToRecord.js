@@ -512,6 +512,7 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 HabitatsVersion.findOne({ id_record : record_data._id, state: "approved_in_use" }).sort({created: -1}).exec(function (err, elementVer) {
                   console.log("Habitats");
                   if(err){
+                    console.log("Error: "+err);
                     callback(new Error("Error to get Habitats element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
@@ -654,22 +655,35 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                     callback(new Error("Error to get AncillaryData element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      if(typeof elementVer.ancillaryData !== 'undefined' && elementVer.ancillaryData.length !== 0 && elementVer.ancillaryData[0].dataType=='image'){
+                      console.log(elementVer.ancillaryData);
+                      //if(typeof elementVer.ancillaryData !== 'undefined' && elementVer.ancillaryData.length !== 0 && elementVer.ancillaryData[0].dataType=='image'){
                         var imageInfo = {};
+                        /*
                         if(typeof elementVer.ancillaryData[0].mediaURL !== 'undefined' && elementVer.ancillaryData[0].mediaURL.length !== 0 && elementVer.ancillaryData[0].mediaURL[0].indexOf("jpg") >= 0){
                           imageInfo.mainImage = elementVer.ancillaryData[0].mediaURL[0];
-                        }
-                        if(typeof elementVer.ancillaryData[0].thumbnailURL !== 'undefined' && elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0){
-                          imageInfo.thumbnailImage = elementVer.ancillaryData[0].thumbnailURL;
                         }
                         if(typeof elementVer.ancillaryData[0].source !== 'undefined' && elementVer.ancillaryData[0].source != ''){
                           imageInfo.source = elementVer.ancillaryData[0].source;
                         }
+                        */
+                        if(typeof elementVer.ancillaryData[0].mediaURL !== 'undefined' && elementVer.ancillaryData[0].mediaURL.length !== 0 ){
+                          console.log("source id: "+record_data._id);
+                          imageInfo.source = elementVer.ancillaryData[0].mediaURL[0];
+                        }
+                        if(typeof elementVer.ancillaryData[0].thumbnailURL !== 'undefined' && (elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0 || elementVer.ancillaryData[0].thumbnailURL.indexOf("png") >= 0 || elementVer.ancillaryData[0].thumbnailURL.indexOf("svg") >= 0)){
+                          console.log("thumbnailImage: "+record_data._id);
+                          imageInfo.thumbnailImage = elementVer.ancillaryData[0].thumbnailURL;
+                        }
+                        if(typeof elementVer.ancillaryData[0].source !== 'undefined' && (elementVer.ancillaryData[0].source.indexOf("jpg") >= 0 || elementVer.ancillaryData[0].source.indexOf("png") >= 0 || elementVer.ancillaryData[0].source.indexOf("svg") >= 0)){
+                          console.log("mainImage: "+record_data._id);
+                          imageInfo.mainImage = elementVer.ancillaryData[0].source;
+                        }
                         if(typeof elementVer.ancillaryData[0].rightsHolder !== 'undefined' && elementVer.ancillaryData[0].rightsHolder != ''){
+                          console.log("rightsHolder: "+record_data._id);
                           imageInfo.rightsHolder = elementVer.ancillaryData[0].rightsHolder;
                         }
                         lastRec.imageInfo = imageInfo;
-                      }
+                      //}
                       lastRec.ancillaryDataApprovedInUse = elementVer;
                     }else{
                       console.log("No exist AncillaryDataVersion for id record : "+record_data._id);

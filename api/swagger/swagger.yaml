@@ -191,9 +191,9 @@ paths:
     get:
       description: Returns Records according to query parameters
       tags:
-        - occurrence
+        - Records
       # used as the method name of the controller
-      operationId: searchRecord
+      operationId: simpleSearchRecord
       parameters:
         - name: q
           in: query
