@@ -386,7 +386,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                   },
                   function(callback){
                     console.log("Saved info for: "+canName);
-                    //callback();
+                    callback();
                   }
           			],function (err, result) {
                   if(err){

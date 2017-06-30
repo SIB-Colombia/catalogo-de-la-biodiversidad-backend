@@ -15,7 +15,7 @@ function simpleSearchRecord(req, res) {
 		console.log(qword);
 		var reg_ex = '.*'+qword+'.*';
 		//var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{'$regex' : reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName':{'$regex' : reg_ex, '$options' : 'i'}}, {'commonNames.name':{'$regex' : reg_ex, '$options' : 'i'}}, {'AbstractApprovedInUse.abstract':{'$regex' : reg_ex, '$options' : 'i'}}, {'FullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured':{'$regex' : reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple creation_date update_date');
-		var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple creation_date update_date');
+		var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple creation_date update_date');
   		query.exec(function (err, data) {
     		if(err){
       			logger.error('Error getting list of records', JSON.stringify({ message:err }) );
