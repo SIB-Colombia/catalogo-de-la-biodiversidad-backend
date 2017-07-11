@@ -73,24 +73,26 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
           		async.eachSeries(data, function(line, callback) {
                 console.log("Values to save");
           			console.log(line);
-          			line = line+"";
-          			specie =line.split(",");
-          			canName = specie[1];
-          			sciName = specie[2];
-          			kingdom = specie[3];
-          			phylum = specie[4];
-          			class_es = specie[5];
-          			order = specie[6];
-          			family = specie[7];
-          			genus = specie[8];
-                specificEpithet = specie[9];
-                status = specie[10];
-          			Imagen_Destacada = specie[10];
-                Imagen_Thumbnail = specie[11];
-                rightsHolder = specie[12];
-                source = specie[13];
-                license = specie[14];
-                agent = specie[15];
+                //var serialArr = JSON.parse(line);
+                //console.log("value 0: "+serialArr[0]);
+          			//line = line+"";
+          			//specie =line.split(",");
+          			canName = line[1];
+          			sciName = line[2];
+          			kingdom = line[3];
+          			phylum = line[4];
+          			class_es = line[5];
+          			order = line[6];
+          			family = line[7];
+          			genus = line[8];
+                specificEpithet = line[9];
+                status = line[10];
+          			Imagen_Destacada = line[11];
+                Imagen_Thumbnail = line[12];
+                rightsHolder = line[13];
+                source = line[14];
+                license = line[15];
+                agent = line[16];
 
           			console.log("canonical name to search: "+canName);
           			/*
@@ -107,7 +109,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
           					Record.findOne({'scientificNameSimple': {'$regex' : reg_ex, '$options' : 'i'} }, 'scientificNameSimple', function(err, record){
           						if(err){
           							console.log("Error finding scientificName in the database!: " + canName);
-									       callback(new Error("Error to get EcologicalSignificance element for the record with id: "+record_data._id+" : " + err.message));
+									       callback(new Error("Error to get EcologicalSignificance element for the record with id: "+id+" : " + err.message));
           						}else{	
           							if(record){
                           console.log("!!!Exist a record for the canonicalName: "+canName+" id: "+record._id);
@@ -153,6 +155,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
 								      taxon_record_name_version = new TaxonRecordNameVersion(taxon_record_name_version);
 								      var ver = 1;
                       var ob_ids= new Array();
+                      ob_ids.push(id_v);
 								      RecordVersion.create({ _id:id_rc, taxonRecordNameVersion: ob_ids },function(err, doc){
 									     if(err){
 										    console.log("Error creating a new RecordVersion for the name: " + canName);
@@ -167,7 +170,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                           }else{
                             var update_date = Date();
                             var scientificNameSimple = taxonRecordName.scientificName.simple;
-                            Record.create({ _id:id_rc, taxonRecordNameApprovedInUse: taxonRecordName, scientificNameSimple: scientificNameSimple, update_date: update_date, creation_date: update_date},function(err, doc){
+                            Record.create({ _id:id_rc, taxonRecordNameApprovedInUse: taxon_record_name_version, scientificNameSimple: scientificNameSimple, update_date: update_date, creation_date: update_date},function(err, doc){
                               if(err){
                                 console.log("Error creating a new Record for the name: " + canName);
                                 callback(new Error("Error creating a new Record for the name: " + canName +" : " + err.message));
@@ -215,7 +218,8 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                       hierarchy_version.state="approved_in_use";
                       hierarchy_version.id_user = 'sib+ac@humboldt.org.co';
                       hierarchy_version.element="hierarchy";
-                      var elementValue = hierarchy_version.hierarchy;
+                      hierarchy_version.hierarchy = hierarchy;
+                      //var elementValue = hierarchy_version.hierarchy;
                       hierarchy_version = new HierarchyVersion(hierarchy_version);
                       var id_v = hierarchy_version._id;
                       async.waterfall([
@@ -244,7 +248,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                       },
                       function(callback){
                         var update_date = Date();
-                        Record.update({_id:id},{ hierarchyApprovedInUse: elementValue, update_date: update_date }, function(err, result){
+                        Record.update({_id:id},{ hierarchyApprovedInUse: hierarchy_version, update_date: update_date }, function(err, result){
                           if(err){
                             callback(new Error(err.message));
                           }else{
@@ -364,7 +368,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         function(id, callback){
                           //Record.update({_id:id, imageThumbnail:{$exists: true}, imageMain:{$exists: true}},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
                           console.log("Update Record images");  
-                          Record.update({_id:id},{ ancillaryDataApprovedInUse: ancillary_data_version.ancillaryData, imageInfo: imageInfo }, function(err, result){
+                          Record.update({_id:id, imageInfo:{$exists: false} },{ ancillaryDataApprovedInUse: ancillary_data_version, imageInfo: imageInfo }, function(err, result){
                             if(err){
                               callback(new Error(err.message));
                             }else{

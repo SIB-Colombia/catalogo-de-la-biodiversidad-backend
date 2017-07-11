@@ -655,7 +655,7 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                     callback(new Error("Error to get AncillaryData element for the record with id: "+record_data._id+" : " + err.message));
                   }else{
                     if(elementVer){
-                      console.log(elementVer.ancillaryData);
+                      //console.log(elementVer.ancillaryData);
                       //if(typeof elementVer.ancillaryData !== 'undefined' && elementVer.ancillaryData.length !== 0 && elementVer.ancillaryData[0].dataType=='image'){
                         var imageInfo = {};
                         /*
@@ -682,7 +682,9 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                           console.log("rightsHolder: "+record_data._id);
                           imageInfo.rightsHolder = elementVer.ancillaryData[0].rightsHolder;
                         }
-                        lastRec.imageInfo = imageInfo;
+                        if((imageInfo.thumbnailImage !== 'undefined') && (imageInfo.mainImage !== 'undefined')){
+                          lastRec.imageInfo = imageInfo;
+                        }
                       //}
                       lastRec.ancillaryDataApprovedInUse = elementVer;
                     }else{
@@ -766,6 +768,7 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 });
               },
               function(callback){
+                //console.log(JSON.stringify(lastRec));
                 approved_in_useRecord = new Record(lastRec);
                 approved_in_useRecord.save(function (err){
                   if(err){

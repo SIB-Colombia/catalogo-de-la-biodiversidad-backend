@@ -5,6 +5,8 @@ import add_objects from '../models/additionalModels.js';
 import generalController from './generalController.js';
 import { logger }  from '../../server/log';
 
+mongoose.Promise = require('bluebird');
+
 
 function postTaxonRecordName(req, res) {
     var taxon_record_name_version  = req.body; 
@@ -47,16 +49,9 @@ function postTaxonRecordName(req, res) {
                     if(err){
                       callback(new Error("failed getting the last version of taxonRecordNameVersion:" + err.message));
                     }else{
-                      var prev = doc.taxonRecordNameVersion;
-                      var next = taxon_record_name_version.taxonRecordNameVersion;
-                      //if(!compare.isEqual(prev,next)){ //TODO
-                      if(true){
-                        taxon_record_name_version.id_record=id_rc;
-                        taxon_record_name_version.version=lentaxonRecordName+1;
-                        callback(null, taxon_record_name_version);
-                      }else{
-                        callback(new Error("The data in TaxonRecordNameVersion is equal to last version of this element in the database"));
-                      }
+                      taxon_record_name_version.id_record=id_rc;
+                      taxon_record_name_version.version=lentaxonRecordName+1;
+                      callback(null, taxon_record_name_version);
                     }
                   });
                 }else{

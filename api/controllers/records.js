@@ -39,7 +39,8 @@ function lastRecord(req, res) {
             res.send("Error: "+err);
           }else{
             if(!(result == null)){
-
+              //console.log(Object.keys(result._doc));
+              //console.log(result._doc.ancillaryDataApprovedInUse);
               if(!(result._doc.associatedPartyApprovedInUse == null)){
                 lastRec.associatedParty = result._doc.associatedPartyApprovedInUse.associatedParty;
               }
@@ -331,7 +332,7 @@ function getProperties(req, res) {
 }
 
 function getMostRecentRecordsUpdated(req, res) {
-  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date').sort({update_date: -1}).limit(5);
+  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date threatStatusValue commonNames imageInfo').sort({update_date: -1}).limit(5);
   //var query_c = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({creation_date: 1}).limit(5);
   query_u.exec(function (err, data_u) {
     if(err){
@@ -347,7 +348,7 @@ function getMostRecentRecordsUpdated(req, res) {
 
 function getMostRecentRecordsUpdatedNumber(req, res) {
   var numberRecords=req.swagger.params.numberRecords.value;
-  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date threatStatusValue commonNames imageThumbnail imageMain').sort({update_date: -1}).limit(numberRecords);
+  var query_u = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date threatStatusValue commonNames imageInfo').sort({update_date: -1}).limit(numberRecords);
   //var query_c = add_objects.Record.find({}).select('_id scientificNameSimple associatedParty creation_date update_date').sort({creation_date: 1}).limit(5);
   query_u.exec(function (err, data_u) {
     if(err){
@@ -364,25 +365,36 @@ function getMostRecentRecordsUpdatedNumber(req, res) {
 function getMostRecentRecordsUpdatedPagination(req, res) {
   var pageNum=req.swagger.params.page.value;
   var limitNum=req.swagger.params.limit.value;
+  var query = {};
   var options = {
-    select: '_id scientificNameSimple creation_date update_date',
+    select: '_id scientificNameSimple creation_date update_date threatStatusValue commonNames imageInfo',
     sort: { update_date: -1 },
     page: pageNum,
     limit: limitNum
   };
-  add_objects.Record.paginate(query, options).then(function(result) {
+  /*
+  add_objects.Record.paginate(query, options).then(function(err,result) {
     if(err){
       logger.error('Error getting most recent updated records pagination', JSON.stringify({ message:err }) );
       res.json({ message:err });
     }else{
-      res.json(data_u);
+      res.json(result);
+    }
+  });
+  */
+  add_objects.Record.paginate({},options,function(err, result){
+    if(err){
+      logger.error('Error getting most recent updated records pagination', JSON.stringify({ message:err }) );
+      res.json({ message:err });
+    }else{
+      res.json(result);
     }
   });
 }
 
 
 function getRecordList(req, res) {
-  var query = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date');
+  var query = add_objects.Record.find({}).select('_id scientificNameSimple creation_date update_date').sort({creation_date: 1});
   query.exec(function (err, data) {
     if(err){
       logger.error('Error getting list of records', JSON.stringify({ message:err }) );

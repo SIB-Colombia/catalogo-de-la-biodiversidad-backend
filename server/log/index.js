@@ -8,6 +8,7 @@ let logger2 = new(winston.Logger)({
 });
 
 // logger dev and production config
+console.log(config.get('env'));
 if (config.get('env') === 'development') {
   logger2 = new(winston.Logger)({
     transports: [

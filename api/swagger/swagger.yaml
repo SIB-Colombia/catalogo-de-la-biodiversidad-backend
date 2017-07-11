@@ -86,7 +86,9 @@ paths:
         - name: numberRecords
           type: integer
           description: "the number of records in the result"
+          default: 10
           minimum: 1
+          maximum: 1000
           in: path
           required: true
       responses:
@@ -103,7 +105,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /updated_records/{page}/{limit}:
+  /last_updated_records/{page}/{limit}:
     x-swagger-router-controller: records
     get:
       description: get for last 5 updated records (scientificName and Id)
@@ -212,8 +214,10 @@ paths:
         "200":
           description: Success
           schema:
-            # a pointer to a definition
-            $ref: "#/definitions/Record"
+            type: array
+            items:
+              # a pointer to a definition
+              $ref: "#/definitions/RecordList"
         # responses may fall through to errors
         "400":
           description: Error
@@ -5383,7 +5387,27 @@ definitions:
         type: string
       update_date: 
         type: string
-        
+      imageInfo:
+        $ref: '#/definitions/ImageInfo'
+      threatStatusValue:
+        type: string
+      commonNames:
+        $ref: '#/definitions/CommonNames'
+
+  ImageInfo:
+    properties:
+      mainImage:
+        type: string
+      thumbnailImage:
+        type: string
+
+  CommonNames:
+    properties:
+      language:
+        type: string
+      name:
+        type: string
+
   MoreInformationVersion:
     required:
       - moreInformation
@@ -6367,6 +6391,7 @@ definitions:
         type: string
       ancillaryData:
         type: array
+        minItems: 1
         items:
           $ref: '#/definitions/AncillaryData'
           

@@ -12,10 +12,10 @@ mongoose.Promise = require('bluebird');
 function simpleSearchRecord(req, res) {
 	if (req.swagger.params.q.value) {
 		var qword = req.swagger.params.q.value;
-		console.log(qword);
+    var numberRecords = req.swagger.params.size.value;
 		var reg_ex = '.*'+qword+'.*';
 		//var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{'$regex' : reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName':{'$regex' : reg_ex, '$options' : 'i'}}, {'commonNames.name':{'$regex' : reg_ex, '$options' : 'i'}}, {'AbstractApprovedInUse.abstract':{'$regex' : reg_ex, '$options' : 'i'}}, {'FullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured':{'$regex' : reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple creation_date update_date');
-		var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple creation_date update_date');
+		var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(numberRecords);;
   		query.exec(function (err, data) {
     		if(err){
       			logger.error('Error getting list of records', JSON.stringify({ message:err }) );
