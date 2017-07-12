@@ -56,7 +56,7 @@ query = add_objects.RecordVersion.find({}).select('_id').sort({ _id: -1});
 
 var lastRec ={};
 
-var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI', function(err) {
+var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI2', function(err) {
   if(err) {
       console.log('connection error', err);
     }else{

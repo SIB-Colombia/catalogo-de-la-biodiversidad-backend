@@ -174,10 +174,10 @@ function setApprovedInUseAncillaryData(req, res) {
         var update_date = Date();
         if(typeof elementVer.ancillaryData !== 'undefined' && elementVer.ancillaryData.length !== 0 && elementVer.ancillaryData[0].dataType=='image'){
           var imageInfo = {};
-          if(typeof elementVer.ancillaryData[0].mediaURL !== 'undefined' && elementVer.ancillaryData[0].mediaURL.length !== 0 && elementVer.ancillaryData[0].mediaURL[0].indexOf("jpg") >= 0){
+          if(typeof elementVer.ancillaryData[0].mediaURL !== 'undefined' && elementVer.ancillaryData[0].mediaURL.length !== 0 && (elementVer.ancillaryData[0].mediaURL[0].indexOf("jpg") >= 0 || elementVer.ancillaryData[0].mediaURL[0].indexOf("png") >= 0) || elementVer.ancillaryData[0].mediaURL[0].indexOf("svg") >= 0){
             imageInfo.mainImage = elementVer.ancillaryData[0].mediaURL[0];
           }
-          if(typeof elementVer.ancillaryData[0].thumbnailURL !== 'undefined' && elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0){
+          if(typeof elementVer.ancillaryData[0].thumbnailURL !== 'undefined' && (elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0 || elementVer.ancillaryData[0].thumbnailURL.indexOf("png") >= 0 || elementVer.ancillaryData[0].thumbnailURL.indexOf("svg") >= 0)){
             imageInfo.thumbnailImage = elementVer.ancillaryData[0].thumbnailURL;
           }
           if(typeof elementVer.ancillaryData[0].source !== 'undefined' && elementVer.ancillaryData[0].source != ''){

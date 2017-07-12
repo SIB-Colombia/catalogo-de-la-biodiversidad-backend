@@ -83,6 +83,81 @@
       },
       "x-swagger-router-controller" : "records"
     },
+    "/last_updated_records/{numberRecords}" : {
+      "get" : {
+        "tags" : [ "record" ],
+        "description" : "get a ordered number of updated records (scientificName and Id)",
+        "operationId" : "getMostRecentRecordsUpdatedNumber",
+        "parameters" : [ {
+          "name" : "numberRecords",
+          "in" : "path",
+          "description" : "the number of records in the result",
+          "required" : true,
+          "type" : "integer",
+          "default" : 10,
+          "maximum" : 1000,
+          "minimum" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/RecordList"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "x-swagger-router-controller" : "records"
+    },
+    "/last_updated_records/{page}/{limit}" : {
+      "get" : {
+        "tags" : [ "record" ],
+        "description" : "get for last 5 updated records (scientificName and Id)",
+        "operationId" : "getMostRecentRecordsUpdatedPagination",
+        "parameters" : [ {
+          "name" : "page",
+          "in" : "path",
+          "description" : "the page in the collection of Records",
+          "required" : true,
+          "type" : "integer",
+          "minimum" : 1
+        }, {
+          "name" : "limit",
+          "in" : "path",
+          "description" : "size limit in the result of Records",
+          "required" : true,
+          "type" : "integer",
+          "minimum" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/RecordList"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "x-swagger-router-controller" : "records"
+    },
     "/record/{id}" : {
       "get" : {
         "tags" : [ "record" ],
@@ -138,6 +213,47 @@
         }
       },
       "x-swagger-router-controller" : "records"
+    },
+    "/record-search/search" : {
+      "get" : {
+        "tags" : [ "Records" ],
+        "description" : "Returns Records according to query parameters",
+        "operationId" : "simpleSearchRecord",
+        "parameters" : [ {
+          "name" : "q",
+          "in" : "query",
+          "description" : "Simple search parameter.",
+          "required" : false,
+          "type" : "string"
+        }, {
+          "name" : "size",
+          "in" : "query",
+          "description" : "The maximum number of results to return. This can't be greater than 1000.",
+          "required" : false,
+          "type" : "integer",
+          "default" : 10,
+          "maximum" : 1000,
+          "minimum" : 1
+        } ],
+        "responses" : {
+          "200" : {
+            "description" : "Success",
+            "schema" : {
+              "type" : "array",
+              "items" : {
+                "$ref" : "#/definitions/RecordList"
+              }
+            }
+          },
+          "400" : {
+            "description" : "Error",
+            "schema" : {
+              "$ref" : "#/definitions/ErrorResponse"
+            }
+          }
+        }
+      },
+      "x-swagger-router-controller" : "search"
     },
     "/record/legacy_id/{legacy_id}" : {
       "get" : {
@@ -6197,6 +6313,35 @@
         },
         "update_date" : {
           "type" : "string"
+        },
+        "imageInfo" : {
+          "$ref" : "#/definitions/ImageInfo"
+        },
+        "threatStatusValue" : {
+          "type" : "string"
+        },
+        "commonNames" : {
+          "$ref" : "#/definitions/CommonNames"
+        }
+      }
+    },
+    "ImageInfo" : {
+      "properties" : {
+        "mainImage" : {
+          "type" : "string"
+        },
+        "thumbnailImage" : {
+          "type" : "string"
+        }
+      }
+    },
+    "CommonNames" : {
+      "properties" : {
+        "language" : {
+          "type" : "string"
+        },
+        "name" : {
+          "type" : "string"
         }
       }
     },
@@ -6660,7 +6805,7 @@
       }
     },
     "SynonymsAtomizedVersion" : {
-      "required" : [ "synonymsAtomized" ],
+      "required" : [ "id_user", "synonymsAtomized" ],
       "properties" : {
         "id" : {
           "type" : "string"
@@ -7517,7 +7662,8 @@
           "type" : "array",
           "items" : {
             "$ref" : "#/definitions/AncillaryData"
-          }
+          },
+          "minItems" : 1
         }
       }
     },
@@ -8760,6 +8906,7 @@
       }
     },
     "AncillaryData" : {
+      "required" : [ "dataType" ],
       "properties" : {
         "dataType" : {
           "type" : "string"
