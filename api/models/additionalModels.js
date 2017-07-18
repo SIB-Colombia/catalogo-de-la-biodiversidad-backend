@@ -91,7 +91,7 @@ var CommonNames = new Schema({language: String, name: String},{ _id : false });
 
 var ImageInfo = new Schema({ mainImage: String, thumbnailImage: String, source: String, rightsHolder: String, license: String },{ _id : false });
 
-var Record = new Schema({ creation_date : { type: Date, index: true }, update_date : { type: Date, index: true }, scientificNameSimple : { type: String, index: true }, imageInfo: { type: ImageInfo, index: true }, threatStatusValue: { type: String, index: true }, commonNames: { type: [CommonNames], index: true, default: void 0 } }, { collection: 'Record', strict: false, versionKey: false });
+var Record = new Schema({ creation_date : { type: Date, index: true }, update_date : { type: Date, index: true }, scientificNameSimple : { type: String, index: true }, imageInfo: { type: ImageInfo, index: true }, threatStatusValue: { type: String, index: true }, commonNames: { type: [CommonNames], index: true, default: void 0 }, hierarchy: { type: [Hierarchy], index: true, default: void 0 } }, { collection: 'Record', strict: false, versionKey: false });
 
 Record.plugin(mongoosePaginate);
 
@@ -101,8 +101,6 @@ var Element = new Schema ({
 
 
 var Hierarchy = new Schema ({
-	classification: String,
-	recommended: Number,
 	kingdom : String,
 	phylum : String,
 	classHierarchy: String,
@@ -115,7 +113,7 @@ var Hierarchy = new Schema ({
 	infraspecificEpithet : String,
 	higherClassification : String,
 	parentTaxon : String 
-});
+},{ versionKey: false, _id : false });
 
 
 var ElementVersion = new Schema ({

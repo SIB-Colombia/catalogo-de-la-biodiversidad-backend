@@ -12,7 +12,7 @@ var parse = require('csv-parse');
 var rest = require('restler');
 var Schema = mongoose.Schema;
 
-var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI2', function(err) {
+var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI', function(err) {
 	if(err){
 		console.log('connection error', err);
 	}else{
@@ -93,6 +93,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 source = line[14];
                 license = line[15];
                 agent = line[16];
+                var hierarchy = [];
 
           			console.log("canonical name to search: "+canName);
           			/*
@@ -191,7 +192,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
           				},
                   function(id, create_new_record, callback){
                     console.log("Step 2.3: Create hierarchy object, create a new HierarchyVersion?:"+create_new_record +" id: "+id);
-                    var hierarchy = [];
+                    hierarchy = [];
                     var hierarchyVal = {}; 
                     if(create_new_record){
                       console.log(create_new_record);
@@ -368,7 +369,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         function(id, callback){
                           //Record.update({_id:id, imageThumbnail:{$exists: true}, imageMain:{$exists: true}},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
                           console.log("Update Record images");  
-                          Record.update({_id:id, imageInfo:{$exists: false} },{ ancillaryDataApprovedInUse: ancillary_data_version, imageInfo: imageInfo }, function(err, result){
+                          Record.update({_id:id, imageInfo:{$exists: false} },{ ancillaryDataApprovedInUse: ancillary_data_version, imageInfo: imageInfo, hierarchy: hierarchy }, function(err, result){
                             if(err){
                               callback(new Error(err.message));
                             }else{

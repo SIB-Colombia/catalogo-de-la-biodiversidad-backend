@@ -56,7 +56,7 @@ query = add_objects.RecordVersion.find({}).select('_id').sort({ _id: -1});
 
 var lastRec ={};
 
-var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI2', function(err) {
+var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI', function(err) {
   if(err) {
       console.log('connection error', err);
     }else{
@@ -381,6 +381,27 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                   }else{
                     if(elementVer){
                       lastRec.hierarchyApprovedInUse = elementVer;
+                      if(typeof elementVer.hierarchy !== 'undefined' && elementVer.hierarchy.length !== 0){
+                        var hierarchy = [];
+                        var hierarchyValues = {};
+                        for(var i=0; i<elementVer.hierarchy.length; i++){
+                          hierarchyValues = {};
+                          hierarchyValues.kingdom = elementVer.hierarchy[i].kingdom;
+                          hierarchyValues.phylum = elementVer.hierarchy[i].phylum;
+                          hierarchyValues.classHierarchy = elementVer.hierarchy[i].classHierarchy;
+                          hierarchyValues.order = elementVer.hierarchy[i].order;
+                          hierarchyValues.family = elementVer.hierarchy[i].family;
+                          hierarchyValues.genus = elementVer.hierarchy[i].genus;
+                          hierarchyValues.subgenus = elementVer.hierarchy[i].subgenus;
+                          hierarchyValues.taxonRank = elementVer.hierarchy[i].taxonRank;
+                          hierarchyValues.specificEpithet = elementVer.hierarchy[i].specificEpithet;
+                          hierarchyValues.infraspecificEpithet = elementVer.hierarchy[i].infraspecificEpithet;
+                          hierarchyValues.higherClassification = elementVer.hierarchy[i].higherClassification;
+                          hierarchyValues.parentTaxon = elementVer.hierarchy[i].parentTaxon;
+                          hierarchy.push(hierarchyValues);
+                        }
+                        lastRec.hierarchy = hierarchy;
+                      }
                     }else{
                       console.log("No exist HierarchyVersion for id record : "+record_data._id);
                     }

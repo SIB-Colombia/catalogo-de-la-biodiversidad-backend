@@ -224,6 +224,107 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
+  /record-advanced-search/search:
+    x-swagger-router-controller: search
+    get:
+      description: Returns Records according to query parameters
+      tags:
+        - Records
+      # used as the method name of the controller
+      operationId: advancedSearchRecord
+      parameters:
+        - name: scientificName
+          in: query
+          description: Scientific name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: kingdomName
+          in: query
+          description: Kingdom name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: phylumName
+          in: query
+          description: Phylum name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: className
+          in: query
+          description: Class name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: orderName
+          in: query
+          description: Order name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: familyName
+          in: query
+          description: Family name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: genusName
+          in: query
+          description: Genus name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: subGenusName
+          in: query
+          description: Subgenus name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: specificEpithetName
+          in: query
+          description: Specific epithet name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: infraspecificEpithetName
+          in: query
+          description: Infraspecific epithet name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: size
+          in: query
+          description: The maximum number of results to return. This can't be greater than 1000.
+          required: false
+          type: integer
+          default: 10
+          minimum: 1
+          maximum: 1000
+      responses:
+        "200":
+          description: Success
+          schema:
+            type: array
+            items:
+              # a pointer to a definition
+              $ref: "#/definitions/RecordList"
+        # responses may fall through to errors
+        "400":
+          description: Error
+          schema:
+            $ref: "#/definitions/ErrorResponse"
+
   /record/legacy_id/{legacy_id}:
     x-swagger-router-controller: records
     get:

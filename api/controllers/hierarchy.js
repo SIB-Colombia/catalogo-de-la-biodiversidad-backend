@@ -171,13 +171,41 @@ function setApprovedInUseHierarchy(req, res) {
       function(elementVer,callback){ 
         elementVer.state="approved_in_use";
         var update_date = Date();
-        add_objects.Record.update({_id:id_rc},{ hierarchyApprovedInUse: elementVer, update_date: update_date }, function(err, result){
-          if(err){
-            callback(new Error(err.message));
-          }else{
-            callback();
+        if(typeof elementVer.hierarchy !== 'undefined' && elementVer.hierarchy.length !== 0){
+          var hierarchy = [];
+          var hierarchyValues = {};
+          for(var i=0; i<elementVer.hierarchy.length; i++){
+            hierarchyValues = {};
+            hierarchyValues.kingdom = elementVer.hierarchy[i].kingdom;
+            hierarchyValues.phylum = elementVer.hierarchy[i].phylum;
+            hierarchyValues.classHierarchy = elementVer.hierarchy[i].classHierarchy;
+            hierarchyValues.order = elementVer.hierarchy[i].order;
+            hierarchyValues.family = elementVer.hierarchy[i].family;
+            hierarchyValues.genus = elementVer.hierarchy[i].genus;
+            hierarchyValues.subgenus = elementVer.hierarchy[i].subgenus;
+            hierarchyValues.taxonRank = elementVer.hierarchy[i].taxonRank;
+            hierarchyValues.specificEpithet = elementVer.hierarchy[i].specificEpithet;
+            hierarchyValues.infraspecificEpithet = elementVer.hierarchy[i].infraspecificEpithet;
+            hierarchyValues.higherClassification = elementVer.hierarchy[i].higherClassification;
+            hierarchyValues.parentTaxon = elementVer.hierarchy[i].parentTaxon;
+            hierarchy.push(hierarchyValues);
           }
-        });
+          add_objects.Record.update({_id:id_rc},{ hierarchyApprovedInUse: elementVer, update_date: update_date, hierarchy: hierarchy }, function(err, result){
+            if(err){
+              callback(new Error(err.message));
+            }else{
+              callback();
+            }
+          });
+        }else{
+          add_objects.Record.update({_id:id_rc},{ hierarchyApprovedInUse: elementVer, update_date: update_date }, function(err, result){
+            if(err){
+              callback(new Error(err.message));
+            }else{
+              callback();
+            }
+          });
+        }
       }
     ],
     function(err, result) {
