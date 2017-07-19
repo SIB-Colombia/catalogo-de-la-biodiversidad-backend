@@ -87,19 +87,6 @@ var Element = new Schema ({
 });
 */
 
-var CommonNames = new Schema({language: String, name: String},{ _id : false });
-
-var ImageInfo = new Schema({ mainImage: String, thumbnailImage: String, source: String, rightsHolder: String, license: String },{ _id : false });
-
-var Record = new Schema({ creation_date : { type: Date, index: true }, update_date : { type: Date, index: true }, scientificNameSimple : { type: String, index: true }, imageInfo: { type: ImageInfo, index: true }, threatStatusValue: { type: String, index: true }, commonNames: { type: [CommonNames], index: true, default: void 0 }, hierarchy: { type: [Hierarchy], index: true, default: void 0 } }, { collection: 'Record', strict: false, versionKey: false });
-
-Record.plugin(mongoosePaginate);
-
-var Element = new Schema ({
-	ancillaryData: { type: [AncillaryData], default: void 0 }
-}, { versionKey: false });
-
-
 var Hierarchy = new Schema ({
 	kingdom : String,
 	phylum : String,
@@ -112,8 +99,20 @@ var Hierarchy = new Schema ({
 	specificEpithet : String,
 	infraspecificEpithet : String,
 	higherClassification : String,
-	parentTaxon : String 
+	parentTaxon : String
 },{ versionKey: false, _id : false });
+
+var CommonNames = new Schema({language: String, name: String},{ _id : false });
+
+var ImageInfo = new Schema({ mainImage: String, thumbnailImage: String, source: String, rightsHolder: String, license: String },{ _id : false });
+
+var Record = new Schema({ creation_date : { type: Date, index: true }, update_date : { type: Date, index: true }, scientificNameSimple : { type: String, index: true }, imageInfo: { type: ImageInfo, index: true }, threatStatusValue: { type: String, index: true }, commonNames: { type: [CommonNames], index: true, default: void 0 }, hierarchy: { type: [Hierarchy], index: true, default: void 0 } }, { collection: 'Record', strict: false, versionKey: false });
+
+Record.plugin(mongoosePaginate);
+
+var Element = new Schema ({
+	ancillaryData: { type: [AncillaryData], default: void 0 }
+}, { versionKey: false });
 
 
 var ElementVersion = new Schema ({

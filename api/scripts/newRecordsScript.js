@@ -93,7 +93,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                 source = line[14];
                 license = line[15];
                 agent = line[16];
-                var hierarchy = [];
+                var hierarchyArray = [];
 
           			console.log("canonical name to search: "+canName);
           			/*
@@ -219,6 +219,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                       hierarchy_version.state="approved_in_use";
                       hierarchy_version.id_user = 'sib+ac@humboldt.org.co';
                       hierarchy_version.element="hierarchy";
+                      hierarchyArray = hierarchy;
                       hierarchy_version.hierarchy = hierarchy;
                       //var elementValue = hierarchy_version.hierarchy;
                       hierarchy_version = new HierarchyVersion(hierarchy_version);
@@ -369,7 +370,7 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         function(id, callback){
                           //Record.update({_id:id, imageThumbnail:{$exists: true}, imageMain:{$exists: true}},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
                           console.log("Update Record images");  
-                          Record.update({_id:id, imageInfo:{$exists: false} },{ ancillaryDataApprovedInUse: ancillary_data_version, imageInfo: imageInfo, hierarchy: hierarchy }, function(err, result){
+                          Record.update({_id:id, imageInfo:{$exists: false} },{ ancillaryDataApprovedInUse: ancillary_data_version, imageInfo: imageInfo, hierarchy: hierarchyArray }, function(err, result){
                             if(err){
                               callback(new Error(err.message));
                             }else{

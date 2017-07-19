@@ -384,6 +384,8 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                       if(typeof elementVer.hierarchy !== 'undefined' && elementVer.hierarchy.length !== 0){
                         var hierarchy = [];
                         var hierarchyValues = {};
+                        //console.log(elementVer.hierarchy);
+                        console.log(JSON.stringify(elementVer.hierarchy));
                         for(var i=0; i<elementVer.hierarchy.length; i++){
                           hierarchyValues = {};
                           hierarchyValues.kingdom = elementVer.hierarchy[i].kingdom;
@@ -614,7 +616,7 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                     if(elementVer){
                       lastRec.threatStatusApprovedInUse = elementVer;
                       if(typeof elementVer.threatStatus !== 'undefined' && elementVer.threatStatus.length !== 0){
-                        console.log("threatStatus: "+elementVer.threatStatus);
+                        //console.log("threatStatus: "+elementVer.threatStatus);
                         lastRec.threatStatusValue = elementVer.threatStatus[0].threatStatusAtomized.threatCategory.measurementValue;
                       }
                     }else{
@@ -790,6 +792,7 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
               },
               function(callback){
                 //console.log(JSON.stringify(lastRec));
+                console.log(lastRec.hierarchy);
                 approved_in_useRecord = new Record(lastRec);
                 approved_in_useRecord.save(function (err){
                   if(err){
