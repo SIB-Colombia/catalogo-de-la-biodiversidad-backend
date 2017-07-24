@@ -39,8 +39,9 @@ function simpleSearchRecord(req, res) {
 function advancedSearchRecord(req, res) {
   var queryParam = {};
   var queryArray = [];
-  var scientificNameArray = [];
+  var queryHierarchyArray = [];
   var num = 0;
+  var num_hier = 0;
   //var reg_ex = '.*'+qword+'.*';
   /*
   console.log(Object.keys(req.swagger));
@@ -50,7 +51,7 @@ function advancedSearchRecord(req, res) {
   */
 
   if(req.swagger.params.scientificName.value){
-    scientificNameArray = req.swagger.params.scientificName.value;
+    var scientificNameArray = req.swagger.params.scientificName.value;
     console.log(req.swagger.params.scientificName.value.length);
     for(var i=0; i < req.swagger.params.scientificName.value.length; i++){
       scientificNameArray[i] = new RegExp('.*'+req.swagger.params.scientificName.value[i]+'.*', 'i');
@@ -69,20 +70,21 @@ function advancedSearchRecord(req, res) {
     for(var i=0; i < req.swagger.params.kingdomName.value.length; i++){
       kingdomNameArray[i] = new RegExp('.*'+req.swagger.params.kingdomName.value[i]+'.*', 'i');
     }
-    //queryParam['hierarchy.kingdom']={ $in: kingdomNameArray };
-    queryArray[num]={'hierarchy.kingdom': { $in: kingdomNameArray  }};
-    num++;
+    console.log(kingdomNameArray.length);
+    console.log(kingdomNameArray);
+    queryHierarchyArray[num_hier]={'hierarchy.kingdom': { $in: kingdomNameArray  }};
+    num_hier++;
   }
 
-  if(req.swagger.params.kingdomName.value){
+  if(req.swagger.params.phylumName.value){
     var phylumNameArray = req.swagger.params.phylumName.value;
     console.log(req.swagger.params.phylumName.value.length);
     for(var i=0; i < req.swagger.params.phylumName.value.length; i++){
       phylumNameArray[i] = new RegExp('.*'+req.swagger.params.phylumName.value[i]+'.*', 'i');
     }
     //queryParam['hierarchy.kingdom']={ $in: kingdomNameArray };
-    queryArray[num]={'hierarchy.phylum': { $in: phylumNameArray  }};
-    num++;
+    queryHierarchyArray[num_hier]={'hierarchy.phylum': { $in: phylumNameArray  }};
+    num_hier++;
   }
 
   if(req.swagger.params.className.value){
@@ -92,8 +94,8 @@ function advancedSearchRecord(req, res) {
       classNameArray[i] = new RegExp('.*'+req.swagger.params.className.value[i]+'.*', 'i');
     }
     //queryParam['hierarchy.kingdom']={ $in: kingdomNameArray };
-    queryArray[num]={'hierarchy.classHierarchy': { $in: classNameArray  }};
-    num++;
+    queryHierarchyArray[num_hier]={'hierarchy.classHierarchy': { $in: classNameArray  }};
+    num_hier++;
   }
 
   if(req.swagger.params.orderName.value){
@@ -103,8 +105,8 @@ function advancedSearchRecord(req, res) {
       orderNameArray[i] = new RegExp('.*'+req.swagger.params.orderName.value[i]+'.*', 'i');
     }
     //queryParam['hierarchy.kingdom']={ $in: kingdomNameArray };
-    queryArray[num]={'hierarchy.order': { $in: orderNameArray  }};
-    num++;
+    queryHierarchyArray[num_hier]={'hierarchy.order': { $in: orderNameArray  }};
+    num_hier++;
   }
 
   if(req.swagger.params.familyName.value){
@@ -114,8 +116,8 @@ function advancedSearchRecord(req, res) {
       familyNameArray[i] = new RegExp('.*'+req.swagger.params.familyName.value[i]+'.*', 'i');
     }
     //queryParam['hierarchy.kingdom']={ $in: kingdomNameArray };
-    queryArray[num]={'hierarchy.family': { $in: familyNameArray  }};
-    num++;
+    queryHierarchyArray[num_hier]={'hierarchy.family': { $in: familyNameArray  }};
+    num_hier++;
   }
 
   if(req.swagger.params.genusName.value){
@@ -124,9 +126,8 @@ function advancedSearchRecord(req, res) {
     for(var i=0; i < req.swagger.params.genusName.value.length; i++){
       genusNameArray[i] = new RegExp('.*'+req.swagger.params.genusName.value[i]+'.*', 'i');
     }
-    //queryParam['hierarchy.kingdom']={ $in: kingdomNameArray };
-    queryArray[num]={'hierarchy.genus': { $in: genusNameArray  }};
-    num++;
+    queryHierarchyArray[num_hier]={'hierarchy.genus': { $in: genusNameArray  }};
+    num_hier++;
   }
 
   if(req.swagger.params.subGenusName.value){
@@ -135,18 +136,50 @@ function advancedSearchRecord(req, res) {
     for(var i=0; i < req.swagger.params.subGenusName.value.length; i++){
       subGenusNameArray[i] = new RegExp('.*'+req.swagger.params.subGenusName.value[i]+'.*', 'i');
     }
-    //queryParam['hierarchy.kingdom']={ $in: kingdomNameArray };
-    queryArray[num]={'hierarchy.subgenus': { $in: subGenusNameArray  }};
-    num++;
+    queryHierarchyArray[num_hier]={'hierarchy.subgenus': { $in: subGenusNameArray  }};
+    num_hier++;
   }
 
 
-  console.log('!!!');
-  console.log(queryParam);
-  console.log(queryParam.length);
+  console.log('!');
+  console.log('length: '+queryHierarchyArray.length);
+  if(queryHierarchyArray.length !=0){
+    queryArray[num]= {$or:queryHierarchyArray};
+    num++;
+  }
+
+  /*
+  if(req.swagger.params.departmentName.value){
+    var departmentNameArray = req.swagger.params.departmentName.value;
+    console.log(req.swagger.params.departmentName.value.length);
+    for(var i=0; i < req.swagger.params.departmentName.value.length; i++){
+      departmentNameArray[i] = new RegExp('.*'+req.swagger.params.departmentName.value[i]+'.*', 'i');
+    }
+    queryArray[num]={'distributionApprovedInUse.distribution.distributionAtomized.stateProvince': { $in: departmentNameArray }};
+    num++;
+  }
+  */
+
+
   console.log(JSON.stringify(queryArray));
   console.log(queryArray.length);
-  console.log(queryArray[0]);
+
+
+
+  var query = add_objects.Record.find({$and:queryArray}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(1000);
+
+  query.exec(function (err, data) {
+    if(err){
+      logger.error('Error getting list of records', JSON.stringify({ message:err }) );
+      res.json(err);
+    }else if(data.length==0){
+      res.status(406);
+      res.json({"message" : "Not found results for the advaced search"});
+    }else{
+      logger.info('Number or documents', JSON.stringify({ docs: data.length }) );
+      res.json(data);
+    }
+  });
   /*
   var query = add_objects.Record.find({'scientificNameSimple':{ $in: scientificNameArray }}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(100);
 
