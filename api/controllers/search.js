@@ -14,9 +14,7 @@ function simpleSearchRecord(req, res) {
 		var qword = req.swagger.params.q.value;
     var numberRecords = req.swagger.params.size.value;
 		var reg_ex = '.*'+qword+'.*';
-		//var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{'$regex' : reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName':{'$regex' : reg_ex, '$options' : 'i'}}, {'commonNames.name':{'$regex' : reg_ex, '$options' : 'i'}}, {'AbstractApprovedInUse.abstract':{'$regex' : reg_ex, '$options' : 'i'}}, {'FullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured':{'$regex' : reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple creation_date update_date');
-		//var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(numberRecords);
-    var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(100);
+    var query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(numberRecords);
   		query.exec(function (err, data) {
     		if(err){
       			logger.error('Error getting list of records', JSON.stringify({ message:err }) );
@@ -37,18 +35,16 @@ function simpleSearchRecord(req, res) {
 
 
 function advancedSearchRecord(req, res) {
+  var query = {};
   var queryParam = {};
   var queryArray = [];
   var queryHierarchyArray = [];
   var num = 0;
   var num_hier = 0;
-  //var reg_ex = '.*'+qword+'.*';
-  /*
-  console.log(Object.keys(req.swagger));
-  console.log(Object.keys(req.swagger.params));
-  console.log(req.swagger.params.specificEpithetName.value);
-  console.log(req.swagger.params.kingdomName.value);
-  */
+  var numberRecords = req.swagger.params.size.value;
+
+  //console.log(req.swagger.params);
+  //console.log(numberRecords);
 
   if(req.swagger.params.scientificName.value){
     var scientificNameArray = req.swagger.params.scientificName.value;
@@ -58,7 +54,6 @@ function advancedSearchRecord(req, res) {
     }
     console.log(scientificNameArray.length);
     console.log(scientificNameArray);
-    //queryParam['scientificNameSimple']={ $in: scientificNameArray };
     queryArray[num]={'scientificNameSimple': { $in: scientificNameArray }};
     num++;
   }
@@ -140,15 +135,16 @@ function advancedSearchRecord(req, res) {
     num_hier++;
   }
 
-
+  /*
   console.log('!');
   console.log('length: '+queryHierarchyArray.length);
+  */
   if(queryHierarchyArray.length !=0){
     queryArray[num]= {$or:queryHierarchyArray};
     num++;
   }
 
-  /*
+  
   if(req.swagger.params.departmentName.value){
     var departmentNameArray = req.swagger.params.departmentName.value;
     console.log(req.swagger.params.departmentName.value.length);
@@ -158,44 +154,70 @@ function advancedSearchRecord(req, res) {
     queryArray[num]={'distributionApprovedInUse.distribution.distributionAtomized.stateProvince': { $in: departmentNameArray }};
     num++;
   }
+
+  /*
+  if(req.swagger.params.threatCategory.value){
+    var threatCategoryArray = req.swagger.params.threatCategory.value;
+    console.log(req.swagger.params.threatCategory.value.length);
+    for(var i=0; i < req.swagger.params.threatCategory.value.length; i++){
+      threatCategoryArray[i] = new RegExp('.*'+req.swagger.params.threatCategory.value[i]+'.*', 'i');
+    }
+    queryArray[num]={'threatStatusApprovedInUse.threatStatus.threatStatusAtomized.threatCategory.measurementValue': { $in: threatCategoryArray }};
+    num++;
+  }
   */
 
+  if(req.swagger.params.threatCategory.value){
+    var queryThreatCategoryArray = [];
+    var threatCategoryArray = req.swagger.params.threatCategory.value;
+    for(var i=0; i < req.swagger.params.threatCategory.value.length; i++){
+      //threatCategoryArray[i] = new RegExp('.*'+req.swagger.params.threatCategory.value[i]+'.*', 'i');
+      threatCategoryArray[i] = req.swagger.params.threatCategory.value[i];
+    }
+    queryThreatCategoryArray[0]={'threatStatusApprovedInUse.threatStatus.threatStatusAtomized.threatCategory.measurementValue': { $in: threatCategoryArray  }};
+    queryThreatCategoryArray[1]={'threatStatusApprovedInUse.threatStatus.threatStatusAtomized.apendiceCITES': { $in: threatCategoryArray  }};
+    queryArray[num]= {$or:queryThreatCategoryArray};
+    num++;
+  }
 
+  
+  /*
+  console.log(req.swagger.params.count.value);
+  console.log(num);
   console.log(JSON.stringify(queryArray));
   console.log(queryArray.length);
-
-
-
-  var query = add_objects.Record.find({$and:queryArray}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(1000);
-
-  query.exec(function (err, data) {
-    if(err){
-      logger.error('Error getting list of records', JSON.stringify({ message:err }) );
-      res.json(err);
-    }else if(data.length==0){
-      res.status(406);
-      res.json({"message" : "Not found results for the advaced search"});
-    }else{
-      logger.info('Number or documents', JSON.stringify({ docs: data.length }) );
-      res.json(data);
-    }
-  });
-  /*
-  var query = add_objects.Record.find({'scientificNameSimple':{ $in: scientificNameArray }}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(100);
-
-  query.exec(function (err, data) {
-    if(err){
-      logger.error('Error getting list of records', JSON.stringify({ message:err }) );
-      res.json(err);
-    }else if(data.length==0){
-      res.status(406);
-      res.json({"message" : "Not found results for the advaced search"});
-    }else{
-      logger.info('Number or documents', JSON.stringify({ docs: data.length }) );
-      res.json(data);
-    }
-  });
   */
+
+  var isCount = req.swagger.params.count.value;
+
+  if(queryArray.length > 0){
+    if(isCount){
+      query = add_objects.Record.find({$and:queryArray}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).count();
+    }else{
+      query = add_objects.Record.find({$and:queryArray}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(numberRecords);
+    }
+  }else{
+    query = add_objects.Record.find({}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).count();
+    isCount = true;
+  }
+
+  query.exec(function (err, data) {
+    if(err){
+      logger.error('Error getting list of records', JSON.stringify({ message:err }) );
+      res.json(err);
+    }else if(data.length==0){
+      res.status(406);
+      res.json({"message" : "Not found results for the advaced search"});
+    }else{
+      if(isCount){
+        logger.info('Number or documents', JSON.stringify({ total: data }) );
+        res.json({ total: data });
+      }else{
+        logger.info('Number or documents', JSON.stringify({ total: data.length }) );
+        res.json(data);
+      }
+    }
+  });
 
 }
 

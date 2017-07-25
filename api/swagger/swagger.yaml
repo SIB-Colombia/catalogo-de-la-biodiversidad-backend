@@ -188,7 +188,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
   
-  /record-search/search:
+  /record_search/search:
     x-swagger-router-controller: search
     get:
       description: Returns Records according to query parameters
@@ -224,7 +224,7 @@ paths:
           schema:
             $ref: "#/definitions/ErrorResponse"
 
-  /record-advanced-search/search:
+  /record_search/advanced_search:
     x-swagger-router-controller: search
     get:
       description: Returns Records according to query parameters
@@ -303,6 +303,26 @@ paths:
           type: array
           items:
             type: string
+        - name: departmentName
+          in: query
+          description: department name.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: threatCategory
+          in: query
+          description: threat category (IUCN y CITES).
+          required: false
+          type: array
+          items:
+            type: string
+        - name: count
+          in: query
+          description: If is a query to count number of documents founded.
+          required: false
+          type: boolean
+          default: false
         - name: size
           in: query
           description: The maximum number of results to return. This can't be greater than 1000.
