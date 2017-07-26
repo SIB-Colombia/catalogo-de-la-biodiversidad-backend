@@ -193,7 +193,7 @@ paths:
     get:
       description: Returns Records according to query parameters
       tags:
-        - Records
+        - Search
       # used as the method name of the controller
       operationId: simpleSearchRecord
       parameters:
@@ -229,7 +229,7 @@ paths:
     get:
       description: Returns Records according to query parameters
       tags:
-        - Records
+        - Search
       # used as the method name of the controller
       operationId: advancedSearchRecord
       parameters:
@@ -4283,7 +4283,7 @@ paths:
     get: 
       description: Returns a version of a References element by record id and version
       tags:
-        - element
+        - References
       operationId: getReferences
       parameters:
         - name: id
@@ -4311,7 +4311,7 @@ paths:
     post:
       description: Save a new version of a References element which belongs to record with id in the url
       tags:
-        - element
+        - References
       operationId: postReferences
       parameters:
         - name: id
@@ -4341,7 +4341,7 @@ paths:
     get: 
       description: Returns a list of References version with state "to_review"
       tags:
-        - element
+        - References
       operationId: getToReviewReferences
       parameters:
         - name: id
@@ -4366,7 +4366,7 @@ paths:
     get: 
       description: Returns the references version approved_in_use #**
       tags:
-        - element
+        - References
       operationId: getLastApprovedInUseReferences
       parameters:
         - name: id
@@ -4390,7 +4390,7 @@ paths:
     put: 
       description: Update a ReferencesVersion state to approved_in_use
       tags:
-        - element
+        - References
       operationId: setApprovedInUseReferences
       parameters:
         - name: id
@@ -4422,7 +4422,7 @@ paths:
     get: 
       description: Returns a version of a EnvironmentalEnvelope element by record id and version
       tags:
-        - element
+        - EnvironmentalEnvelope
       operationId: getEnvironmentalEnvelope
       parameters:
         - name: id
@@ -4450,7 +4450,7 @@ paths:
     post:
       description: Save a new version of a EnvironmentalEnvelope element which belongs to record with id in the url
       tags:
-        - element
+        - EnvironmentalEnvelope
       operationId: postEnvironmentalEnvelope
       parameters:
         - name: id
@@ -4480,7 +4480,7 @@ paths:
     get: 
       description: Returns a list of EnvironmentalEnvelope version with state "to_review"
       tags:
-        - element
+        - EnvironmentalEnvelope
       operationId: getToReviewEnvironmentalEnvelope
       parameters:
         - name: id
@@ -4505,7 +4505,7 @@ paths:
     get: 
       description: Returns the environmentalEnvelope version approved_in_use #**
       tags:
-        - element
+        - EnvironmentalEnvelope
       operationId: getLastApprovedInUseEnvironmentalEnvelope
       parameters:
         - name: id
@@ -4529,7 +4529,7 @@ paths:
     put: 
       description: Update a EnvironmentalEnvelopeVersion state to approved_in_use
       tags:
-        - element
+        - EnvironmentalEnvelope
       operationId: setApprovedInUseEnvironmentalEnvelope
       parameters:
         - name: id
@@ -4561,7 +4561,7 @@ paths:
     get: 
       description: Returns a version of a EcologicalSignificance element by record id and version
       tags:
-        - element
+        - EcologicalSignificance
       operationId: getEcologicalSignificance
       parameters:
         - name: id
@@ -4589,7 +4589,7 @@ paths:
     post:
       description: Save a new version of a EcologicalSignificance element which belongs to record with id in the url
       tags:
-        - element
+        - EcologicalSignificance
       operationId: postEcologicalSignificance
       parameters:
         - name: id
@@ -4619,7 +4619,7 @@ paths:
     get: 
       description: Returns a list of EcologicalSignificance version with state "to_review"
       tags:
-        - element
+        - EcologicalSignificance
       operationId: getToReviewEcologicalSignificance
       parameters:
         - name: id
@@ -4644,7 +4644,7 @@ paths:
     get: 
       description: Returns the ecologicalSignificance version approved_in_use #**
       tags:
-        - element
+        - EcologicalSignificance
       operationId: getLastApprovedInUseEcologicalSignificance
       parameters:
         - name: id
@@ -4668,7 +4668,7 @@ paths:
     put: 
       description: Update a EcologicalSignificanceVersion state to approved_in_use
       tags:
-        - element
+        - EcologicalSignificance
       operationId: setApprovedInUseEcologicalSignificance
       parameters:
         - name: id
@@ -4701,7 +4701,7 @@ paths:
     get: 
       description: Returns a version of a Invasiveness element by record id and version
       tags:
-        - element
+        - Invasiveness
       operationId: getInvasiveness
       parameters:
         - name: id
@@ -4729,7 +4729,7 @@ paths:
     post:
       description: Save a new version of a Invasiveness element which belongs to record with id in the url
       tags:
-        - element
+        - Invasiveness
       operationId: postInvasiveness
       parameters:
         - name: id
@@ -4759,7 +4759,7 @@ paths:
     get: 
       description: Returns a list of Invasiveness version with state "to_review"
       tags:
-        - element
+        - Invasiveness
       operationId: getToReviewInvasiveness
       parameters:
         - name: id
@@ -4784,7 +4784,7 @@ paths:
     get: 
       description: Returns the invasiveness version approved_in_use #**
       tags:
-        - element
+        - Invasiveness
       operationId: getLastApprovedInUseInvasiveness
       parameters:
         - name: id
@@ -4808,7 +4808,7 @@ paths:
     put: 
       description: Update a InvasivenessVersion state to approved_in_use
       tags:
-        - element
+        - Invasiveness
       operationId: setApprovedInUseInvasiveness
       parameters:
         - name: id
@@ -4840,7 +4840,7 @@ paths:
     get: 
       description: Returns a version of a MoreInformation element by record id and version
       tags:
-        - element
+        - MoreInformation
       operationId: getMoreInformation
       parameters:
         - name: id
@@ -4868,7 +4868,7 @@ paths:
     post:
       description: Save a new version of a MoreInformation element which belongs to record with id in the url
       tags:
-        - element
+        - MoreInformation
       operationId: postMoreInformation
       parameters:
         - name: id
@@ -4898,7 +4898,7 @@ paths:
     get: 
       description: Returns a list of MoreInformation version with state "to_review"
       tags:
-        - element
+        - MoreInformation
       operationId: getToReviewMoreInformation
       parameters:
         - name: id
@@ -4923,7 +4923,7 @@ paths:
     get: 
       description: Returns the moreInformation version approved_in_use #**
       tags:
-        - element
+        - MoreInformation
       operationId: getLastApprovedInUseMoreInformation
       parameters:
         - name: id
@@ -4947,7 +4947,7 @@ paths:
     put: 
       description: Update a MoreInformationVersion state to approved_in_use
       tags:
-        - element
+        - MoreInformation
       operationId: setApprovedInUseMoreInformation
       parameters:
         - name: id
@@ -4979,7 +4979,7 @@ paths:
     get: 
       description: Returns a version of a BriefDescription element by record id and version
       tags:
-        - element
+        - BriefDescription
       operationId: getBriefDescription
       parameters:
         - name: id
@@ -5007,7 +5007,7 @@ paths:
     post:
       description: Save a new version of a BriefDescription element which belongs to record with id in the url
       tags:
-        - element
+        - BriefDescription
       operationId: postBriefDescription
       parameters:
         - name: id
@@ -5037,7 +5037,7 @@ paths:
     get: 
       description: Returns a list of BriefDescription version with state "to_review"
       tags:
-        - element
+        - BriefDescription
       operationId: getToReviewBriefDescription
       parameters:
         - name: id
@@ -5062,7 +5062,7 @@ paths:
     get: 
       description: Returns the briefDescription version approved_in_use #**
       tags:
-        - element
+        - BriefDescription
       operationId: getLastApprovedInUseBriefDescription
       parameters:
         - name: id
@@ -5086,7 +5086,7 @@ paths:
     put: 
       description: Update a BriefDescriptionVersion state to approved_in_use
       tags:
-        - element
+        - BriefDescription
       operationId: setApprovedInUseBriefDescription
       parameters:
         - name: id
@@ -5119,7 +5119,7 @@ paths:
     get: 
       description: Returns a version of a AncillaryData element by record id and version
       tags:
-        - element
+        - AncillaryData
       operationId: getAncillaryData
       parameters:
         - name: id
@@ -5147,7 +5147,7 @@ paths:
     post:
       description: Save a new version of a AncillaryData element which belongs to record with id in the url
       tags:
-        - element
+        - AncillaryData
       operationId: postAncillaryData
       parameters:
         - name: id
@@ -5177,7 +5177,7 @@ paths:
     get: 
       description: Returns a list of AncillaryData version with state "to_review"
       tags:
-        - element
+        - AncillaryData
       operationId: getToReviewAncillaryData
       parameters:
         - name: id
@@ -5202,7 +5202,7 @@ paths:
     get: 
       description: Returns the ancillaryData version approved_in_use #**
       tags:
-        - element
+        - AncillaryData
       operationId: getLastApprovedInUseAncillaryData
       parameters:
         - name: id
@@ -5226,7 +5226,7 @@ paths:
     put: 
       description: Update a AncillaryDataVersion state to approved_in_use
       tags:
-        - element
+        - AncillaryData
       operationId: setApprovedInUseAncillaryData
       parameters:
         - name: id
@@ -5294,106 +5294,6 @@ paths:
           required: true
           schema:
             $ref: '#/definitions/ListRecords'
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/ResultResponse"
-        # responses may fall through to errors
-        "400":
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /user/{id}:
-    x-swagger-router-controller: user
-    get: 
-      description: Returns a user by id
-      tags:
-        - user
-      operationId: getUser
-      parameters:
-        - name: id
-          type: string
-          in: path
-          required: true
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/User"
-        # responses may fall through to errors
-        "400":
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /user:
-    x-swagger-router-controller: user
-    post:
-      description: Save a new user 
-      tags:
-        - user
-      operationId: postUser
-      parameters:
-        - name: user
-          description: User object
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/User'
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/ResultResponse"
-        # responses may fall through to errors
-        "400":
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /group/{id}:
-    x-swagger-router-controller: group
-    get: 
-      description: Returns a group by id
-      tags:
-        - group
-      operationId: getGroup
-      parameters:
-        - name: id
-          type: string
-          in: path
-          required: true
-      responses:
-        "200":
-          description: Success
-          schema:
-            # a pointer to a definition
-            $ref: "#/definitions/Group"
-        # responses may fall through to errors
-        "400":
-          description: Error
-          schema:
-            $ref: "#/definitions/ErrorResponse"
-            
-  /group:
-    x-swagger-router-controller: group
-    post:
-      description: Save a new group 
-      tags:
-        - group
-      operationId: postGroup
-      parameters:
-        - name: group
-          description: Group object
-          in: body
-          required: true
-          schema:
-            $ref: '#/definitions/Group'
       responses:
         "200":
           description: Success
@@ -7750,33 +7650,6 @@ definitions:
       group:
         type: string
           
-  Group:
-    required:
-      - users
-      - admins
-    properties:
-      users:
-        type: array
-        items:
-          type: string
-      admins:
-        type: array
-        items:
-          type: string
-      image: 
-        type: string
-      created: 
-        type: string
-      description: 
-        type: string
-      tags:
-        type: array
-        items:
-          type: string
-      records: 
-        type: string
-        items:
-          type: string
         
           
   User:

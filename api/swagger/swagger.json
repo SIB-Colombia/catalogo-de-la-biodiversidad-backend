@@ -216,7 +216,7 @@
     },
     "/record_search/search" : {
       "get" : {
-        "tags" : [ "Records" ],
+        "tags" : [ "Search" ],
         "description" : "Returns Records according to query parameters",
         "operationId" : "simpleSearchRecord",
         "parameters" : [ {
@@ -257,7 +257,7 @@
     },
     "/record_search/advanced_search" : {
       "get" : {
-        "tags" : [ "Records" ],
+        "tags" : [ "Search" ],
         "description" : "Returns Records according to query parameters",
         "operationId" : "advancedSearchRecord",
         "parameters" : [ {
@@ -5001,7 +5001,7 @@
     },
     "/record/{id}/references/{version}" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "References" ],
         "description" : "Returns a version of a References element by record id and version",
         "operationId" : "getReferences",
         "parameters" : [ {
@@ -5034,7 +5034,7 @@
     },
     "/record/{id}/references" : {
       "post" : {
-        "tags" : [ "element" ],
+        "tags" : [ "References" ],
         "description" : "Save a new version of a References element which belongs to record with id in the url",
         "operationId" : "postReferences",
         "parameters" : [ {
@@ -5070,7 +5070,7 @@
     },
     "/record/to_review/{id}/references" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "References" ],
         "description" : "Returns a list of References version with state \"to_review\"",
         "operationId" : "getToReviewReferences",
         "parameters" : [ {
@@ -5098,7 +5098,7 @@
     },
     "/record/approved_in_use/{id}/references" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "References" ],
         "description" : "Returns the references version approved_in_use",
         "operationId" : "getLastApprovedInUseReferences",
         "parameters" : [ {
@@ -5126,7 +5126,7 @@
     },
     "/record/approved_in_use/{id}/references/{version}" : {
       "put" : {
-        "tags" : [ "element" ],
+        "tags" : [ "References" ],
         "description" : "Update a ReferencesVersion state to approved_in_use",
         "operationId" : "setApprovedInUseReferences",
         "parameters" : [ {
@@ -5164,7 +5164,7 @@
     },
     "/record/{id}/environmental_envelope/{version}" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EnvironmentalEnvelope" ],
         "description" : "Returns a version of a EnvironmentalEnvelope element by record id and version",
         "operationId" : "getEnvironmentalEnvelope",
         "parameters" : [ {
@@ -5197,7 +5197,7 @@
     },
     "/record/{id}/environmental_envelope" : {
       "post" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EnvironmentalEnvelope" ],
         "description" : "Save a new version of a EnvironmentalEnvelope element which belongs to record with id in the url",
         "operationId" : "postEnvironmentalEnvelope",
         "parameters" : [ {
@@ -5233,7 +5233,7 @@
     },
     "/record/to_review/{id}/environmental_envelope" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EnvironmentalEnvelope" ],
         "description" : "Returns a list of EnvironmentalEnvelope version with state \"to_review\"",
         "operationId" : "getToReviewEnvironmentalEnvelope",
         "parameters" : [ {
@@ -5261,7 +5261,7 @@
     },
     "/record/approved_in_use/{id}/environmental_envelope" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EnvironmentalEnvelope" ],
         "description" : "Returns the environmentalEnvelope version approved_in_use",
         "operationId" : "getLastApprovedInUseEnvironmentalEnvelope",
         "parameters" : [ {
@@ -5289,7 +5289,7 @@
     },
     "/record/approved_in_use/{id}/environmental_envelope/{version}" : {
       "put" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EnvironmentalEnvelope" ],
         "description" : "Update a EnvironmentalEnvelopeVersion state to approved_in_use",
         "operationId" : "setApprovedInUseEnvironmentalEnvelope",
         "parameters" : [ {
@@ -5327,7 +5327,7 @@
     },
     "/record/{id}/ecological_significance/{version}" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EcologicalSignificance" ],
         "description" : "Returns a version of a EcologicalSignificance element by record id and version",
         "operationId" : "getEcologicalSignificance",
         "parameters" : [ {
@@ -5360,7 +5360,7 @@
     },
     "/record/{id}/ecological_significance" : {
       "post" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EcologicalSignificance" ],
         "description" : "Save a new version of a EcologicalSignificance element which belongs to record with id in the url",
         "operationId" : "postEcologicalSignificance",
         "parameters" : [ {
@@ -5396,7 +5396,7 @@
     },
     "/record/to_review/{id}/ecological_significance" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EcologicalSignificance" ],
         "description" : "Returns a list of EcologicalSignificance version with state \"to_review\"",
         "operationId" : "getToReviewEcologicalSignificance",
         "parameters" : [ {
@@ -5424,7 +5424,7 @@
     },
     "/record/approved_in_use/{id}/ecological_significance" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EcologicalSignificance" ],
         "description" : "Returns the ecologicalSignificance version approved_in_use",
         "operationId" : "getLastApprovedInUseEcologicalSignificance",
         "parameters" : [ {
@@ -5452,7 +5452,7 @@
     },
     "/record/approved_in_use/{id}/ecological_significance/{version}" : {
       "put" : {
-        "tags" : [ "element" ],
+        "tags" : [ "EcologicalSignificance" ],
         "description" : "Update a EcologicalSignificanceVersion state to approved_in_use",
         "operationId" : "setApprovedInUseEcologicalSignificance",
         "parameters" : [ {
@@ -5490,7 +5490,7 @@
     },
     "/record/{id}/invasiveness/{version}" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "Invasiveness" ],
         "description" : "Returns a version of a Invasiveness element by record id and version",
         "operationId" : "getInvasiveness",
         "parameters" : [ {
@@ -5523,7 +5523,7 @@
     },
     "/record/{id}/invasiveness" : {
       "post" : {
-        "tags" : [ "element" ],
+        "tags" : [ "Invasiveness" ],
         "description" : "Save a new version of a Invasiveness element which belongs to record with id in the url",
         "operationId" : "postInvasiveness",
         "parameters" : [ {
@@ -5559,7 +5559,7 @@
     },
     "/record/to_review/{id}/invasiveness" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "Invasiveness" ],
         "description" : "Returns a list of Invasiveness version with state \"to_review\"",
         "operationId" : "getToReviewInvasiveness",
         "parameters" : [ {
@@ -5587,7 +5587,7 @@
     },
     "/record/approved_in_use/{id}/invasiveness" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "Invasiveness" ],
         "description" : "Returns the invasiveness version approved_in_use",
         "operationId" : "getLastApprovedInUseInvasiveness",
         "parameters" : [ {
@@ -5615,7 +5615,7 @@
     },
     "/record/approved_in_use/{id}/invasiveness/{version}" : {
       "put" : {
-        "tags" : [ "element" ],
+        "tags" : [ "Invasiveness" ],
         "description" : "Update a InvasivenessVersion state to approved_in_use",
         "operationId" : "setApprovedInUseInvasiveness",
         "parameters" : [ {
@@ -5653,7 +5653,7 @@
     },
     "/record/{id}/more_information/{version}" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "MoreInformation" ],
         "description" : "Returns a version of a MoreInformation element by record id and version",
         "operationId" : "getMoreInformation",
         "parameters" : [ {
@@ -5686,7 +5686,7 @@
     },
     "/record/{id}/more_information" : {
       "post" : {
-        "tags" : [ "element" ],
+        "tags" : [ "MoreInformation" ],
         "description" : "Save a new version of a MoreInformation element which belongs to record with id in the url",
         "operationId" : "postMoreInformation",
         "parameters" : [ {
@@ -5722,7 +5722,7 @@
     },
     "/record/to_review/{id}/more_information" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "MoreInformation" ],
         "description" : "Returns a list of MoreInformation version with state \"to_review\"",
         "operationId" : "getToReviewMoreInformation",
         "parameters" : [ {
@@ -5750,7 +5750,7 @@
     },
     "/record/approved_in_use/{id}/more_information" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "MoreInformation" ],
         "description" : "Returns the moreInformation version approved_in_use",
         "operationId" : "getLastApprovedInUseMoreInformation",
         "parameters" : [ {
@@ -5778,7 +5778,7 @@
     },
     "/record/approved_in_use/{id}/more_information/{version}" : {
       "put" : {
-        "tags" : [ "element" ],
+        "tags" : [ "MoreInformation" ],
         "description" : "Update a MoreInformationVersion state to approved_in_use",
         "operationId" : "setApprovedInUseMoreInformation",
         "parameters" : [ {
@@ -5816,7 +5816,7 @@
     },
     "/record/{id}/brief_description/{version}" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "BriefDescription" ],
         "description" : "Returns a version of a BriefDescription element by record id and version",
         "operationId" : "getBriefDescription",
         "parameters" : [ {
@@ -5849,7 +5849,7 @@
     },
     "/record/{id}/brief_description" : {
       "post" : {
-        "tags" : [ "element" ],
+        "tags" : [ "BriefDescription" ],
         "description" : "Save a new version of a BriefDescription element which belongs to record with id in the url",
         "operationId" : "postBriefDescription",
         "parameters" : [ {
@@ -5885,7 +5885,7 @@
     },
     "/record/to_review/{id}/brief_description" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "BriefDescription" ],
         "description" : "Returns a list of BriefDescription version with state \"to_review\"",
         "operationId" : "getToReviewBriefDescription",
         "parameters" : [ {
@@ -5913,7 +5913,7 @@
     },
     "/record/approved_in_use/{id}/brief_description" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "BriefDescription" ],
         "description" : "Returns the briefDescription version approved_in_use",
         "operationId" : "getLastApprovedInUseBriefDescription",
         "parameters" : [ {
@@ -5941,7 +5941,7 @@
     },
     "/record/approved_in_use/{id}/brief_description/{version}" : {
       "put" : {
-        "tags" : [ "element" ],
+        "tags" : [ "BriefDescription" ],
         "description" : "Update a BriefDescriptionVersion state to approved_in_use",
         "operationId" : "setApprovedInUseBriefDescription",
         "parameters" : [ {
@@ -5979,7 +5979,7 @@
     },
     "/record/{id}/ancillary_data/{version}" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "AncillaryData" ],
         "description" : "Returns a version of a AncillaryData element by record id and version",
         "operationId" : "getAncillaryData",
         "parameters" : [ {
@@ -6012,7 +6012,7 @@
     },
     "/record/{id}/ancillary_data" : {
       "post" : {
-        "tags" : [ "element" ],
+        "tags" : [ "AncillaryData" ],
         "description" : "Save a new version of a AncillaryData element which belongs to record with id in the url",
         "operationId" : "postAncillaryData",
         "parameters" : [ {
@@ -6048,7 +6048,7 @@
     },
     "/record/to_review/{id}/ancillary_data" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "AncillaryData" ],
         "description" : "Returns a list of AncillaryData version with state \"to_review\"",
         "operationId" : "getToReviewAncillaryData",
         "parameters" : [ {
@@ -6076,7 +6076,7 @@
     },
     "/record/approved_in_use/{id}/ancillary_data" : {
       "get" : {
-        "tags" : [ "element" ],
+        "tags" : [ "AncillaryData" ],
         "description" : "Returns the ancillaryData version approved_in_use",
         "operationId" : "getLastApprovedInUseAncillaryData",
         "parameters" : [ {
@@ -6104,7 +6104,7 @@
     },
     "/record/approved_in_use/{id}/ancillary_data/{version}" : {
       "put" : {
-        "tags" : [ "element" ],
+        "tags" : [ "AncillaryData" ],
         "description" : "Update a AncillaryDataVersion state to approved_in_use",
         "operationId" : "setApprovedInUseAncillaryData",
         "parameters" : [ {
@@ -6198,124 +6198,6 @@
         }
       },
       "x-swagger-router-controller" : "listRecords"
-    },
-    "/user/{id}" : {
-      "get" : {
-        "tags" : [ "user" ],
-        "description" : "Returns a user by id",
-        "operationId" : "getUser",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "required" : true,
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Success",
-            "schema" : {
-              "$ref" : "#/definitions/User"
-            }
-          },
-          "400" : {
-            "description" : "Error",
-            "schema" : {
-              "$ref" : "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      },
-      "x-swagger-router-controller" : "user"
-    },
-    "/user" : {
-      "post" : {
-        "tags" : [ "user" ],
-        "description" : "Save a new user",
-        "operationId" : "postUser",
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "user",
-          "description" : "User object",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/User"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Success",
-            "schema" : {
-              "$ref" : "#/definitions/ResultResponse"
-            }
-          },
-          "400" : {
-            "description" : "Error",
-            "schema" : {
-              "$ref" : "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      },
-      "x-swagger-router-controller" : "user"
-    },
-    "/group/{id}" : {
-      "get" : {
-        "tags" : [ "group" ],
-        "description" : "Returns a group by id",
-        "operationId" : "getGroup",
-        "parameters" : [ {
-          "name" : "id",
-          "in" : "path",
-          "required" : true,
-          "type" : "string"
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Success",
-            "schema" : {
-              "$ref" : "#/definitions/Group"
-            }
-          },
-          "400" : {
-            "description" : "Error",
-            "schema" : {
-              "$ref" : "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      },
-      "x-swagger-router-controller" : "group"
-    },
-    "/group" : {
-      "post" : {
-        "tags" : [ "group" ],
-        "description" : "Save a new group",
-        "operationId" : "postGroup",
-        "parameters" : [ {
-          "in" : "body",
-          "name" : "group",
-          "description" : "Group object",
-          "required" : true,
-          "schema" : {
-            "$ref" : "#/definitions/Group"
-          }
-        } ],
-        "responses" : {
-          "200" : {
-            "description" : "Success",
-            "schema" : {
-              "$ref" : "#/definitions/ResultResponse"
-            }
-          },
-          "400" : {
-            "description" : "Error",
-            "schema" : {
-              "$ref" : "#/definitions/ErrorResponse"
-            }
-          }
-        }
-      },
-      "x-swagger-router-controller" : "group"
     },
     "/swagger" : {
       "x-swagger-pipe" : "swagger_raw"
@@ -9601,41 +9483,6 @@
           }
         },
         "group" : {
-          "type" : "string"
-        }
-      }
-    },
-    "Group" : {
-      "required" : [ "admins", "users" ],
-      "properties" : {
-        "users" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "admins" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "image" : {
-          "type" : "string"
-        },
-        "created" : {
-          "type" : "string"
-        },
-        "description" : {
-          "type" : "string"
-        },
-        "tags" : {
-          "type" : "array",
-          "items" : {
-            "type" : "string"
-          }
-        },
-        "records" : {
           "type" : "string"
         }
       }
