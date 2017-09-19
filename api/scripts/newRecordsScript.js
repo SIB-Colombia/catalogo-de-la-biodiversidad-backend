@@ -12,7 +12,7 @@ var parse = require('csv-parse');
 var rest = require('restler');
 var Schema = mongoose.Schema;
 
-var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI', function(err) {
+var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI2', function(err) {
 	if(err){
 		console.log('connection error', err);
 	}else{
@@ -370,14 +370,26 @@ var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         function(id, callback){
                           //Record.update({_id:id, imageThumbnail:{$exists: true}, imageMain:{$exists: true}},{ imageThumbnail: Imagen_Thumbnail, imageMain:Imagen_Destacada }, function(err, result){
                           console.log("Update Record images");  
-                          Record.update({_id:id, imageInfo:{$exists: false} },{ ancillaryDataApprovedInUse: ancillary_data_version, imageInfo: imageInfo, hierarchy: hierarchyArray }, function(err, result){
+                          if(create_new_record){
+                            Record.update({_id:id, imageInfo:{$exists: false} },{ ancillaryDataApprovedInUse: ancillary_data_version, imageInfo: imageInfo, hierarchy: hierarchyArray }, function(err, result){
                             if(err){
                               callback(new Error(err.message));
                             }else{
                               number_images_updated++;
                               callback();
                             }
-                          });
+                            });
+                          }else{
+                            Record.update({_id:id, imageInfo:{$exists: false} },{ ancillaryDataApprovedInUse: ancillary_data_version, imageInfo: imageInfo }, function(err, result){
+                              if(err){
+                                callback(new Error(err.message));
+                              }else{
+                                number_images_updated++;
+                                callback();
+                              }
+                            });
+                          }
+                          
                         }
                       ],
                       function(err, result) {

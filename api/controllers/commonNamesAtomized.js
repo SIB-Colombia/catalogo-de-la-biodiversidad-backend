@@ -176,8 +176,12 @@ function setApprovedInUseCommonNamesAtomized(req, res) {
           var commonNamesValues = {};
           for(var i=0; i<elementVer.commonNamesAtomized.length; i++){
             commonNamesValues = {};
-            commonNamesValues.language = elementVer.commonNamesAtomized[i].language;
-            commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
+            if(elementVer.commonNamesAtomized[i] && elementVer.commonNamesAtomized[i].language !== ''){
+              commonNamesValues.language = elementVer.commonNamesAtomized[i].language;
+            }
+            if(elementVer.commonNamesAtomized[i] && elementVer.commonNamesAtomized[i].name !== ''){
+              commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
+            }
             commonNames.push(commonNamesValues);
           }
           add_objects.Record.update({_id:id_rc},{ commonNamesAtomizedApprovedInUse: elementVer, update_date: update_date, commonNames: commonNames }, function(err, result){

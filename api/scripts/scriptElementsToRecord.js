@@ -247,8 +247,12 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         var commonNamesValues = {};
                         for(var i=0; i<elementVer.commonNamesAtomized.length; i++){
                           commonNamesValues = {};
-                          commonNamesValues.language = elementVer.commonNamesAtomized[i].language;
-                          commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
+                          if(elementVer.commonNamesAtomized[i]  && elementVer.commonNamesAtomized[i].language !== ''){
+                            commonNamesValues.language = elementVer.commonNamesAtomized[i].language;
+                          }
+                          if(elementVer.commonNamesAtomized[i] && elementVer.commonNamesAtomized[i].name !== ''){
+                            commonNamesValues.name = elementVer.commonNamesAtomized[i].name;
+                          }
                           commonNames.push(commonNamesValues);
                         }
                         lastRec.commonNames = commonNames;
@@ -690,22 +694,24 @@ var catalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDb
                         }
                         */
                         if(typeof elementVer.ancillaryData[0].mediaURL !== 'undefined' && elementVer.ancillaryData[0].mediaURL.length !== 0 ){
-                          console.log("source id: "+record_data._id);
+                          console.log("Source: "+elementVer.ancillaryData[0].mediaURL[0]);
                           imageInfo.source = elementVer.ancillaryData[0].mediaURL[0];
                         }
                         if(typeof elementVer.ancillaryData[0].thumbnailURL !== 'undefined' && (elementVer.ancillaryData[0].thumbnailURL.indexOf("jpg") >= 0 || elementVer.ancillaryData[0].thumbnailURL.indexOf("png") >= 0 || elementVer.ancillaryData[0].thumbnailURL.indexOf("svg") >= 0)){
-                          console.log("thumbnailImage: "+record_data._id);
+                          console.log("thumbnailImage: "+ elementVer.ancillaryData[0].thumbnailURL);
                           imageInfo.thumbnailImage = elementVer.ancillaryData[0].thumbnailURL;
                         }
                         if(typeof elementVer.ancillaryData[0].source !== 'undefined' && (elementVer.ancillaryData[0].source.indexOf("jpg") >= 0 || elementVer.ancillaryData[0].source.indexOf("png") >= 0 || elementVer.ancillaryData[0].source.indexOf("svg") >= 0)){
                           console.log("mainImage: "+record_data._id);
+                          console.log("mainImage: "+ elementVer.ancillaryData[0].source);
                           imageInfo.mainImage = elementVer.ancillaryData[0].source;
                         }
                         if(typeof elementVer.ancillaryData[0].rightsHolder !== 'undefined' && elementVer.ancillaryData[0].rightsHolder != ''){
-                          console.log("rightsHolder: "+record_data._id);
+                          console.log("rightsHolder: "+ elementVer.ancillaryData[0].rightsHolder);
                           imageInfo.rightsHolder = elementVer.ancillaryData[0].rightsHolder;
                         }
-                        if((imageInfo.thumbnailImage !== 'undefined') && (imageInfo.mainImage !== 'undefined')){
+                        if(((typeof imageInfo.thumbnailImage !== 'undefined') || ( typeof imageInfo.mainImage !== 'undefined')) && Object.keys(imageInfo).length > 0 ){
+                          console.log("Element with imageInfo: "+record_data._id);
                           lastRec.imageInfo = imageInfo;
                         }
                       //}

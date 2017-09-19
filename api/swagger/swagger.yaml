@@ -240,70 +240,70 @@ paths:
           type: array
           items:
             type: string
-        - name: kingdomName
+        - name: kingdom
           in: query
           description: Kingdom name.
           required: false
           type: array
           items:
             type: string
-        - name: phylumName
+        - name: phylum
           in: query
           description: Phylum name.
           required: false
           type: array
           items:
             type: string
-        - name: className
+        - name: class
           in: query
           description: Class name.
           required: false
           type: array
           items:
             type: string
-        - name: orderName
+        - name: order
           in: query
           description: Order name.
           required: false
           type: array
           items:
             type: string
-        - name: familyName
+        - name: family
           in: query
           description: Family name.
           required: false
           type: array
           items:
             type: string
-        - name: genusName
+        - name: genus
           in: query
           description: Genus name.
           required: false
           type: array
           items:
             type: string
-        - name: subGenusName
+        - name: subGenus
           in: query
           description: Subgenus name.
           required: false
           type: array
           items:
             type: string
-        - name: specificEpithetName
+        - name: specificEpithet
           in: query
           description: Specific epithet name.
           required: false
           type: array
           items:
             type: string
-        - name: infraspecificEpithetName
+        - name: infraspecificEpithet
           in: query
           description: Infraspecific epithet name.
           required: false
           type: array
           items:
             type: string
-        - name: departmentName
+        - name: department
           in: query
           description: department name.
           required: false
@@ -317,6 +317,19 @@ paths:
           type: array
           items:
             type: string
+        - name: multimedia
+          in: query
+          description: search for multimedia type in ancillaryDataApprovedInUse.
+          required: false
+          type: array
+          items:
+            type: string
+        - name: invasiveness
+          in: query
+          description: records with invasiveness
+          required: false
+          type: boolean
+          default: false
         - name: count
           in: query
           description: If is a query to count number of documents founded.

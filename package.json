@@ -1,5 +1,5 @@
 {
-  "name": "chigui",
+  "name": "biodiversity_catalogue_v2_API",
   "version": "0.0.1",
   "description": "Starter project for an ES6 RESTful Express API",
   "main": "index.js",
@@ -38,8 +38,8 @@
     "csv-parse": "latest",
     "restler": "latest",
     "csv-streamify": "latest",
-    "mongoose-paginate" : "latest",
-    "flickrapi" : "latest"
+    "mongoose-paginate": "latest",
+    "flickrapi": "latest"
   },
   "bugs": {
     "url": ""
