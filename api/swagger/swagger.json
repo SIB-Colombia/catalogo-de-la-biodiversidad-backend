@@ -231,7 +231,7 @@
           "description" : "The maximum number of results to return. This can't be greater than 1000.",
           "required" : false,
           "type" : "integer",
-          "default" : 10,
+          "default" : 1000,
           "maximum" : 1000,
           "minimum" : 1
         } ],
@@ -270,7 +270,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "kingdomName",
+          "name" : "kingdom",
           "in" : "query",
           "description" : "Kingdom name.",
           "required" : false,
@@ -279,7 +279,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "phylumName",
+          "name" : "phylum",
           "in" : "query",
           "description" : "Phylum name.",
           "required" : false,
@@ -288,7 +288,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "className",
+          "name" : "class",
           "in" : "query",
           "description" : "Class name.",
           "required" : false,
@@ -297,7 +297,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "orderName",
+          "name" : "order",
           "in" : "query",
           "description" : "Order name.",
           "required" : false,
@@ -306,7 +306,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "familyName",
+          "name" : "family",
           "in" : "query",
           "description" : "Family name.",
           "required" : false,
@@ -315,7 +315,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "genusName",
+          "name" : "genus",
           "in" : "query",
           "description" : "Genus name.",
           "required" : false,
@@ -324,7 +324,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "subGenusName",
+          "name" : "subGenus",
           "in" : "query",
           "description" : "Subgenus name.",
           "required" : false,
@@ -333,7 +333,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "specificEpithetName",
+          "name" : "specificEpithet",
           "in" : "query",
           "description" : "Specific epithet name.",
           "required" : false,
@@ -342,7 +342,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "infraspecificEpithetName",
+          "name" : "infraspecificEpithet",
           "in" : "query",
           "description" : "Infraspecific epithet name.",
           "required" : false,
@@ -351,7 +351,7 @@
             "type" : "string"
           }
         }, {
-          "name" : "departmentName",
+          "name" : "department",
           "in" : "query",
           "description" : "department name.",
           "required" : false,
@@ -369,6 +369,22 @@
             "type" : "string"
           }
         }, {
+          "name" : "multimedia",
+          "in" : "query",
+          "description" : "search for multimedia type in ancillaryDataApprovedInUse.",
+          "required" : false,
+          "type" : "array",
+          "items" : {
+            "type" : "string"
+          }
+        }, {
+          "name" : "invasiveness",
+          "in" : "query",
+          "description" : "records with invasiveness",
+          "required" : false,
+          "type" : "boolean",
+          "default" : false
+        }, {
           "name" : "count",
           "in" : "query",
           "description" : "If is a query to count number of documents founded.",
@@ -381,7 +397,7 @@
           "description" : "The maximum number of results to return. This can't be greater than 1000.",
           "required" : false,
           "type" : "integer",
-          "default" : 10,
+          "default" : 1000,
           "maximum" : 1000,
           "minimum" : 1
         } ],
