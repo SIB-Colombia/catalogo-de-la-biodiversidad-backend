@@ -12,7 +12,7 @@ var parse = require('csv-parse');
 var rest = require('restler');
 var Schema = mongoose.Schema;
 
-var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI2', function(err) {
+var CatalogoDb = mongoose.createConnection('mongodb://localhost:27017/catalogoDbNewAPI', function(err) {
 	if(err){
 		console.log('connection error', err);
 	}else{

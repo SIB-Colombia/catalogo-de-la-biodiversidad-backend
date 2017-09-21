@@ -38,7 +38,7 @@ export const config = convict({
     mongoDb: {
       url: {
         doc: 'MongoDb url to connect',
-        default: ['localhost:27017/catalogoDbNewAPI2'],
+        default: ['localhost:27017/catalogoDbNewAPI'],
         env: 'MONGODB_URL'
       },
       password:{

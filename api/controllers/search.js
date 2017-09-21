@@ -64,7 +64,6 @@ function simpleSearchRecord(req, res) {
     			res.status(406);
       	  res.json({"message" : "Not found results for the simple search: "+req.swagger.params.q.value});
           */
-          console.log(alter_qword);
           reg_ex = '\\b'+alter_qword+'\\b';
           query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(numberRecords);
           query.exec(function (err, data) {
@@ -85,7 +84,6 @@ function simpleSearchRecord(req, res) {
     		}
   		});
  	}else{
- 		console.log("No query");
     res.json({message: "No query for search" });
  	}
 }
@@ -100,17 +98,11 @@ function advancedSearchRecord(req, res) {
   var num_hier = 0;
   var numberRecords = req.swagger.params.size.value;
 
-  console.log(Object.keys(req.swagger.params)+ "!!!!");
-  //console.log(numberRecords);
-
   if(req.swagger.params.scientificName.value){
     var scientificNameArray = req.swagger.params.scientificName.value;
-    console.log(req.swagger.params.scientificName.value.length);
     for(var i=0; i < req.swagger.params.scientificName.value.length; i++){
       scientificNameArray[i] = new RegExp('.*'+req.swagger.params.scientificName.value[i]+'.*', 'i');
     }
-    console.log(scientificNameArray.length);
-    console.log(scientificNameArray);
     queryArray[num]={'scientificNameSimple': { $in: scientificNameArray }};
     num++;
   }
@@ -118,19 +110,15 @@ function advancedSearchRecord(req, res) {
  
   if(req.swagger.params.kingdom.value){
     var kingdomNameArray = req.swagger.params.kingdom.value;
-    console.log(req.swagger.params.kingdom.value.length);
     for(var i=0; i < req.swagger.params.kingdom.value.length; i++){
       kingdomNameArray[i] = new RegExp('.*'+req.swagger.params.kingdom.value[i]+'.*', 'i');
     }
-    console.log(kingdomNameArray.length);
-    console.log(kingdomNameArray);
     queryHierarchyArray[num_hier]={'hierarchy.kingdom': { $in: kingdomNameArray  }};
     num_hier++;
   }
 
   if(req.swagger.params.phylum.value){
     var phylumNameArray = req.swagger.params.phylum.value;
-    console.log(req.swagger.params.phylum.value.length);
     for(var i=0; i < req.swagger.params.phylum.value.length; i++){
       phylumNameArray[i] = new RegExp('.*'+req.swagger.params.phylum.value[i]+'.*', 'i');
     }
@@ -141,7 +129,6 @@ function advancedSearchRecord(req, res) {
 
   if(req.swagger.params.class.value){
     var classNameArray = req.swagger.params.class.value;
-    console.log(req.swagger.params.class.value.length);
     for(var i=0; i < req.swagger.params.class.value.length; i++){
       classNameArray[i] = new RegExp('.*'+req.swagger.params.class.value[i]+'.*', 'i');
     }
@@ -152,7 +139,6 @@ function advancedSearchRecord(req, res) {
 
   if(req.swagger.params.order.value){
     var orderNameArray = req.swagger.params.order.value;
-    console.log(req.swagger.params.order.value.length);
     for(var i=0; i < req.swagger.params.order.value.length; i++){
       orderNameArray[i] = new RegExp('.*'+req.swagger.params.order.value[i]+'.*', 'i');
     }
@@ -163,7 +149,6 @@ function advancedSearchRecord(req, res) {
 
   if(req.swagger.params.family.value){
     var familyNameArray = req.swagger.params.family.value;
-    console.log(req.swagger.params.family.value.length);
     for(var i=0; i < req.swagger.params.family.value.length; i++){
       familyNameArray[i] = new RegExp('.*'+req.swagger.params.family.value[i]+'.*', 'i');
     }
@@ -174,7 +159,6 @@ function advancedSearchRecord(req, res) {
 
   if(req.swagger.params.genus.value){
     var genusNameArray = req.swagger.params.genus.value;
-    console.log(req.swagger.params.genus.value.length);
     for(var i=0; i < req.swagger.params.genus.value.length; i++){
       genusNameArray[i] = new RegExp('.*'+req.swagger.params.genus.value[i]+'.*', 'i');
     }
@@ -184,7 +168,6 @@ function advancedSearchRecord(req, res) {
 
   if(req.swagger.params.subGenus.value){
     var subGenusNameArray = req.swagger.params.subGenus.value;
-    console.log(req.swagger.params.subGenus.value.length);
     for(var i=0; i < req.swagger.params.subGenus.value.length; i++){
       subGenusNameArray[i] = new RegExp('.*'+req.swagger.params.subGenus.value[i]+'.*', 'i');
     }
@@ -192,10 +175,7 @@ function advancedSearchRecord(req, res) {
     num_hier++;
   }
 
-  /*
-  console.log('!');
-  console.log('length: '+queryHierarchyArray.length);
-  */
+
   if(queryHierarchyArray.length !=0){
     queryArray[num]= {$or:queryHierarchyArray};
     num++;
@@ -205,12 +185,9 @@ function advancedSearchRecord(req, res) {
   
   if(req.swagger.params.department.value){
     var departmentNameArray = req.swagger.params.department.value;
-    console.log(req.swagger.params.department.value.length);
-    console.log(department_iso[departmentNameArray[0]]);
     for(var i=0; i < req.swagger.params.department.value.length; i++){
       departmentNameArray[i] = new RegExp('.*'+department_iso[req.swagger.params.department.value[i]]+'.*', 'i');
     }
-    console.log(departmentNameArray);
     queryArray[num]={'distributionApprovedInUse.distribution.distributionAtomized.stateProvince': { $in: departmentNameArray }};
     num++;
   }
@@ -274,7 +251,6 @@ function advancedSearchRecord(req, res) {
     }
     queryMultimediaArray[0]={'ancillaryDataApprovedInUse.ancillaryData.dataType': { $in: multimediaArray }};
     if(multimediaArray.includes('image')){
-      console.log("Return records with imageInfo");
       queryMultimediaArray[1]={'imageInfo': {$exists: true}};
     }
     queryArray[num]= {$or:queryMultimediaArray};
@@ -283,7 +259,6 @@ function advancedSearchRecord(req, res) {
 
 
   if(req.swagger.params.invasiveness.value){
-    console.log("search by invasiveness");
     queryArray[num]={'invasivenessApprovedInUse.invasiveness.invasivenessUnstructured': {$exists: true, $not: {$size: 0}, $ne: '' }};
     num++; 
   }
