@@ -14,7 +14,7 @@
   "author": "Oscar Duque <cosmicgarden1@gmail.com>",
   "license": "MIT",
   "dependencies": {
-    "babel": "latest",
+    "babel-cli": "latest",
     "body-parser": "latest",
     "compression": "latest",
     "convict": "latest",
