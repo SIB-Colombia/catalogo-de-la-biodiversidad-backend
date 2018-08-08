@@ -226,6 +226,13 @@
           "required" : false,
           "type" : "string"
         }, {
+          "name" : "count",
+          "in" : "query",
+          "description" : "If is a query to count number of documents founded.",
+          "required" : false,
+          "type" : "boolean",
+          "default" : false
+        }, {
           "name" : "size",
           "in" : "query",
           "description" : "The maximum number of results to return. This can't be greater than 1000.",
