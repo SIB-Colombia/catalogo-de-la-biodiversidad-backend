@@ -65,7 +65,14 @@ function simpleSearchRecord(req, res) {
       	  res.json({"message" : "Not found results for the simple search: "+req.swagger.params.q.value});
           */
           reg_ex = '\\b'+alter_qword+'\\b';
-          query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(numberRecords);
+          
+          var isCount = req.swagger.params.count.value;
+          
+          if(isCount){
+            query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).count();
+          }else{
+            query = add_objects.Record.find({$or:[ {'scientificNameSimple':{ '$regex': reg_ex, '$options' : 'i'}}, {'taxonRecordNameApprovedInUse.taxonRecordName.scientificName.canonicalName': {'$regex': reg_ex, '$options' : 'i'}}, {'commonNames.name': {'$regex': reg_ex, '$options' : 'i'}}, {'abstractApprovedInUse.abstract': {'$regex': reg_ex, '$options' : 'i'}}, {'fullDescriptionApprovedInUse.fullDescription.fullDescriptionUnstructured': {'$regex': reg_ex, '$options' : 'i'}} ]}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(numberRecords);
+          }
           query.exec(function (err, data) {
             if(err){
               logger.error('Error getting list of records', JSON.stringify({ message:err }) );
@@ -74,8 +81,15 @@ function simpleSearchRecord(req, res) {
               res.status(406);
               res.json({"message" : "Not found results for the simple search: "+req.swagger.params.q.value});
             }else{
-              logger.info('Simple search', JSON.stringify({ query: req.swagger.params.q.value }) );
-              res.json(data);
+            if(isCount){
+                logger.info('Number or documents', JSON.stringify({ total: data }) );
+                res.json({ total: data });
+              }else{
+                logger.info('Simple search', JSON.stringify({ total: data.length }) );
+                res.json(data);
+              }
+              //logger.info('Simple search', JSON.stringify({ query: req.swagger.params.q.value }) );
+              //res.json(data);
               }
             });
       		}else{
@@ -269,15 +283,17 @@ function advancedSearchRecord(req, res) {
 
   if(queryArray.length > 0){
     if(isCount){
-      query = add_objects.Record.find({$and:queryArray}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).count();
+      query = add_objects.Record.find({$and:queryArray}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date threatStatusApprovedInUse fullDescriptionApprovedInUse').sort({update_date: -1}).count();
     }else{
-      query = add_objects.Record.find({$and:queryArray}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).limit(numberRecords);
+      query = add_objects.Record.find({$and:queryArray}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date threatStatusApprovedInUse fullDescriptionApprovedInUse').sort({update_date: -1}).limit(numberRecords);
     }
   }else{
-    query = add_objects.Record.find({}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date ').sort({update_date: -1}).count();
+    query = add_objects.Record.find({}).select('_id scientificNameSimple imageInfo threatStatusValue commonNames creation_date update_date threatStatusApprovedInUse fullDescriptionApprovedInUse').sort({update_date: -1}).count();
     isCount = true;
   }
 
+  
+  console.log("query: ", query)
   
   query.exec(function (err, data) {
     if(err){
